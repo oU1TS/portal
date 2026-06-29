@@ -1,19 +1,31 @@
 // Supabase Configuration
-// Replace these with your actual Supabase project credentials
+// Credentials are loaded from window.__ENV (set by env-config.js locally,
+// or injected by GitHub Actions at deploy time in production).
+// DO NOT hardcode credentials here — keep this file safe to commit.
 
-const SUPABASE_URL = 'https://gcegxwqdztlgqewmvteh.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdjZWd4d3FkenRsZ3Fld212dGVoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAzMDE3NzgsImV4cCI6MjA4NTg3Nzc3OH0.cbeNnZCIQwubQ1ETjvydVruLpjkacCjX-3PCs6xcdQg';
+(function () {
+    const url = window.__ENV?.SUPABASE_URL;
+    const key = window.__ENV?.SUPABASE_ANON_KEY;
 
-// Initialize Supabase client
-try {
-    // Check if Supabase library is loaded
-    if (typeof supabase === 'undefined') {
-        throw new Error('Supabase library not loaded. Make sure the CDN script is included before this file.');
+    if (!url || !key || url.includes('YOUR-NEW-PROJECT-ID')) {
+        console.error(
+            '[supabase-config] Missing credentials.\n' +
+            'Local dev: fill in env-config.js with your Supabase URL and anon key.\n' +
+            'Production: ensure GitHub Actions secrets SUPABASE_URL and SUPABASE_ANON_KEY are set.'
+        );
+        window.supabaseClient = null;
+        return;
     }
-    
-    window.supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-    console.log('Supabase client initialized successfully');
-} catch (error) {
-    console.error('Failed to initialize Supabase client:', error);
-    window.supabaseClient = null;
-}
+
+    try {
+        if (typeof supabase === 'undefined') {
+            throw new Error('Supabase library not loaded. Make sure the CDN script is included before this file.');
+        }
+
+        window.supabaseClient = supabase.createClient(url, key);
+        console.log('Supabase client initialized successfully');
+    } catch (error) {
+        console.error('Failed to initialize Supabase client:', error);
+        window.supabaseClient = null;
+    }
+})();

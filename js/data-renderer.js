@@ -162,8 +162,8 @@
 
             container.appendChild(dropdown);
 
-            // Add separator hr if not the last item
-            if (sIndex < sections.length - 1) {
+            // Add separator hr only below "All Courses" (which is the first dropdown, sIndex === 0)
+            if (sIndex === 0) {
                 const hr = document.createElement('hr');
                 hr.style.margin = '25px 0';
                 container.appendChild(hr);
