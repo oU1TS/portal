@@ -24,22 +24,34 @@ This project is an Academic Resources Portal called "oU1TS Portal" designed to s
 
 ```
 ou1ts.portal/
-├── index.html          # Homepage with hero, categories, featured marquee
-├── official.html       # Official UITS - Portals & Notices
-├── materials.html      # Materials - Drive & Other links
-├── tools.html          # Tools - Projects
-├── community.html      # Community - Groups & Social
-├── portfolios.html     # Portfolios - Showcases
-├── courses.html        # Course Repositories - GitHub repos per course
-├── guidance.html       # Guidance - Tips & Tutorials
+├── index.html          # Homepage with hero, categories, featured marquee (dynamic marquee)
+├── official.html       # Official UITS - Portals & Notices (dynamic list)
+├── materials.html      # Materials - Drive & Other links (dynamic list)
+├── tools.html          # Tools - Projects (dynamic list)
+├── community.html      # Community - Groups & Social (dynamic list)
+├── portfolios.html     # Portfolios - Showcases (dynamic list)
+├── courses.html        # Course Repositories - GitHub repos per course (dynamic lists)
+├── guidance.html       # Guidance - Tips & Tutorials (dynamic list)
 ├── contributions.html  # Contributors - Dynamic page with Google Sheets integration
 ├── style.css           # Main stylesheet (shared across all pages)
 ├── script.js           # JavaScript functionality (sidebar, mobile menu)
-├── inspirations.html   # Inspirations - Portals from other universities
+├── inspirations.html   # Inspirations - Portals from other universities (dynamic lists)
+├── json/               # Dynamic data source folder
+│   ├── community.json  # Data for community.html
+│   ├── courses.json    # Data for courses.html
+│   ├── featured.json   # Data for index.html featured marquee
+│   ├── guidance.json   # Data for guidance.html
+│   ├── inspirations.json # Data for inspirations.html
+│   ├── materials.json  # Data for materials.html
+│   ├── official.json   # Data for official.html
+│   ├── portfolios.json # Data for portfolios.html
+│   └── tools.json      # Data for tools.html
 ├── js/                 # JavaScript modules
 │   ├── supabase-config.js  # Supabase client configuration
+│   ├── auth-modal.js       # Reusable Auth Modal HTML injection
 │   ├── auth.js             # Authentication logic (login, register, logout)
-│   └── stars.js            # Resource starring and ranking logic
+│   ├── stars.js            # Resource starring and ranking logic
+│   └── data-renderer.js    # Universal JSON data fetching and rendering engine
 ├── portfolio-icon/     # Icons and assets for portfolio section
 └── doc/
     └── DOCUMENTATION.md    # This documentation file
@@ -217,11 +229,14 @@ After OAuth sign-in, users must add their Student ID to complete their profile.
 
 ### Files Overview
 
-| File | Purpose |
+| File / Folder | Purpose |
 |------|--------|
 | `js/supabase-config.js` | Supabase client initialization with project URL and anon key |
+| `js/auth-modal.js` | Auth Modal module: reusable script to dynamically inject the auth modal HTML template |
 | `js/auth.js` | Auth module: register, login, logout, session management, UI updates |
 | `js/stars.js` | Stars module: toggle stars, load counts, sort resources |
+| `js/data-renderer.js` | Universal data renderer: dynamically fetches JSON files and builds DOM components for lists, dropdowns, and featured marquee tracks |
+| `json/` | Folder containing structured data (.json files) representing all items/resources on category pages and index marquee |
 | `courses.html` (inline) | `CoursesStars` module: per-dropdown star sorting for course repositories |
 
 ### Resource ID Format
@@ -565,6 +580,8 @@ const SHEET_ID = 'your-new-sheet-id-here';
 
 | Version | Feature / Change | Description |
 | :--- | :--- | :--- |
+| **v3.9** | **Dynamic JSON-Driven Rendering** | Replaced static list items on all resource pages and index featured projects marquee with a dynamic fetching loader (`js/data-renderer.js`) pulling data from individual JSON files in `json/`, preserving full Supabase starring compatibility and isolated ranking logic. |
+| **v3.8** | **Reusable Auth Modal Script** | Extracted the hardcoded Auth Modal HTML template into a separate reusable `js/auth-modal.js` script dynamically injected across all category pages, index page, and guidance page. |
 | **v3.7** | **Inspirations & Style Fixes** | Added `inspirations.html` with project portals from UIU/DIU. Added "All Courses" section to `courses.html`. Fixed scrollbar display and word-wrapping for long links. |
 | **v3.6** | **Portfolio Expertise Tags** | Added core expertise tags (e.g., Full Stack, Cybersecurity, Backend) to each entry in `portfolios.html` for better categorization and visibility. |
 | **v3.5** | **PWA & Notifications** | Enabled Progressive Web App (PWA) features including offline support, manifest installation, and browser notifications for new submissions. |

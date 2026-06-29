@@ -6,25 +6,25 @@ Note: _This is purely the output of the chat conversation and does not contain a
 
 refer to "temp" folder files as reference and add a "Recent Submission" button and window to show recent-most 10 submissions for the "contributions.html" page.
 
-*Listed directory [ou1ts.portal](file:///e:/Git_WIP/2.%20Personal%20Repositories/ou1ts.portal) *
+*Listed directory [ou1ts.portal](ou1ts.portal) *
 
-*Listed directory [temp](file:///e:/Git_WIP/2.%20Personal%20Repositories/ou1ts.portal/temp) *
+*Listed directory [temp](ou1ts.portal/temp) *
 
-*Listed directory [js](file:///e:/Git_WIP/2.%20Personal%20Repositories/ou1ts.portal/temp/js) *
+*Listed directory [js](ou1ts.portal/temp/js) *
 
-*Viewed [submission.html](file:///e:/Git_WIP/2.%20Personal%20Repositories/ou1ts.portal/temp/submission.html) *
+*Viewed [submission.html](ou1ts.portal/temp/submission.html) *
 
-*Viewed [submission.html](file:///e:/Git_WIP/2.%20Personal%20Repositories/ou1ts.portal/temp/submission.html) *
+*Viewed [submission.html](ou1ts.portal/temp/submission.html) *
 
 *Grep searched codebase*
 
-*Listed directory [js](file:///e:/Git_WIP/2.%20Personal%20Repositories/ou1ts.portal/temp/js) *
+*Listed directory [js](ou1ts.portal/temp/js) *
 
 *Grep searched codebase*
 
 *Edited relevant file*
 
-*Viewed [contributions.html](file:///e:/Git_WIP/2.%20Personal%20Repositories/ou1ts.portal/contributions.html) *
+*Viewed [contributions.html](ou1ts.portal/contributions.html) *
 
 *Viewed code item*
 
@@ -32,11 +32,11 @@ refer to "temp" folder files as reference and add a "Recent Submission" button a
 
 *Grep searched codebase*
 
-*Viewed [submission.html](file:///e:/Git_WIP/2.%20Personal%20Repositories/ou1ts.portal/temp/submission.html) *
+*Viewed [submission.html](ou1ts.portal/temp/submission.html) *
 
-*Listed directory [css](file:///e:/Git_WIP/2.%20Personal%20Repositories/ou1ts.portal/temp/css) *
+*Listed directory [css](ou1ts.portal/temp/css) *
 
-*Viewed [pwa.js](file:///e:/Git_WIP/2.%20Personal%20Repositories/ou1ts.portal/temp/pwa.js) *
+*Viewed [pwa.js](ou1ts.portal/temp/pwa.js) *
 
 *Edited relevant file*
 
@@ -48,7 +48,7 @@ refer to "temp" folder files as reference and add a "Recent Submission" button a
 
 *Edited relevant file*
 
-*Viewed [contributions.html](file:///e:/Git_WIP/2.%20Personal%20Repositories/ou1ts.portal/contributions.html) *
+*Viewed [contributions.html](ou1ts.portal/contributions.html) *
 
 *Edited relevant file*
 
@@ -92,15 +92,15 @@ also refer to lines 912-923 for the mapping:
 
 *Edited relevant file*
 
-*Viewed [contributions.html](file:///e:/Git_WIP/2.%20Personal%20Repositories/ou1ts.portal/contributions.html) *
+*Viewed [contributions.html](ou1ts.portal/contributions.html) *
 
 ### User Input
 
 update documentation at "doc\DOCUMENTATION.md"
 
-*Listed directory [doc](file:///e:/Git_WIP/2.%20Personal%20Repositories/ou1ts.portal/doc) *
+*Listed directory [doc](ou1ts.portal/doc) *
 
-*Viewed [DOCUMENTATION.md](file:///e:/Git_WIP/2.%20Personal%20Repositories/ou1ts.portal/doc/DOCUMENTATION.md) *
+*Viewed [DOCUMENTATION.md](ou1ts.portal/doc/DOCUMENTATION.md) *
 
 *Edited relevant file*
 
@@ -118,7 +118,7 @@ update documentation at "doc\DOCUMENTATION.md"
 
 *Edited relevant file*
 
-*Viewed [DOCUMENTATION.md](file:///e:/Git_WIP/2.%20Personal%20Repositories/ou1ts.portal/doc/DOCUMENTATION.md) *
+*Viewed [DOCUMENTATION.md](ou1ts.portal/doc/DOCUMENTATION.md) *
 
 *Edited relevant file*
 
@@ -126,13 +126,13 @@ update documentation at "doc\DOCUMENTATION.md"
 
 enable PWA features for this website, and notification capabilities for new submisisons in contribution.html
 
-*Listed directory [ou1ts.portal](file:///e:/Git_WIP/2.%20Personal%20Repositories/ou1ts.portal) *
+*Listed directory [ou1ts.portal](ou1ts.portal) *
 
-*Listed directory [temp](file:///e:/Git_WIP/2.%20Personal%20Repositories/ou1ts.portal/temp) *
+*Listed directory [temp](ou1ts.portal/temp) *
 
 *Searched filesystem*
 
-*Listed directory [js](file:///e:/Git_WIP/2.%20Personal%20Repositories/ou1ts.portal/js) *
+*Listed directory [js](ou1ts.portal/js) *
 
 *Grep searched codebase*
 
@@ -166,19 +166,19 @@ use @[e:\Git_WIP\2. Personal Repositories\ou1ts.portal\oU1TS-portal.webp] for th
 
 *Edited relevant file*
 
-*Viewed [index.html](file:///e:/Git_WIP/2.%20Personal%20Repositories/ou1ts.portal/index.html) *
+*Viewed [index.html](ou1ts.portal/index.html) *
 
-*Viewed [script.js](file:///e:/Git_WIP/2.%20Personal%20Repositories/ou1ts.portal/script.js) *
+*Viewed [script.js](ou1ts.portal/script.js) *
 
-*Viewed [contributions.html](file:///e:/Git_WIP/2.%20Personal%20Repositories/ou1ts.portal/contributions.html) *
+*Viewed [contributions.html](ou1ts.portal/contributions.html) *
 
-*Viewed [contributions.html](file:///e:/Git_WIP/2.%20Personal%20Repositories/ou1ts.portal/contributions.html) *
+*Viewed [contributions.html](ou1ts.portal/contributions.html) *
 
-*Viewed [contributions.html](file:///e:/Git_WIP/2.%20Personal%20Repositories/ou1ts.portal/contributions.html) *
+*Viewed [contributions.html](ou1ts.portal/contributions.html) *
 
 *Edited relevant file*
 
-*Viewed [contributions.html](file:///e:/Git_WIP/2.%20Personal%20Repositories/ou1ts.portal/contributions.html) *
+*Viewed [contributions.html](ou1ts.portal/contributions.html) *
 
 *Edited relevant file*
 
@@ -186,49 +186,49 @@ use @[e:\Git_WIP\2. Personal Repositories\ou1ts.portal\oU1TS-portal.webp] for th
 
 *Edited relevant file*
 
-*Viewed [contributions.html](file:///e:/Git_WIP/2.%20Personal%20Repositories/ou1ts.portal/contributions.html) *
+*Viewed [contributions.html](ou1ts.portal/contributions.html) *
 
-*Listed directory [ou1ts.portal](file:///e:/Git_WIP/2.%20Personal%20Repositories/ou1ts.portal) *
-
-*Edited relevant file*
-
-*Viewed [community.html](file:///e:/Git_WIP/2.%20Personal%20Repositories/ou1ts.portal/community.html) *
+*Listed directory [ou1ts.portal](ou1ts.portal) *
 
 *Edited relevant file*
 
+*Viewed [community.html](ou1ts.portal/community.html) *
+
+*Edited relevant file*
+
 *Edited relevant file*
 
 *Edited relevant file*
 
-*Viewed [courses.html](file:///e:/Git_WIP/2.%20Personal%20Repositories/ou1ts.portal/courses.html) *
+*Viewed [courses.html](ou1ts.portal/courses.html) *
 
 *Edited relevant file*
 
-*Viewed [guidance.html](file:///e:/Git_WIP/2.%20Personal%20Repositories/ou1ts.portal/guidance.html) *
+*Viewed [guidance.html](ou1ts.portal/guidance.html) *
 
 *Edited relevant file*
 
-*Viewed [materials.html](file:///e:/Git_WIP/2.%20Personal%20Repositories/ou1ts.portal/materials.html) *
+*Viewed [materials.html](ou1ts.portal/materials.html) *
 
 *Edited relevant file*
 
-*Viewed [official.html](file:///e:/Git_WIP/2.%20Personal%20Repositories/ou1ts.portal/official.html) *
+*Viewed [official.html](ou1ts.portal/official.html) *
 
 *Edited relevant file*
 
-*Viewed [portfolios.html](file:///e:/Git_WIP/2.%20Personal%20Repositories/ou1ts.portal/portfolios.html) *
+*Viewed [portfolios.html](ou1ts.portal/portfolios.html) *
 
 *Edited relevant file*
 
-*Viewed [tools.html](file:///e:/Git_WIP/2.%20Personal%20Repositories/ou1ts.portal/tools.html) *
+*Viewed [tools.html](ou1ts.portal/tools.html) *
 
 *Edited relevant file*
 
-*Viewed [DOCUMENTATION.md](file:///e:/Git_WIP/2.%20Personal%20Repositories/ou1ts.portal/doc/DOCUMENTATION.md) *
+*Viewed [DOCUMENTATION.md](ou1ts.portal/doc/DOCUMENTATION.md) *
 
-*Viewed [DOCUMENTATION.md](file:///e:/Git_WIP/2.%20Personal%20Repositories/ou1ts.portal/doc/DOCUMENTATION.md) *
+*Viewed [DOCUMENTATION.md](ou1ts.portal/doc/DOCUMENTATION.md) *
 
-*Viewed [DOCUMENTATION.md](file:///e:/Git_WIP/2.%20Personal%20Repositories/ou1ts.portal/doc/DOCUMENTATION.md) *
+*Viewed [DOCUMENTATION.md](ou1ts.portal/doc/DOCUMENTATION.md) *
 
 *Edited relevant file*
 

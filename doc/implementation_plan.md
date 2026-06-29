@@ -6,9 +6,9 @@ Restructure the oU1TS Portal to match the structural layout of [UIU LinkSphere](
 
 Based on the uploaded screenshots, UIU LinkSphere features:
 
-![Homepage Reference](C:/Users/gsmur/.gemini/antigravity/brain/789d6786-5582-4a31-a414-1e8bc397e462/uploaded_media_0_1769531997606.png)
+![Homepage Reference](.gemini/antigravity/brain/789d6786-5582-4a31-a414-1e8bc397e462/uploaded_media_0_1769531997606.png)
 
-![Category Page Reference](C:/Users/gsmur/.gemini/antigravity/brain/789d6786-5582-4a31-a414-1e8bc397e462/uploaded_media_1_1769531997606.jpg)
+![Category Page Reference](.gemini/antigravity/brain/789d6786-5582-4a31-a414-1e8bc397e462/uploaded_media_1_1769531997606.jpg)
 
 **Homepage Structure:**
 - Header with logo and navigation
@@ -25,7 +25,7 @@ Based on the uploaded screenshots, UIU LinkSphere features:
 
 ## Proposed Changes
 
-### Homepage ([index.html](file:///e:/Git_WIP/2.%20Personal%20Repositories/ou1ts.portal/index.html))
+### Homepage ([index.html](ou1ts.portal/index.html))
 
 #### [MODIFY] Homepage Structure
 
@@ -57,12 +57,12 @@ Each category page includes: Back button, category header with icon, "+ Add Link
 
 | Page | Title | Content |
 |------|-------|------|
-| [official.html](file:///e:/Git_WIP/2.%20Personal%20Repositories/ou1ts.portal/official.html) | Official UITS | University portals & notices |
-| [materials.html](file:///e:/Git_WIP/2.%20Personal%20Repositories/ou1ts.portal/materials.html) | Materials | Study resources & drives |
-| [tools.html](file:///e:/Git_WIP/2.%20Personal%20Repositories/ou1ts.portal/tools.html) | Tools | Project tools & utilities |
-| [community.html](file:///e:/Git_WIP/2.%20Personal%20Repositories/ou1ts.portal/community.html) | Community | Social links & groups |
-| [portfolios.html](file:///e:/Git_WIP/2.%20Personal%20Repositories/ou1ts.portal/portfolios.html) | Portfolios | Student showcases |
-| [courses.html](file:///e:/Git_WIP/2.%20Personal%20Repositories/ou1ts.portal/courses.html) | Course Repos | **Dropdown menus per course** with GitHub repo links |
+| [official.html](ou1ts.portal/official.html) | Official UITS | University portals & notices |
+| [materials.html](ou1ts.portal/materials.html) | Materials | Study resources & drives |
+| [tools.html](ou1ts.portal/tools.html) | Tools | Project tools & utilities |
+| [community.html](ou1ts.portal/community.html) | Community | Social links & groups |
+| [portfolios.html](ou1ts.portal/portfolios.html) | Portfolios | Student showcases |
+| [courses.html](ou1ts.portal/courses.html) | Course Repos | **Dropdown menus per course** with GitHub repo links |
 
 > [!NOTE]
 > All categories will be populated with **demo content** that can be replaced later.
@@ -71,7 +71,7 @@ Each category page includes: Back button, category header with icon, "+ Add Link
 
 ### Styles
 
-#### [MODIFY] [style.css](file:///e:/Git_WIP/2.%20Personal%20Repositories/ou1ts.portal/style.css)
+#### [MODIFY] [style.css](ou1ts.portal/style.css)
 
 Add new styles while preserving existing theme:
 - `.hero-section` - Centered hero layout

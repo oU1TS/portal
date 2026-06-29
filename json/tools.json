@@ -1,0 +1,55 @@
+[
+  {
+    "id": "tools-handgesture",
+    "icon": {
+      "type": "icon",
+      "class": "fa-solid fa-robot",
+      "color": "#1976d2",
+      "background": "linear-gradient(135deg, #e3f2fd, #bbdefb)"
+    },
+    "title": "Hand Gesture Control System | Soyeb Akram",
+    "description": "Hands‑free mouse and system control using real‑time AI hand tracking.",
+    "visitUrl": "https://github.com/SoyebAkram/Hand_Gesture_control__system"
+  },
+  {
+    "id": "tools-blooddonation",
+    "icon": {
+      "type": "image",
+      "src": "tools-icon/logo-bd.png",
+      "background": "linear-gradient(135deg, #e3f2fd, #bbdefb)"
+    },
+    "title": "Blood Donation Network - UITS",
+    "description": "We intend to create a network of donators, under certain groups where people know each other. This network will have a list containing contact info and previous donation dates to make the Blood Reception faster for the requester. Your single donation can help save up to three lives.<br><br>Join our community of heroes today.",
+    "visitUrl": "https://bd-ou1ts.netlify.app/"
+  },
+  {
+    "id": "tools-b1tsched",
+    "icon": {
+      "type": "image",
+      "src": "tools-icon/b1t-sched.webp",
+      "background": "linear-gradient(135deg, #e8f5e9, #c8e6c9)"
+    },
+    "title": "b1t Scheduler",
+    "description": "lightweight, centralized academic assistant that allows students to view their schedules, track tasks, and access academic information efficiently.",
+    "links": [
+      { "label": "Source Code", "url": "https://github.com/b1tranger/b1t-Sched" },
+      { "label": "Dev", "url": "https://github.com/b1tranger" }
+    ],
+    "visitUrl": "https://b1tsched.netlify.app/"
+  },
+  {
+    "id": "tools-yourbloodbank",
+    "icon": {
+      "type": "image",
+      "src": "",
+      "background": "linear-gradient(135deg, #e8f5e9, #c8e6c9)"
+    },
+    "title": "UBBDMS",
+    "description": "Save Lives Through Blood Donation UITS Blood Bank & Donor Management System connects blood donors with those in need within UITS university.",
+    "links": [
+      { "label": "Source Code", "url": "https://github.com/amit1-ctrl/ubbdms-backend" },
+      { "label": "Dev", "url": "https://github.com/amit1-ctrl" }
+    ],
+    "visitUrl": "https://yourbloodbank.netlify.app/"
+  }
+]
