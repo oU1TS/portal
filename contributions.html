@@ -1,0 +1,1203 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contributors - oU1TS Portal</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#1a1a2e">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        .contributors-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+            padding: 1rem 0;
+        }
+
+        .contributor-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .contributor-card:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(100, 181, 246, 0.3);
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .contributor-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #64b5f6, #42a5f5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+            font-size: 2rem;
+            color: white;
+            font-weight: bold;
+        }
+
+        .contributor-name {
+            color: #e0e6ed;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .contributor-id {
+            color: #a0a0a0;
+            font-size: 0.85rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .contributor-stats {
+            display: flex;
+            gap: 1.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .stat-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .stat-value {
+            color: #64b5f6;
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+
+        .stat-label {
+            color: #a0a0a0;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 16px;
+            border: 1px dashed rgba(255, 255, 255, 0.15);
+        }
+
+        .empty-state i {
+            font-size: 4rem;
+            color: #64b5f6;
+            margin-bottom: 1.5rem;
+        }
+
+        .empty-state h3 {
+            color: #e0e6ed;
+            font-size: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .empty-state p {
+            color: #a0a0a0;
+            font-size: 1rem;
+            max-width: 400px;
+            margin: 0 auto 1.5rem;
+            line-height: 1.6;
+        }
+
+        .submit-resource-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            background: linear-gradient(45deg, #64b5f6, #42a5f5);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .submit-resource-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(100, 181, 246, 0.4);
+        }
+
+        .page-description {
+            background: rgba(100, 181, 246, 0.1);
+            border: 1px solid rgba(100, 181, 246, 0.2);
+            border-radius: 12px;
+            padding: 1.25rem 1.5rem;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .page-description i {
+            color: #64b5f6;
+            font-size: 1.5rem;
+        }
+
+        .page-description p {
+            color: #e0e6ed;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .reference-footer {
+            margin-top: 3rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+        }
+
+        .reference-footer p {
+            color: #a0a0a0;
+            font-size: 0.85rem;
+        }
+
+        .reference-footer a {
+            color: #64b5f6;
+            text-decoration: none;
+        }
+
+        .reference-footer a:hover {
+            text-decoration: underline;
+        }
+
+        .contributor-email {
+            color: #64b5f6;
+            font-size: 0.8rem;
+            margin-bottom: 0.5rem;
+            word-break: break-all;
+        }
+
+        .contributor-card {
+            cursor: pointer;
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            padding: 1rem;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            max-width: 600px;
+            width: 100%;
+            max-height: 80vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            animation: modalSlideIn 0.3s ease;
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h2 {
+            color: #e0e6ed;
+            font-size: 1.25rem;
+            margin: 0;
+        }
+
+        .modal-header .contributor-info-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .modal-header .mini-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            color: white;
+            font-weight: bold;
+        }
+
+        .modal-close {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: #e0e6ed;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.25rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .modal-close:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .modal-body {
+            padding: 1.5rem;
+            overflow-y: auto;
+        }
+
+        .resource-item {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 1rem 1.25rem;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .resource-item:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(100, 181, 246, 0.3);
+        }
+
+        .resource-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .resource-title {
+            color: #e0e6ed;
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .resource-type {
+            display: inline-block;
+            background: rgba(100, 181, 246, 0.2);
+            color: #64b5f6;
+            font-size: 0.75rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            margin-bottom: 0.75rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        a.resource-type:hover {
+            background: rgba(100, 181, 246, 0.4);
+            color: #fff;
+        }
+
+        .resource-link {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #ffffff;
+            text-shadow: 0 0 4px black;
+            font-size: 0.85rem;
+            text-decoration: none;
+            word-break: break-all;
+        }
+
+        .resource-link:hover {
+            color: #000000;
+            text-shadow: 0 0 0 black;
+
+        }
+
+        .resource-link i {
+            flex-shrink: 0;
+        }
+
+        .modal-contact-info {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 1rem 1.25rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-contact-info h4 {
+            color: #a0a0a0;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.75rem;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: #e0e6ed;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+            word-break: break-all;
+        }
+
+        .contact-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .contact-item i {
+            color: #64b5f6;
+            width: 18px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        .contact-item a {
+            color: #64b5f6;
+            text-decoration: none;
+        }
+
+        .contact-item a:hover {
+            text-decoration: underline;
+        }
+
+        .resources-section h4 {
+            color: #a0a0a0;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 1rem;
+        }
+
+        /* Recent Submissions Panel Styles */
+        .recent-panel-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(5px);
+            z-index: 9999;
+            display: none;
+            justify-content: center;
+            align-items: flex-start;
+            padding-top: 5vh;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .recent-panel-overlay.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .recent-panel {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 20px;
+            width: 90%;
+            max-width: 520px;
+            max-height: 80vh;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5);
+            transform: translateY(-20px);
+            transition: transform 0.3s ease;
+        }
+
+        .recent-panel-overlay.active .recent-panel {
+            transform: translateY(0);
+        }
+
+        .recent-panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.25rem 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .recent-panel-title {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            color: #e0e6ed;
+        }
+
+        .recent-panel-title i {
+            color: #ffb74d;
+            font-size: 1.2rem;
+        }
+
+        .recent-panel-title h3 {
+            font-size: 1.1rem;
+            margin: 0;
+        }
+
+        .recent-panel-close {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: #e0e6ed;
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s ease;
+        }
+
+        .recent-panel-close:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .recent-panel-body {
+            padding: 1rem 1.25rem;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 0.65rem;
+        }
+
+        .recent-item {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 0.9rem 1rem;
+            transition: all 0.2s ease;
+        }
+
+        .recent-item:hover {
+            background: rgba(255, 255, 255, 0.07);
+            border-color: rgba(100, 181, 246, 0.25);
+        }
+
+        .recent-item-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .recent-type-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            font-size: 0.72rem;
+            font-weight: 600;
+            padding: 0.2rem 0.65rem;
+            border-radius: 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+            background: rgba(100, 181, 246, 0.2);
+            color: #64b5f6;
+        }
+
+        .recent-item-text {
+            color: #c8d0da;
+            font-size: 0.88rem;
+            line-height: 1.5;
+            margin: 0;
+        }
+
+        .recent-item-text strong {
+            color: #e0e6ed;
+        }
+
+        .recent-dept {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            margin-top: 0.4rem;
+            font-size: 0.75rem;
+            color: #81c784;
+            background: rgba(129, 199, 132, 0.1);
+            padding: 0.15rem 0.6rem;
+            border-radius: 12px;
+        }
+
+        .notif-actions {
+            display: flex;
+            gap: 0.6rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .recent-bell-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.6rem 1.15rem;
+            background: rgba(100, 181, 246, 0.12);
+            border: 1px solid rgba(100, 181, 246, 0.25);
+            border-radius: 25px;
+            color: #64b5f6;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .recent-bell-btn:hover {
+            background: rgba(100, 181, 246, 0.22);
+            border-color: rgba(100, 181, 246, 0.45);
+            transform: translateY(-1px);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="category-page">
+        <header class="category-header">
+            <a href="index.html" class="back-btn">
+                <i class="fa-solid fa-arrow-left"></i>
+                Back
+            </a>
+            <div class="category-icon" style="background: linear-gradient(135deg, #e8f5e9, #c8e6c9);">
+                <i class="fa-solid fa-users" style="color: #388e3c;"></i>
+            </div>
+            <div class="category-info">
+                <h1>Contributors</h1>
+                <p>Community members who have shared resources</p>
+            </div>
+            <a href="https://forms.gle/UR1HSavWJYdPBPnC8" target="_blank" class="add-link-btn"
+                style="width: fit-content;">
+                <i class="fa-solid fa-plus"></i>
+                SUBMIT RESOURCE
+            </a>
+        </header>
+
+        <div class="project-list">
+            <div class="page-description">
+                <i class="fa-solid fa-circle-info"></i>
+                <p>This page recognizes the amazing community members who have contributed resources to the oU1TS Portal
+                    through the "Submit Resource" button. Your contributions help fellow students succeed!</p>
+            </div>
+
+            <div class="notif-actions">
+                <button class="recent-bell-btn" onclick="showRecentSubmissions()">
+                    <i class="fa-solid fa-clock-rotate-left"></i>
+                    Recent Submissions
+                </button>
+            </div>
+
+            <!-- Loading State -->
+            <div id="loading-state" class="empty-state">
+                <i class="fa-solid fa-spinner fa-spin"></i>
+                <h3>Loading Contributors...</h3>
+                <p>Fetching data from the community submissions.</p>
+            </div>
+
+            <!-- Empty State - Show when no contributors yet -->
+            <div id="empty-state" class="empty-state" style="display: none;">
+                <i class="fa-solid fa-hand-holding-heart"></i>
+                <h3>Be the First Contributor!</h3>
+                <p>No contributions yet. Submit a resource link through our form and your name will appear here as a
+                    contributor to the oU1TS community.</p>
+                <a href="https://forms.gle/UR1HSavWJYdPBPnC8" target="_blank" class="submit-resource-btn"
+                    style="width: fit-content;margin: auto;">
+                    <i class="fa-solid fa-plus"
+                        style="font-size: 2rem;margin-bottom: -3px;color: rgba(255, 255, 255, 0.623);"></i>
+                    Submit Resource
+                </a>
+            </div>
+
+            <!-- Error State -->
+            <div id="error-state" class="empty-state" style="display: none;">
+                <i class="fa-solid fa-exclamation-triangle"></i>
+                <h3>Unable to Load Contributors</h3>
+                <p>There was an error fetching the contributors list. Please try again later.</p>
+            </div>
+
+            <!-- Contributors Grid - Populated dynamically -->
+            <div id="contributors-grid" class="contributors-grid" style="display: none;"></div>
+
+            <!-- Modal for showing resources -->
+            <div id="resources-modal" class="modal-overlay">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <div class="contributor-info-header">
+                            <div id="modal-avatar" class="mini-avatar"></div>
+                            <div>
+                                <h2 id="modal-name">Contributor Name</h2>
+                                <span id="modal-subtitle" style="color: #a0a0a0; font-size: 0.85rem;"></span>
+                            </div>
+                        </div>
+                        <button class="modal-close" onclick="closeModal()">
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <!-- Contact Info Section -->
+                        <div id="modal-contact-info" class="modal-contact-info">
+                            <!-- Populated dynamically -->
+                        </div>
+                        <!-- Resources Section -->
+                        <div class="resources-section">
+                            <h4>Submitted Resources</h4>
+                            <div id="modal-resources">
+                                <!-- Resources populated dynamically -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- Recent Submissions Panel -->
+            <div id="recent-submissions-panel" class="recent-panel-overlay">
+                <div class="recent-panel">
+                    <div class="recent-panel-header">
+                        <div class="recent-panel-title">
+                            <i class="fa-solid fa-clock-rotate-left"></i>
+                            <h3>Recent Submissions</h3>
+                        </div>
+                        <button class="recent-panel-close" onclick="closeRecentPanel()">
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>
+                    </div>
+                    <div class="recent-panel-body" id="recent-panel-body">
+                        <!-- Populated dynamically -->
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="reference-footer">
+                <p>Page design inspired by <a href="https://diuqbank.com/contributors/"
+                        target="_blank">https://diuqbank.com/contributors/</a></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Google Sheet Configuration
+        const SHEET_ID = '1oQ5Mkavjm62UGZwNjM-52yvKppWZHfX-Qpq6jtEVIOY';
+        const SHEET_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json`;
+
+        // Column indices (0-based) - based on your form columns
+        const COL_EMAIL = 2;       // "Student Education Email"
+        const COL_SUBMISSION_FOR = 3; // "What is this submission for?"
+        const COL_NAME = 4;        // "Your Name"
+        const COL_SOCIAL = 5;      // "Contacts and Social Links"
+        const COL_PROJECT_TITLE = 6;  // "Project Title"
+        const COL_PROJECT_LINK = 7;   // "Project Link"
+        const COL_PROJECT_TYPE = 8;   // "Project Type"
+        const COL_DEPARTMENT = 10; // "Department"
+        const COL_BATCH = 11;      // "Batch"
+        const COL_DETAILS = 12;    // "Additional Details"
+
+        // Store all contributors data for modal
+        let allContributorsData = new Map();
+        let chronologicalSubmissions = [];
+
+
+        // DOM Elements
+        const loadingState = document.getElementById('loading-state');
+        const emptyState = document.getElementById('empty-state');
+        const errorState = document.getElementById('error-state');
+        const contributorsGrid = document.getElementById('contributors-grid');
+
+        // Fetch and render contributors
+        async function fetchContributors() {
+            try {
+                const response = await fetch(SHEET_URL);
+
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+
+                const text = await response.text();
+
+                // Check if the response contains valid data
+                if (!text.includes('google.visualization.Query.setResponse')) {
+                    throw new Error('Invalid response format - sheet may not be published');
+                }
+
+                // Parse the JSONP response (Google returns it wrapped in a function call)
+                const jsonString = text.substring(text.indexOf('(') + 1, text.lastIndexOf(')'));
+                const data = JSON.parse(jsonString);
+
+                // Check for errors in response
+                if (data.status === 'error') {
+                    throw new Error(data.errors?.[0]?.message || 'Sheet error');
+                }
+
+                if (!data.table || !data.table.rows || data.table.rows.length === 0) {
+                    showEmptyState();
+                    return;
+                }
+
+                // Group contributions by name
+                const contributorMap = new Map();
+                chronologicalSubmissions = []; // Clear previous submissions before populating
+
+                data.table.rows.forEach(row => {
+                    if (!row.c) return;
+
+                    // Get name value safely
+                    const nameCell = row.c[COL_NAME];
+                    if (!nameCell || !nameCell.v) return;
+
+                    const name = String(nameCell.v).trim();
+                    if (!name || name === '' || name.toLowerCase() === 'your name') return; // Skip header or empty
+
+                    const email = row.c[COL_EMAIL]?.v ? String(row.c[COL_EMAIL].v) : '';
+                    const department = row.c[COL_DEPARTMENT]?.v ? String(row.c[COL_DEPARTMENT].v) : '';
+                    const batch = row.c[COL_BATCH]?.v ? String(row.c[COL_BATCH].v) : '';
+                    const social = row.c[COL_SOCIAL]?.v ? String(row.c[COL_SOCIAL].v) : '';
+                    const projectTitle = row.c[COL_PROJECT_TITLE]?.v ? String(row.c[COL_PROJECT_TITLE].v) : '';
+                    const projectLink = row.c[COL_PROJECT_LINK]?.v ? String(row.c[COL_PROJECT_LINK].v) : '';
+                    const projectType = row.c[COL_PROJECT_TYPE]?.v ? String(row.c[COL_PROJECT_TYPE].v) : '';
+                    const submissionFor = row.c[COL_SUBMISSION_FOR]?.v ? String(row.c[COL_SUBMISSION_FOR].v) : '';
+                    const additionalDetails = row.c[COL_DETAILS]?.v ? String(row.c[COL_DETAILS].v) : '';
+
+                    const resource = { title: projectTitle, link: projectLink, type: projectType, submissionFor: submissionFor, details: additionalDetails };
+
+                    // Store chronological submission
+                    chronologicalSubmissions.push({
+                        name: name,
+                        deptBatch: [department, batch].filter(Boolean).join(' • '),
+                        title: projectTitle,
+                        type: projectType,
+                        submissionFor: submissionFor,
+                        link: projectLink
+                    });
+
+                    if (contributorMap.has(name)) {
+
+                        const contributor = contributorMap.get(name);
+                        contributor.count++;
+                        contributor.resources.push(resource);
+                    } else {
+                        contributorMap.set(name, {
+                            name: name,
+                            email: email,
+                            department: department,
+                            batch: batch,
+                            social: social,
+                            count: 1,
+                            resources: [resource]
+                        });
+                    }
+                });
+
+                // Store last submission count for notifications
+                checkNewSubmissions(chronologicalSubmissions.length);
+
+                // Store globally for modal access
+                allContributorsData = contributorMap;
+
+                if (contributorMap.size === 0) {
+                    showEmptyState();
+                    return;
+                }
+
+                // Sort by contribution count (descending)
+                const contributors = Array.from(contributorMap.values())
+                    .sort((a, b) => b.count - a.count);
+
+                renderContributors(contributors);
+
+            } catch (error) {
+                console.error('Error fetching contributors:', error);
+                showErrorState();
+            }
+        }
+
+        function renderContributors(contributors) {
+            loadingState.style.display = 'none';
+            emptyState.style.display = 'none';
+            errorState.style.display = 'none';
+            contributorsGrid.style.display = 'grid';
+
+            contributorsGrid.innerHTML = contributors.map(contributor => {
+                const initials = contributor.name
+                    .split(' ')
+                    .filter(word => word.length > 0)
+                    .map(word => word[0])
+                    .join('')
+                    .substring(0, 2)
+                    .toUpperCase() || '?';
+
+                const subtitle = [contributor.department, contributor.batch]
+                    .filter(Boolean)
+                    .join(' • ') || 'UITS Student';
+
+                // Generate a consistent color based on name
+                const colors = [
+                    ['#64b5f6', '#42a5f5'], // Blue
+                    ['#81c784', '#66bb6a'], // Green
+                    ['#ffb74d', '#ffa726'], // Orange
+                    ['#ba68c8', '#ab47bc'], // Purple
+                    ['#4dd0e1', '#26c6da'], // Cyan
+                    ['#f06292', '#ec407a'], // Pink
+                    ['#aed581', '#9ccc65'], // Light Green
+                    ['#ff8a65', '#ff7043'], // Deep Orange
+                ];
+                const colorIndex = contributor.name.length % colors.length;
+                const [color1, color2] = colors[colorIndex];
+
+                const emailDisplay = contributor.email ? contributor.email : '';
+
+                return `
+                    <div class="contributor-card" onclick="openModal('${escapeHtml(contributor.name).replace(/'/g, "\\'")}')"
+                         data-color1="${color1}" data-color2="${color2}">
+                        <div class="contributor-avatar" style="background: linear-gradient(135deg, ${color1}, ${color2});">
+                            ${initials}
+                        </div>
+                        <div class="contributor-name">${escapeHtml(contributor.name)}</div>
+                        ${emailDisplay ? `<div class="contributor-email">${escapeHtml(emailDisplay)}</div>` : ''}
+                        <div class="contributor-id">${escapeHtml(subtitle)}</div>
+                        <div class="contributor-stats">
+                            <div class="stat-item">
+                                <span class="stat-value">${contributor.count}</span>
+                                <span class="stat-label">${contributor.count === 1 ? 'Resource' : 'Resources'}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function showEmptyState() {
+            loadingState.style.display = 'none';
+            emptyState.style.display = 'flex';
+            emptyState.style.flexDirection = 'column';
+            errorState.style.display = 'none';
+            contributorsGrid.style.display = 'none';
+        }
+
+        function showErrorState() {
+            loadingState.style.display = 'none';
+            emptyState.style.display = 'none';
+            errorState.style.display = 'flex';
+            errorState.style.flexDirection = 'column';
+            contributorsGrid.style.display = 'none';
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Resource type to page URL mapping
+        const resourceTypePages = {
+            'Tools': 'tools.html',
+            'Course Repositories': 'courses.html',
+            'Materials': 'materials.html',
+            'Community': 'community.html',
+            'Official': 'official.html',
+            'Portfolio': 'portfolios.html',
+            'Portfolios': 'portfolios.html',
+            'Guidance': 'guidance.html'
+        };
+
+        // Get page URL for a resource type
+        function getResourceTypePage(type) {
+            if (!type) return null;
+            // Check exact match first
+            if (resourceTypePages[type]) return resourceTypePages[type];
+            // Check case-insensitive match
+            const lowerType = type.toLowerCase();
+            for (const [key, value] of Object.entries(resourceTypePages)) {
+                if (key.toLowerCase() === lowerType) return value;
+            }
+            return null;
+        }
+
+        // Modal functions
+        function openModal(contributorName) {
+            const contributor = allContributorsData.get(contributorName);
+            if (!contributor) return;
+
+            const modal = document.getElementById('resources-modal');
+            const modalName = document.getElementById('modal-name');
+            const modalSubtitle = document.getElementById('modal-subtitle');
+            const modalAvatar = document.getElementById('modal-avatar');
+            const modalContactInfo = document.getElementById('modal-contact-info');
+            const modalResources = document.getElementById('modal-resources');
+
+            // Set contributor info
+            modalName.textContent = contributor.name;
+
+            // Set subtitle (department & batch)
+            const subtitle = [contributor.department, contributor.batch]
+                .filter(Boolean)
+                .join(' • ') || 'UITS Student';
+            modalSubtitle.textContent = subtitle;
+
+            // Build contact info section
+            let contactHtml = '<h4>Contact Information</h4>';
+
+            if (contributor.email) {
+                contactHtml += `
+                    <div class="contact-item">
+                        <i class="fa-solid fa-envelope"></i>
+                        <a href="mailto:${escapeHtml(contributor.email)}">${escapeHtml(contributor.email)}</a>
+                    </div>
+                `;
+            }
+
+            if (contributor.social) {
+                // Check if social is a URL
+                const isUrl = contributor.social.startsWith('http://') || contributor.social.startsWith('https://');
+                contactHtml += `
+                    <div class="contact-item">
+                        <i class="fa-solid fa-link"></i>
+                        ${isUrl
+                        ? `<a href="${escapeHtml(contributor.social)}" target="_blank">${escapeHtml(contributor.social)}</a>`
+                        : `<span>${escapeHtml(contributor.social)}</span>`
+                    }
+                    </div>
+                `;
+            }
+
+            if (!contributor.email && !contributor.social) {
+                contactHtml += '<div class="contact-item" style="color: #a0a0a0;"><i class="fa-solid fa-circle-info"></i><span>No contact information provided</span></div>';
+            }
+
+            modalContactInfo.innerHTML = contactHtml;
+
+            // Set avatar
+            const initials = contributor.name
+                .split(' ')
+                .filter(word => word.length > 0)
+                .map(word => word[0])
+                .join('')
+                .substring(0, 2)
+                .toUpperCase() || '?';
+
+            const colors = [
+                ['#64b5f6', '#42a5f5'],
+                ['#81c784', '#66bb6a'],
+                ['#ffb74d', '#ffa726'],
+                ['#ba68c8', '#ab47bc'],
+                ['#4dd0e1', '#26c6da'],
+                ['#f06292', '#ec407a'],
+                ['#aed581', '#9ccc65'],
+                ['#ff8a65', '#ff7043'],
+            ];
+            const colorIndex = contributor.name.length % colors.length;
+            const [color1, color2] = colors[colorIndex];
+
+            modalAvatar.textContent = initials;
+            modalAvatar.style.background = `linear-gradient(135deg, ${color1}, ${color2})`;
+
+            // Render resources
+            modalResources.innerHTML = contributor.resources
+                .filter(r => r.title || r.link) // Only show resources with title or link
+                .reverse() // Sort from bottom to top (most recent first)
+                .map(resource => {
+                    const typePage = getResourceTypePage(resource.type);
+                    const typeHtml = resource.type
+                        ? (typePage
+                            ? `<a href="${typePage}" class="resource-type">${escapeHtml(resource.type)}</a>`
+                            : `<span class="resource-type">${escapeHtml(resource.type)}</span>`)
+                        : '';
+                    const submissionForHtml = resource.submissionFor
+                        ? `<span class="resource-type" style="background: rgba(156, 39, 176, 0.2); color: #ce93d8; margin-left: 0.5rem;">${escapeHtml(resource.submissionFor)}</span>`
+                        : '';
+
+                    return `
+                        <div class="resource-item">
+                            <div class="resource-title">${escapeHtml(resource.title || 'Untitled Resource')}</div>
+                            ${submissionForHtml} ${typeHtml}
+                            ${resource.details ? `<div class="resource-details" style="color: #a0a0a0; font-size: 0.85rem; margin-bottom: 0.75rem; line-height: 1.4;">${escapeHtml(resource.details)}</div>` : ''}
+                            ${resource.link ? `
+                                <a href="${escapeHtml(resource.link)}" target="_blank" class="resource-link">
+                                    <i class="fa-solid fa-link"></i>
+                                    View Resource
+                                </a>
+                            ` : ''}
+                        </div>
+                    `;
+                }).join('') || '<p style="color: #a0a0a0; text-align: center;">No resources found.</p>';
+
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('resources-modal');
+            modal.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        // Recent Submissions Panel Functions
+        async function showRecentSubmissions() {
+            const panel = document.getElementById('recent-submissions-panel');
+            const body = document.getElementById('recent-panel-body');
+
+            // Show panel first with loading state
+            panel.style.display = 'flex';
+            requestAnimationFrame(() => {
+                panel.classList.add('active');
+            });
+            document.body.style.overflow = 'hidden';
+
+            body.innerHTML = '<div style="text-align: center; padding: 2rem; color: #64b5f6;"><i class="fa-solid fa-spinner fa-spin fa-2x"></i><p style="margin-top: 1rem; color: #a0a0a0;">Fetching latest submissions...</p></div>';
+
+            try {
+                // Fetch fresh data
+                await fetchContributors();
+            } catch (err) {
+                body.innerHTML = '<p style="color: #ef5350; text-align: center; padding: 2rem;"><i class="fa-solid fa-circle-exclamation"></i> Error fetching updates.</p>';
+                return;
+            }
+
+            // Take the last 10 submissions and reverse for most recent first
+            const recent = chronologicalSubmissions.slice(-10).reverse();
+
+            if (recent.length === 0) {
+                body.innerHTML = '<p style="color: #a0a0a0; text-align: center; padding: 2rem;">No recent submissions found.</p>';
+            } else {
+                body.innerHTML = recent.map(item => {
+                    const typePage = getResourceTypePage(item.type);
+                    const typeBadgeHtml = `
+                        <span class="recent-type-badge">
+                            <i class="fa-solid fa-file-circle-check"></i>
+                            ${item.type || 'Resource'}
+                        </span>
+                    `;
+                    const typeLinkHtml = typePage
+                        ? `<a href="${typePage}" style="text-decoration: none;">${typeBadgeHtml}</a>`
+                        : typeBadgeHtml;
+
+                    const submissionForBadgeHtml = item.submissionFor
+                        ? `<span class="recent-type-badge" style="background: rgba(156, 39, 176, 0.2); color: #ce93d8;">
+                            <i class="fa-solid fa-bullseye"></i>
+                            ${escapeHtml(item.submissionFor)}
+                           </span>`
+                        : '';
+
+                    return `
+                        <div class="recent-item">
+                            <div class="recent-item-header">
+                                ${submissionForBadgeHtml}
+                                ${typeLinkHtml}
+                                
+                            </div>
+                            <p class="recent-item-text">
+                                <strong>${escapeHtml(item.name)}</strong> contributed: 
+                                ${item.link ? `<a href="${escapeHtml(item.link)}" target="_blank" style="color: #64b5f6; text-decoration: none;">${escapeHtml(item.title || 'a resource')}</a>` : escapeHtml(item.title || 'a resource')}
+                            </p>
+                            ${item.deptBatch ? `<span class="recent-dept">${escapeHtml(item.deptBatch)}</span>` : ''}
+                        </div>
+                    `;
+                }).join('');
+            }
+
+        }
+
+        function closeRecentPanel() {
+            const panel = document.getElementById('recent-submissions-panel');
+            panel.classList.remove('active');
+            setTimeout(() => {
+                panel.style.display = 'none';
+                document.body.style.overflow = '';
+            }, 300);
+        }
+
+        // Close panels on overlay click
+        window.onclick = function (event) {
+            const resourceModal = document.getElementById('resources-modal');
+            const recentPanel = document.getElementById('recent-submissions-panel');
+            if (event.target == resourceModal) {
+                closeModal();
+            }
+            if (event.target == recentPanel) {
+                closeRecentPanel();
+            }
+        }
+
+        // Close on Escape key
+        document.addEventListener('keydown', function (event) {
+            if (event.key === 'Escape') {
+                closeModal();
+                closeRecentPanel();
+            }
+        });
+
+        // Notification Functions
+        function checkNewSubmissions(currentCount) {
+            const lastCount = localStorage.getItem('lastSubmissionCount');
+
+            if (lastCount !== null) {
+                const countDiff = currentCount - parseInt(lastCount);
+                if (countDiff > 0) {
+                    showNotification(countDiff);
+                }
+            }
+
+            localStorage.setItem('lastSubmissionCount', currentCount);
+        }
+
+        async function showNotification(newCount) {
+            if (!("Notification" in window)) return;
+
+            if (Notification.permission === "granted") {
+                new Notification("oU1TS Portal", {
+                    body: `${newCount} new submission${newCount > 1 ? 's' : ''} detected!`,
+                    icon: "icons/icon.webp"
+                });
+            } else if (Notification.permission !== "denied") {
+                const permission = await Notification.requestPermission();
+                if (permission === "granted") {
+                    showNotification(newCount);
+                }
+            }
+        }
+
+        // Initialize
+        fetchContributors();
+
+        // Request notification permission on load
+        if ("Notification" in window && Notification.permission === "default") {
+            Notification.requestPermission();
+        }
+
+    </script>
+    <script src="script.js"></script>
+</body>
+
+</html>

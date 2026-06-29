@@ -1,0 +1,170 @@
+[
+  {
+    "id": "portfolio-b1tranger",
+    "icon": {
+      "type": "image",
+      "src": "portfolio-icon/b1ranger-portfolio.webp",
+      "background": "linear-gradient(135deg, #e8f5e9, #c8e6c9)"
+    },
+    "title": "@b1tranger/0432410005101088",
+    "description": "I’m a CSE undergrad at UITS, exploring and learning. I have a deep appreciation for poetry and the Arabic language. | b1tranger.01@gmail.com",
+    "tags": ["Development", "Editing", "Content Creation"],
+    "visitUrl": "https://b1tranger.netlify.app/",
+    "copyUrl": "https://uitssec.github.io/"
+  },
+  {
+    "id": "portfolio-chatokjnr",
+    "icon": {
+      "type": "image",
+      "src": "portfolio-icon/AnNazmusSakib-portfolio.webp",
+      "background": "linear-gradient(135deg, #f3e5f500, #ffffff00)"
+    },
+    "title": "@chatok-jnr/0432220005101058",
+    "description": "I'm always open to discussing new projects, creative ideas, or opportunities to be part of your vision. | md.sakib.hos3n@gmail.com | <a href=\"https://www.facebook.com/sakib.the.jnr.chatok\" target=\"_blank\">Social</a>",
+    "tags": ["Backend Developer", "Programmer", "Mentorship"],
+    "visitUrl": "https://iamchatokjunior.netlify.app/",
+    "copyUrl": "https://iamchatokjunior.netlify.app/"
+  },
+  {
+    "id": "portfolio-atikshahria",
+    "icon": {
+      "type": "image",
+      "src": "portfolio-icon/AtikShahriaOpu-portfolio2.webp",
+      "background": "linear-gradient(135deg, #f3e5f500, #ffffff00)"
+    },
+    "title": "@Atik Shahria Opu/0432220005101079",
+    "description": "I am a backend developer and competitive problem-solver with production experience. I specialize in scalable system architecture, algorithm optimization, and modern development practices. I combine strong computer science fundamentals with practical software engineering skills. | atikshariaropu@gmail.com | <a href=\"https://www.facebook.com/atikshahriaopu\" target=\"_blank\">Social</a>",
+    "tags": ["Backend Developer", "Programmer"],
+    "visitUrl": "https://atikshahriaopu.netlify.app/",
+    "copyUrl": "https://atikshahriaopu.netlify.app/"
+  },
+  {
+    "id": "portfolio-MahfuzRahman",
+    "icon": {
+      "type": "image",
+      "src": "portfolio-icon/MahfuzRahman-portfolio.webp",
+      "background": "linear-gradient(135deg, #f3e5f500, #ffffff00)"
+    },
+    "title": "@Md. Mahfuz/0432310005101057",
+    "description": "I am a Fullstack Developer and Competitive Programmer. I specialize in building performance-critical applications with strict adherence to clean architecture and modern design patterns. | mahfuzur3456@gmail.com | <a href=\"https://www.linkedin.com/in/md-mahfuz-dev\" target=\"_blank\">Social</a>",
+    "tags": ["Fullstack Web Developer", "Competitive Programmer"],
+    "visitUrl": "https://mahfuz-portfolio-three.vercel.app/",
+    "copyUrl": "https://mahfuz-portfolio-three.vercel.app/"
+  },
+  {
+    "id": "portfolio-AkibReza",
+    "icon": {
+      "type": "image",
+      "src": "portfolio-icon/AkibReza-portfolio.webp",
+      "background": "linear-gradient(135deg, #f3e5f500, #ffffff00)"
+    },
+    "title": "@Akib Reza/0432220005101061",
+    "description": "Final-year Computer Science student with hands-on experience delivering real-world web applications for international clients. I specialize in building responsive frontends, robust backends, and end-to-end features that are reliable, scalable, and ready for production. | akib.reza23@gmail.com | <a href=\"https://www.facebook.com/alpha.akib\" target=\"_blank\">Social</a>",
+    "tags": ["MERN Stack Developer"],
+    "visitUrl": "https://akibreza.netlify.app/",
+    "copyUrl": "https://akibreza.netlify.app/"
+  },
+  {
+    "id": "portfolio-AhammedAbdaliKhan",
+    "icon": {
+      "type": "image",
+      "src": "portfolio-icon/AhammedAbdaliKhan-portfolio.webp",
+      "background": "linear-gradient(135deg, #f3e5f500, #ffffff00)"
+    },
+    "title": "@Ahammed Abdali Khan/0432320005101118",
+    "description": "Hello! I'm Ahmmad, a strategic problem-solver from Dhaka, Bangladesh, currently pursuing my CSE degree at UITS. I am actively preparing for my Master's in Australia while building security tools in Parrot OS and Kali Linux. | <a href=\"https://www.facebook.com/ahk.abdali/\" target=\"_blank\">Social</a>",
+    "tags": ["Backend Developer", "Cybersecurity"],
+    "visitUrl": "https://abdali.vercel.app/",
+    "copyUrl": "https://abdali.vercel.app/"
+  },
+  {
+    "id": "portfolio-MdKamruzzamanShishir",
+    "icon": {
+      "type": "image",
+      "src": "portfolio-icon/MdKamruzzamanShishir-portfolio.webp",
+      "background": "linear-gradient(135deg, #f3e5f500, #ffffff00)"
+    },
+    "title": "@Md Kamruzzaman Shishir/1814355002",
+    "description": "I am a professional Web Developer and IT Specialist based in Bangladesh. I specialize in building high-performance websites, managing secure IT infrastructures, and delivering custom digital solutions for businesses worldwide. | info.mkshishir@gmail.com | <a href=\"https://www.linkedin.com/in/md-kamruzzaman-shishir/\" target=\"_blank\">Social</a>",
+    "tags": ["IT Specialist", "Web Developer", "E-commerce", "CMS Expertise", "Infrastructure", "Database Management"],
+    "visitUrl": "https://mkshishir.pages.dev/",
+    "copyUrl": "https://mkshishir.pages.dev/"
+  },
+  {
+    "id": "portfolio-SelimReza",
+    "icon": {
+      "type": "image",
+      "src": "portfolio-icon/SelimReza-portfolio.webp",
+      "background": "linear-gradient(135deg, #f3e5f500, #ffffff00)"
+    },
+    "title": "@Selim Reza/0432410005101150 <span style=\"color: rgba(255, 255, 255, 0.253);\">[ updated ]</span>",
+    "description": "Blending deep Python, OOP & DSA expertise with AI-powered workflows to ship secured, production-grade systems. Awarded \"Developer of the Quarter\" at Join Venture AI. | selim.reza.uits@gmail.com | <a href=\"https://www.linkedin.com/in/selim-reza-dev/\" target=\"_blank\">Social</a>",
+    "tags": ["Backend Developer", "Python"],
+    "visitUrl": "https://portfolio.selimreza.dev/",
+    "copyUrl": "https://portfolio.selimreza.dev/"
+  },
+  {
+    "id": "portfolio-KaziMdAzharUddinAbeer",
+    "icon": {
+      "type": "image",
+      "src": "portfolio-icon/KaziMdAzharUddinAbeer-portfolio.webp",
+      "background": "linear-gradient(135deg, #f3e5f500, #ffffff00)"
+    },
+    "title": "@Kazi Md. Azhar Uddin Abeer/0432320005101120",
+    "description": "Specialized in penetration testing, secure DevOps, and building resilient systems. 7+ years of experience in backend development and infrastructure security. | c.azhar@outlook.com | <a href=\"https://www.facebook.com/4xrhd\" target=\"_blank\">Social</a>",
+    "tags": ["Pentester", "DevOps", "Cybersecurity"],
+    "visitUrl": "http://4xrhd.rf.gd",
+    "copyUrl": "http://4xrhd.rf.gd"
+  },
+  {
+    "id": "portfolio-#",
+    "icon": {
+      "type": "image",
+      "src": "portfolio-icon/NafizAlZawad-portfolio.webp",
+      "background": "linear-gradient(135deg, #f3e5f500, #ffffff00)"
+    },
+    "title": "Nafiz Al Zawad/0432220005101041",
+    "description": "I'm a 4th-year Computer Science student from Bangladesh who believes that great software isn't just built, it's refined, tested, and trusted. My journey through development, documentation, and client experience naturally pulled me toward one direction: Software Quality Assurance. | contact@zawad.dev | <a href=\"https://linkedin.com/in/nafizalzawad\" target=\"_blank\">Social</a>",
+    "tags": ["QA Engineer", "Automation Specialist", "Documentation"],
+    "visitUrl": "https://zawad.dev/",
+    "copyUrl": "https://zawad.dev/"
+  },
+  {
+    "id": "portfolio-safrid",
+    "icon": {
+      "type": "image",
+      "src": "portfolio-icon/safrid-portfolio.webp",
+      "background": "linear-gradient(135deg, #f3e5f500, #ffffff00)"
+    },
+    "title": "@MD Safrid Bhueyan/0432310005101080",
+    "description": "Building AI-powered scalable mobile solutions. Expert in cross-platform development and machine learning integration. | safridbhueyan@gmail.com<br>Socials: <a href=\"https://linkedin.com/in/safridbhueyan\" target=\"_blank\">LinkedIn</a> | <a href=\"https://github.com/safridbhueyan\" target=\"_blank\">GitHub</a>",
+    "tags": ["Flutter & ML Engineer"],
+    "visitUrl": "https://portfolionew-lime-phi.vercel.app/",
+    "copyUrl": "https://portfolionew-lime-phi.vercel.app/"
+  },
+  {
+    "id": "portfolio-MohammadIsmailHossen",
+    "icon": {
+      "type": "image",
+      "src": "portfolio-icon/MohammadIsmailHossen-portfolio.jpg",
+      "background": "linear-gradient(135deg, #f3e5f500, #ffffff00)"
+    },
+    "title": "Mohammad Ismail Hossen/04325205101003",
+    "description": "I'm a CS student working my way through cloud engineering, AWS focused. I tend to learn the most random, complex things at the most random times. | <a href=\"https://www.linkedin.com/in/mohammad-ismail-hossen/\" target=\"_blank\">Social</a>",
+    "tags": ["Cloud / DevOps Engineer", "AWS", "Linux", "Python"],
+    "visitUrl": "https://ismails-nocturne.vercel.app/",
+    "copyUrl": "https://ismails-nocturne.vercel.app/"
+  },
+  {
+    "id": "portfolio-JubairAhmed",
+    "icon": {
+      "type": "image",
+      "src": "portfolio-icon/JubairAhmed-portfolio.webp",
+      "background": "linear-gradient(135deg, #f3e5f500, #ffffff00)"
+    },
+    "title": "Jubair Ahammed/0432410005101112",
+    "description": "With a strong foundation in Computer Science and hands-on expertise in modern web technologies, I thrive on building responsive applications, solving real-world problems through code, and crafting intuitive user interfaces. <br>Socials: <a href=\"https://www.facebook.com/share/1CYCQoJzyy/\" target=\"_blank\">Facebook</a> | <a href=\"https://www.linkedin.com/in/jubairahammed\" target=\"_blank\">LinkedIn</a> | <a href=\"https://github.com/JubairAhammedJubu\" target=\"_blank\">GitHub</a>",
+    "visitUrl": "https://jubairprotfolio.netlify.app/",
+    "copyUrl": "https://jubairprotfolio.netlify.app/"
+  }
+]

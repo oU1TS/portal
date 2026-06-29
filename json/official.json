@@ -1,0 +1,50 @@
+[
+  {
+    "id": "official-website",
+    "icon": {
+      "type": "icon",
+      "class": "fa-solid fa-school",
+      "color": "#1976d2",
+      "background": "linear-gradient(135deg, #e3f2fd, #bbdefb)"
+    },
+    "title": "UITS Official Website",
+    "description": "https://uits.ac.bd/",
+    "visitUrl": "https://uits.ac.bd/"
+  },
+  {
+    "id": "official-studentportal",
+    "icon": {
+      "type": "icon",
+      "class": "fa-solid fa-user-graduate",
+      "color": "#f57c00",
+      "background": "linear-gradient(135deg, #fff3e0, #ffe0b2)"
+    },
+    "title": "Student Portal",
+    "description": "https://ucam.uits.edu.bd/",
+    "visitUrl": "https://ucam.uits.edu.bd/"
+  },
+  {
+    "id": "community-github",
+    "icon": {
+      "type": "image",
+      "src": "https://res.cloudinary.com/b1tranger/image/upload/v1757773769/nobg_UITS_Cyber_Security_Wing_FB_logo_admu5c.png",
+      "alt": "UITS Cyber Security Wing",
+      "background": "linear-gradient(135deg, #212121, #424242)"
+    },
+    "title": "UITS Cyber Security Wing",
+    "description": "Welcome to the community page of Cyber Security Wing, UITS Computer Club! We explore cybersecurity through hands-on workshops, CTF challenges, and networking with experts. Join Us!<br><br>Alt: <a href=\"https://www.facebook.com/uitssec\" target=\"_blank\">Facebook</a> | <a href=\"https://discord.gg/hqBQZzMwce\" target=\"_blank\">Discord</a>",
+    "visitUrl": "https://uitssec.github.io/index.html"
+  },
+  {
+    "id": "official-attendance",
+    "icon": {
+      "type": "image",
+      "src": "official-icon/attendance-fine-icon.webp",
+      "alt": "Attendance Fine",
+      "background": "linear-gradient(135deg, #e8f5e9, #c8e6c9)"
+    },
+    "title": "CSE Attendance Fine",
+    "description": "This portal allows students of UITS Department of CSE to check their attendance fines for the Spring 2026 semester. Enter your Student ID in the lookup section to view your detailed fine breakdown.<br><a href=\"https://github.com/mrinmoybiswasU/performance-and-attendance\" target=\"_blank\">Source Code</a> | <a href=\"https://github.com/mrinmoybiswasu\" target=\"_blank\">Dev</a>",
+    "visitUrl": "https://mrinmoybiswasu.github.io/performance-and-attendance/"
+  }
+]

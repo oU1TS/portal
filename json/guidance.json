@@ -1,0 +1,26 @@
+[
+  {
+    "id": "guidance-faq-capstone",
+    "icon": {
+      "type": "icon",
+      "class": "fa-solid fa-book",
+      "color": "#0288d1",
+      "background": "linear-gradient(135deg, #e1f5fe, #b3e5fc)"
+    },
+    "title": "FAQ on Capstone Project [foxxie]",
+    "description": "foxxie's den/foxxie911.github.io | <a class=\"\" href=\"https://github.com/user-attachments/files/25094431/foxxie911_github_io_FoxxieBlog_articles_2026_FEBRUARY_FAQonC.pdf\">Backup</a><br>To address student anxiety regarding Capstone projects,<br>the author has compiled a quick FAQ guide.",
+    "visitUrl": "https://foxxie911.github.io/FoxxieBlog/articles/2026/FEBRUARY/FAQonCapstoneProject.html"
+  },
+  {
+    "id": "guidance-research-pub",
+    "icon": {
+      "type": "icon",
+      "class": "fa-solid fa-book",
+      "color": "#0288d1",
+      "background": "linear-gradient(135deg, #e1f5fe, #b3e5fc)"
+    },
+    "title": "গবেষণা প্রকাশের সম্পূর্ণ গাইড [4xrhd]",
+    "description": "গবেষণা শুধু পেপার লেখা না, এটি একটি দীর্ঘমেয়াদি কৌশল। সেই কৌশলটাকেই সহজভাবে সাজিয়ে দিয়েছি এই ছোট বইটিতে। এই বইটি বিশেষভাবে উপযোগীঃ<br>- অনার্স ও মাস্টার্স শিক্ষার্থী<br>- PhD গবেষক<br>- নতুন ও আগ্রহী গবেষক<br>- যারা বিদেশে উচ্চশিক্ষা বা একাডেমিক ক্যারিয়ার গড়তে চান<br><a class=\"\" href=\"https://github.com/user-attachments/files/26050275/Complete.Guide.to.Research.Publishing.Azhar.pdf\">Backup</a> | <a href=\"http://fb.me/\">Dev</a>",
+    "visitUrl": "https://www.supportkori.com/4xrhd/extras/complete-guide-to-research-publishing-banglav100-azhar-uddin-l17g"
+  }
+]

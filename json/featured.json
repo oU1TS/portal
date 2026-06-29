@@ -1,0 +1,29 @@
+[
+  {
+    "url": "https://uitssec.github.io/",
+    "img": "https://res.cloudinary.com/b1tranger/image/upload/v1757773769/nobg_UITS_Cyber_Security_Wing_FB_logo_admu5c.png",
+    "alt": "UITS Cyber Security Wing",
+    "title": "UITS Cyber Security Wing"
+  },
+  {
+    "url": "https://foxxie911.github.io/FoxxieBlog/articles/2026/FEBRUARY/FAQonCapstoneProject.html",
+    "icon": "fa-solid fa-book",
+    "title": "FAQ on Capstone Project"
+  },
+  {
+    "url": "https://b1tacad.netlify.app/",
+    "img": "materials-icon/b1t-acad.webp",
+    "title": "b1t Academics"
+  },
+  {
+    "url": "https://bd-ou1ts.netlify.app/",
+    "img": "tools-icon/logo-bd.png",
+    "alt": "Blood Donation Network",
+    "title": "Blood Donation Network"
+  },
+  {
+    "url": "https://www.facebook.com/groups/sfuits",
+    "img": "community-icon/sfuits-fb.webp",
+    "title": "Students Forum of UITS"
+  }
+]

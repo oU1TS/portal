@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inspirations - oU1TS Portal</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#1a1a2e">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <!-- SUPABASE -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+
+<body>    <div class="category-page">
+        <header class="category-header">
+            <a href="index.html" class="back-btn">
+                <i class="fa-solid fa-arrow-left"></i>
+                Back
+            </a>
+            <div class="category-icon" style="background: linear-gradient(135deg, #e8eaf6, #c5cae9);">
+                <i class="fa-solid fa-wand-magic-sparkles" style="color: #3f51b5;"></i>
+            </div>
+            <div class="category-info">
+                <h1>Inspirations</h1>
+                <p>Listing project portals/hubs from other Universities to get those squishy brain muscles of yours
+                    pumping.</p>
+            </div>
+            <div class="header-actions">
+                <a href="https://forms.gle/UR1HSavWJYdPBPnC8" target="_blank" class="add-link-btn">
+                    <i class="fa-solid fa-plus"></i>
+                    ADD LINK
+                </a>
+                <!-- Auth Section -->
+                <button class="auth-btn" id="authBtn" onclick="openAuthModal('login')">
+                    <i class="fa-solid fa-right-to-bracket"></i>
+                </button>
+                <div class="user-info" id="userInfo" style="display: none;">
+                    <div class="user-details" id="userDetails"></div>
+                    <button class="logout-btn" id="logoutBtn" onclick="handleLogout()">
+                        <i class="fa-solid fa-right-from-bracket"></i>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <div class="inspirations-list" style="padding: 1rem;">
+            <!-- Dynamically populated via JSON -->
+        </div>
+    </div>
+
+    <script src="js/data-renderer.js" data-page="inspirations"></script>
+    <script src="env-config.js"></script>
+    <script src="js/supabase-config.js"></script>
+    <script src="js/auth-modal.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/stars.js"></script>
+    <script>
+        function copyLink(url) {
+            navigator.clipboard.writeText(url).then(() => {
+                alert('Link copied to clipboard!');
+            });
+        }
+
+        function toggleDropdown(button) {
+            const dropdown = button.closest('.course-dropdown');
+            dropdown.classList.toggle('active');
+        }
+
+        // Initialize stars for this page
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => {
+                Stars.init('inspirations');
+            }, 500);
+        });
+    </script>
+    <script src="script.js"></script>
+</body>
+
+</html>

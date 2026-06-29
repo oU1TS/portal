@@ -1,0 +1,22 @@
+{
+  "name": "oU1TS Portal",
+  "short_name": "oU1TS",
+  "description": "Centralized hub for UITS students to access resources, projects, and community links.",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "background_color": "#1a1a2e",
+  "theme_color": "#1a1a2e",
+  "icons": [
+    {
+      "src": "icons/icon.webp",
+      "sizes": "512x512",
+      "type": "image/webp",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icons/icon.webp",
+      "sizes": "192x192",
+      "type": "image/webp"
+    }
+  ]
+}

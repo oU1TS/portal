@@ -1,0 +1,59 @@
+[
+  {
+    "category": "UIU",
+    "fullName": "United International University",
+    "color": "#64b5f6",
+    "items": [
+      {
+        "id": "insp-uiu-links",
+        "title": "UIU Links",
+        "url": "https://uiulinks.vercel.app/",
+        "description": "An amazing centralized student portal and resource hub for UIU."
+      },
+      {
+        "id": "insp-uiu-student-hub",
+        "title": "UIU Student Hub",
+        "url": "https://uiu-student-hub.vercel.app/",
+        "description": "A great collection of tools, communities, and study resources built by UIU students."
+      },
+      {
+        "id": "insp-awesome-uiu",
+        "title": "Awesome UIU",
+        "url": "https://awesomeuiu.tech/",
+        "description": "A curated list of awesome products, hacks, and open-source projects by UIU students."
+      }
+    ]
+  },
+  {
+    "category": "DIU",
+    "fullName": "Daffodil International University",
+    "color": "#81c784",
+    "items": [
+      {
+        "id": "insp-diu-project-hub",
+        "title": "DIU Project Hub",
+        "url": "https://diuprojecthub.vercel.app/",
+        "description": "A centralized platform showcasing prominent student projects from DIU."
+      },
+      {
+        "id": "insp-diu-cover-page",
+        "title": "DIU Cover Page",
+        "url": "https://diucoverpage.com/",
+        "description": "A simple, fast, and reliable way to create professional cover pages for your assignments, lab reports, and indexes. No MS Word needed — just fill, download, and attach on your files for online submissions."
+      }
+    ]
+  },
+  {
+    "category": "NU",
+    "fullName": "National University",
+    "color": "#64b5f6",
+    "items": [
+      {
+        "id": "insp-nu-news",
+        "title": "NU News",
+        "url": "https://nu-app.pro.bd/",
+        "description": "National University Notice Hub. | <a href=\"https://github.com/ReXiOP/NU-Notice-App\" target=\"_blank\">GitHub</a>"
+      }
+    ]
+  }
+]

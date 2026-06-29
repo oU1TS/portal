@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Course Repositories - oU1TS Portal</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#1a1a2e">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <!-- SUPABASE -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+
+<body>
+    <div class="category-page">
+        <header class="category-header">
+            <a href="index.html" class="back-btn">
+                <i class="fa-solid fa-arrow-left"></i>
+                Back
+            </a>
+            <div class="category-icon" style="background: linear-gradient(135deg, #e0f7fa, #b2ebf2);">
+                <i class="fa-brands fa-github" style="color: #00838f;"></i>
+            </div>
+            <div class="category-info">
+                <h1>Course Repositories</h1>
+                <p>GitHub Repositories</p>
+            </div>
+            <div class="header-actions">
+                <a href="https://forms.gle/UR1HSavWJYdPBPnC8" target="_blank" class="add-link-btn">
+                    <i class="fa-solid fa-plus"></i>
+                    ADD REPO
+                </a>
+                <!-- Auth Section -->
+                <button class="auth-btn" id="authBtn" onclick="openAuthModal('login')">
+                    <i class="fa-solid fa-right-to-bracket"></i>
+                </button>
+                <div class="user-info" id="userInfo" style="display: none;">
+                    <div class="user-details" id="userDetails"></div>
+                    <button class="logout-btn" id="logoutBtn" onclick="handleLogout()">
+                        <i class="fa-solid fa-right-from-bracket"></i>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <div class="course-list">
+            <!-- Dynamically populated via JSON -->
+        </div>
+    </div>
+
+    <script src="js/data-renderer.js" data-page="courses"></script>
+    <script src="env-config.js"></script>
+    <script src="js/supabase-config.js"></script>
+    <script src="js/auth-modal.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/stars.js"></script>
+    <script>
+        function toggleDropdown(button) {
+            const dropdown = button.parentElement;
+            dropdown.classList.toggle('active');
+        }
+
+        // Custom per-dropdown star sorting for courses page
+        const CoursesStars = {
+            resourceType: 'courses',
+
+            async init() {
+                await this.loadStarCounts();
+                this.sortAllDropdowns();
+
+                // Update UI based on auth state
+                window.addEventListener('authStateChanged', () => {
+                    this.updateStarButtons();
+                });
+            },
+
+            // Alias for compatibility with auth.js which calls Stars.loadStars()
+            async loadStars() {
+                await this.loadStarCounts();
+                this.sortAllDropdowns();
+            },
+
+            async loadStarCounts() {
+                try {
+                    // Get all resource IDs from the page
+                    const items = document.querySelectorAll('[data-resource-id]');
+                    const resourceIds = Array.from(items).map(item => item.dataset.resourceId);
+
+                    if (resourceIds.length === 0) return;
+
+                    // Fetch star counts from Supabase
+                    const { data, error } = await window.supabaseClient
+                        .from('stars')
+                        .select('resource_id')
+                        .eq('resource_type', this.resourceType)
+                        .in('resource_id', resourceIds);
+
+                    if (error) throw error;
+
+                    // Count stars per resource
+                    const starCounts = {};
+                    resourceIds.forEach(id => starCounts[id] = 0);
+                    if (data) {
+                        data.forEach(star => {
+                            starCounts[star.resource_id] = (starCounts[star.resource_id] || 0) + 1;
+                        });
+                    }
+
+                    // Update UI with counts
+                    items.forEach(item => {
+                        const resourceId = item.dataset.resourceId;
+                        const countEl = item.querySelector('.star-count');
+                        if (countEl) {
+                            countEl.textContent = starCounts[resourceId] || 0;
+                        }
+                    });
+
+                    // Check which resources current user has starred
+                    await this.loadUserStars(resourceIds);
+                } catch (err) {
+                    console.error('Error loading star counts:', err);
+                }
+            },
+
+            async loadUserStars(resourceIds) {
+                try {
+                    const { data: { user } } = await window.supabaseClient.auth.getUser();
+                    if (!user) return;
+
+                    const { data, error } = await window.supabaseClient
+                        .from('stars')
+                        .select('resource_id')
+                        .eq('user_id', user.id)
+                        .eq('resource_type', this.resourceType)
+                        .in('resource_id', resourceIds);
+
+                    if (error) throw error;
+
+                    // Mark starred items
+                    if (data) {
+                        data.forEach(star => {
+                            const item = document.querySelector(`[data-resource-id="${star.resource_id}"]`);
+                            if (item) {
+                                const btn = item.querySelector('.star-btn');
+                                if (btn) btn.classList.add('starred');
+                            }
+                        });
+                    }
+
+                    this.updateStarButtons();
+                } catch (err) {
+                    console.error('Error loading user stars:', err);
+                }
+            },
+
+            updateStarButtons() {
+                const isLoggedIn = window.Auth && window.Auth.currentUser;
+                document.querySelectorAll('.star-btn').forEach(btn => {
+                    if (isLoggedIn) {
+                        btn.classList.remove('disabled');
+                        btn.title = 'Click to star this resource';
+                    } else {
+                        btn.classList.add('disabled');
+                        btn.title = 'Login to star resources';
+                    }
+                });
+            },
+
+            sortAllDropdowns() {
+                // Sort items within each dropdown separately
+                document.querySelectorAll('.course-content').forEach(content => {
+                    const items = Array.from(content.querySelectorAll('.repo-item'));
+                    if (items.length <= 1) return;
+
+                    // Sort by star count (descending)
+                    items.sort((a, b) => {
+                        const countA = parseInt(a.querySelector('.star-count')?.textContent || '0');
+                        const countB = parseInt(b.querySelector('.star-count')?.textContent || '0');
+                        return countB - countA;
+                    });
+
+                    // Re-append in sorted order
+                    items.forEach(item => content.appendChild(item));
+                });
+            },
+
+            async toggleStar(resourceId) {
+                if (!window.Auth || !window.Auth.currentUser) {
+                    openAuthModal('login');
+                    return;
+                }
+
+                const item = document.querySelector(`[data-resource-id="${resourceId}"]`);
+                const btn = item?.querySelector('.star-btn');
+                const countEl = item?.querySelector('.star-count');
+                if (!btn || !countEl) return;
+
+                const isStarred = btn.classList.contains('starred');
+
+                try {
+                    if (isStarred) {
+                        // Remove star
+                        const { error } = await window.supabaseClient
+                            .from('stars')
+                            .delete()
+                            .eq('user_id', window.Auth.currentUser.id)
+                            .eq('resource_id', resourceId)
+                            .eq('resource_type', this.resourceType);
+
+                        if (error) throw error;
+
+                        btn.classList.remove('starred');
+                        countEl.textContent = Math.max(0, parseInt(countEl.textContent) - 1);
+                    } else {
+                        // Add star
+                        const { error } = await window.supabaseClient
+                            .from('stars')
+                            .insert({
+                                user_id: window.Auth.currentUser.id,
+                                resource_id: resourceId,
+                                resource_type: this.resourceType
+                            });
+
+                        if (error) throw error;
+
+                        btn.classList.add('starred');
+                        countEl.textContent = parseInt(countEl.textContent) + 1;
+                    }
+
+                    // Re-sort just this dropdown section
+                    const dropdown = item.closest('.course-content');
+                    if (dropdown) {
+                        const items = Array.from(dropdown.querySelectorAll('.repo-item'));
+                        items.sort((a, b) => {
+                            const countA = parseInt(a.querySelector('.star-count')?.textContent || '0');
+                            const countB = parseInt(b.querySelector('.star-count')?.textContent || '0');
+                            return countB - countA;
+                        });
+                        items.forEach(i => dropdown.appendChild(i));
+                    }
+                } catch (err) {
+                    console.error('Error toggling star:', err);
+                    alert('Failed to update star. Please try again.');
+                }
+            }
+        };
+
+        // Save reference to original Stars before overriding
+        const OriginalStars = window.Stars;
+
+        // Override Stars for this page
+        window.Stars = CoursesStars;
+
+        // Also set resourceType on original Stars as fallback
+        // (in case it's still referenced somewhere)
+        if (OriginalStars) {
+            OriginalStars.resourceType = 'courses';
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => {
+                CoursesStars.init();
+            }, 500);
+        });
+    </script>
+    <script src="script.js"></script>
+</body>
+
+</html>

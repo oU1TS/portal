@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>oU1TS Portal - Academic Project Hub</title>
+    <meta name="description" content="Projects for and by the students of UITS.">
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#1a1a2e">
+
+    <!-- FONT AWESOME -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <!-- SUPABASE -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+
+<body>
+    <div class="overlay" id="overlay"></div>    <div class="container homepage-container">
+        <nav class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h2>Navigation</h2>
+                <p>Quick access to resources</p>
+            </div>
+            <ul class="nav-menu">
+
+                <li class="nav-item">
+                    <a href="#featured" class="nav-link">Featured Projects</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#categories" class="nav-link">Categories</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#about" class="nav-link">About</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#platforms" class="nav-link">Socials</a>
+                </li>
+                <div class="sidebar-divider"></div>
+                <div style="display: flex;justify-content: center;">
+                    <a href="https://github.com/b1tranger/ou1ts.portal/releases" class="open-app-btn" target="_blank">
+                        Open in App
+                    </a>
+                </div>
+            </ul>
+        </nav>
+
+
+        <main class="main-content">
+
+            <!-- Top Auth Bar -->
+            <div class="top-auth-bar">
+                <!-- Mobile Menu Button -->
+                <button class="mobile-menu-button" id="mobileMenuToggle">☰</button>
+
+                <!-- Auth Section -->
+                <div class="auth-section">
+                    <button class="auth-btn" id="authBtn" onclick="openAuthModal('login')">
+                        <i class="fa-solid fa-right-to-bracket"></i>
+                        <span>Login</span>
+                    </button>
+                    <div class="user-info" id="userInfo" style="display: none;">
+                        <div class="user-details" id="userDetails"></div>
+                        <button class="logout-btn" id="logoutBtn" onclick="handleLogout()">
+                            <i class="fa-solid fa-right-from-bracket"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hero Section -->
+            <section class="hero-section">
+
+
+                <h1 class="hero-title">
+                    oU1TS Portal
+                </h1>
+
+                <p class="hero-description">
+                    Projects for and by the students of UITS.<br><small style="color: #ffffff67;">Resources | Guides |
+                        References</small>
+                </p>
+
+                <a href="https://forms.gle/UR1HSavWJYdPBPnC8" class="submit-btn" target="_blank">
+                    <i class="fa-solid fa-plus"></i>
+                    Submit Resource
+                </a>
+            </section>
+
+
+            <!-- Featured Projects Marquee -->            <section class="featured-section" id="featured">
+                <h2 class="category-title">Featured Projects</h2>
+                <div class="marquee-container">
+                    <div class="marquee-track">
+                        <!-- Dynamically populated via JSON -->
+                    </div>
+                </div>
+                <br><br>
+                <p class="hero-tagline" style="text-align: center;">visit <span class="repo-info"><a
+                            href="https://ou1ts.netlify.app/ " target="_blank">oU1TS initiative</a></span></p>
+            </section>
+
+            <!-- Category Cards Grid -->
+            <section class="category-cards-section" id="categories">
+                <div class="category-cards-grid">
+
+                    <a href="materials.html" class="category-card">
+                        <div class="card-icon" style="background: linear-gradient(135deg, #f3e5f5, #e1bee7);">
+                            <i class="fa-solid fa-graduation-cap" style="color: #7b1fa2;"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>Materials</h3>
+                            <p>Academic Resources and Links</p>
+                        </div>
+                        <div class="card-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+                    </a>
+
+                    <a href="tools.html" class="category-card">
+                        <div class="card-icon" style="background: linear-gradient(135deg, #e8f5e9, #c8e6c9);">
+                            <i class="fa-solid fa-book-open" style="color: #388e3c;"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>Tools</h3>
+                            <p>Projects</p>
+                        </div>
+                        <div class="card-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+                    </a>
+                    <a href="guidance.html" class="category-card">
+                        <div class="card-icon" style="background: linear-gradient(135deg, #e1f5fe, #b3e5fc);">
+                            <i class="fa-solid fa-lightbulb" style="color: #0288d1;"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>Guidance</h3>
+                            <p>Tips & Tutorials</p>
+                        </div>
+                        <div class="card-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+                    </a>
+
+                    <a href="community.html" class="category-card">
+                        <div class="card-icon" style="background: linear-gradient(135deg, #fce4ec, #f8bbd9);">
+                            <i class="fa-solid fa-share-nodes" style="color: #c2185b;"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>Community</h3>
+                            <p>Groups & Social</p>
+                        </div>
+                        <div class="card-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+                    </a>
+
+
+                    <a href="courses.html" class="category-card">
+                        <div class="card-icon" style="background: linear-gradient(135deg, #e0f7fa, #b2ebf2);">
+                            <i class="fa-brands fa-github" style="color: #00838f;"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>Course Repos</h3>
+                            <p>GitHub Repositories</p>
+                        </div>
+                        <div class="card-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+                    </a>
+                    <a href="portfolios.html" class="category-card">
+                        <div class="card-icon" style="background: linear-gradient(135deg, #fff3e0, #ffe0b2);">
+                            <i class="fa-solid fa-user" style="color: #f57c00;"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>Portfolios</h3>
+                            <p>Showcases</p>
+                        </div>
+                        <div class="card-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+                    </a>
+                    <a href="official.html" class="category-card">
+                        <div class="card-icon" style="background: linear-gradient(135deg, #e3f2fd, #bbdefb);">
+                            <i class="fa-solid fa-globe" style="color: #1976d2;"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>Official UITS</h3>
+                            <p>Portals & Notices</p>
+                        </div>
+                        <div class="card-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+                    </a>
+                    <!-- Divider -->
+                    <div style="grid-column: 1 / -1; border-top: 1px solid rgba(255,255,255,0.1); margin: 0.5rem 0;">
+                    </div>
+
+                    <a href="contributions.html" class="category-card">
+                        <div class="card-icon" style="background: linear-gradient(135deg, #e8f5e9, #c8e6c9);">
+                            <i class="fa-solid fa-users" style="color: #388e3c;"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>Contributors</h3>
+                            <p>Resource Submitters</p>
+                        </div>
+                        <div class="card-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+                    </a>
+
+                    <a href="inspirations.html" class="category-card">
+                        <div class="card-icon" style="background: linear-gradient(135deg, #e8eaf6, #c5cae9);">
+                            <i class="fa-solid fa-wand-magic-sparkles" style="color: #3f51b5;"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>Inspirations</h3>
+                            <p>Lacking ideas? See what others are doing and make one for your University!</p>
+                        </div>
+                        <div class="card-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+                    </a>
+
+
+
+
+                </div>
+            </section>
+            <br><br>
+
+
+
+            <!-- About Section -->
+            <div class="category-section" id="about">
+                <h2 class="category-title">About This Portal</h2>
+                <div class="resources-grid">
+                    <div class="resource-card" style="grid-column: 1 / -1;">
+                        <h3>Academic Resources Portal</h3>
+                        <p>"oU1TS" is an initiative to build the foundation of an online student-centered community for
+                            UITS. We seek people who are inherently ambitious about their career and want to pursue a
+                            productive university life. No matter the struggles that lie in the face of reality.</p>
+                        <p>This portal is just another effort at listing projects regarding UITS from its students. It's
+                            a scalable
+                            project in a sense that new projects can be listed here in the future and there are
+                            practically limitless options to organize that list. There is an app version of this if
+                            anyone fancies that.</p>
+
+                        <p style="margin-top: 1rem;">Reach out to us in any of the social platforms (preferably
+                            Telegram/Discord) if you have any feedback or just want to talk about
+                            doing projects together.</p>
+
+                        <p style="margin-top: 1rem;">Jazakallahu khair, o wanderer of life!
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Socials Section -->
+            <div class="category-section" id="platforms">
+                <h2 class="category-title">Socials</h2>
+                <div class="resources-grid socials-grid">
+
+                    <a href="https://facebook.com/groups/1074592960836263/" target="_blank">
+                        <p class="resource-card" style="text-align: center;align-items: center;"><i
+                                class="fa-brands fa-facebook" style="color: white;font-size: 2rem;"></i></p>
+                    </a>
+                    <a href="https://t.me/s/oUITS_ORnU" target="_blank">
+                        <p class="resource-card" style="text-align: center;align-items: center;"><i
+                                class="fa-brands fa-telegram" style="color: white;font-size: 2rem;"></i></p>
+                    </a>
+
+
+                    <a href="https://discord.gg/BdmArz6FHY" target="_blank">
+                        <p class="resource-card" style="text-align: center;align-items: center;"><i
+                                class="fa-brands fa-discord" style="color: white;font-size: 2rem;"></i></p>
+                    </a>
+                    <a href="https://github.com/oU1TS" target="_blank">
+                        <p class="resource-card" style="text-align: center;align-items: center;"><i
+                                class="fa-brands fa-github" style="color: white;font-size: 2rem;"></i></p>
+                    </a>
+                    <a href="https://www.reddit.com/r/oU1TS/" target="_blank">
+                        <p class="resource-card" style="text-align: center;align-items: center;"><i
+                                class="fa-brands fa-reddit" style="color: white;font-size: 2rem;"></i></p>
+                    </a>
+                </div>
+            </div>
+
+            <div class="category-section" id="download-qr">
+                <h2 class="category-title">Stable App (v2.0)</h2>
+                <img src="https://github.com/user-attachments/assets/84b61e38-12c6-44bb-b860-cad7e270d54c"
+                    style="max-width: 300px;width: 50vw;margin: auto;border-radius:15px;display: flex;margin-top: 3rem;">
+
+            </div>
+            <!-- <section> -->
+            <div class="hero-badge"
+                style="display: flex;justify-content: center;align-items: center;width: fit-content;margin: auto;">
+                <i class="fa-solid fa-link"></i>
+                <span class="repo-info"><a href="https://github.com/b1tranger/ou1ts.portal" target="_blank">Source
+                        Code</a> | <a href="https://b1tacad.netlify.app/misc/university_projects"
+                        target="_blank">References</a></span>
+                <span class="badge-dot"></span>
+            </div>
+            <br>
+            <p style="text-align: center;">Redesign inspired by <a href="https://uiulinks.vercel.app/" target="_blank"
+                    style="color: rgba(255, 255, 255, 0.377);">https://uiulinks.vercel.app/</p>
+            <!-- </section> -->
+        </main>
+    </div>
+
+    <script src="js/data-renderer.js" data-page="featured"></script>
+    <script src="env-config.js"></script>
+    <script src="js/supabase-config.js"></script>
+    <script src="js/auth-modal.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>
