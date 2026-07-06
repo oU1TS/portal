@@ -20,25 +20,58 @@
 <body>
     <div class="overlay" id="overlay"></div>
     <div class="container homepage-container">
+
+        <!-- Sidebar Navigation -->
         <nav class="sidebar" id="sidebar">
             <div class="sidebar-header">
                 <h2>Navigation</h2>
                 <p>Quick access to resources</p>
             </div>
             <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="#" class="nav-link"><i class="fa-solid fa-house"></i> Home</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#profile" class="nav-link"><i class="fa-solid fa-user-shield"></i> Profile</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#materials" class="nav-link"><i class="fa-solid fa-graduation-cap"></i> Materials</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#tools" class="nav-link"><i class="fa-solid fa-book-open"></i> Tools</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#guidance" class="nav-link"><i class="fa-solid fa-lightbulb"></i> Guidance</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#community" class="nav-link"><i class="fa-solid fa-share-nodes"></i> Community</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#courses" class="nav-link"><i class="fa-brands fa-github"></i> Course Repos</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#portfolios" class="nav-link"><i class="fa-solid fa-user"></i> Portfolios</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#official" class="nav-link"><i class="fa-solid fa-globe"></i> Official UITS</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#inspirations" class="nav-link"><i class="fa-solid fa-wand-magic-sparkles"></i>
+                        Inspirations</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#capstones" class="nav-link"><i class="fa-solid fa-diagram-project"></i> Capstones</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#mentors" class="nav-link"><i class="fa-solid fa-users-rectangle"></i> Mentors</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#talent" class="nav-link"><i class="fa-solid fa-briefcase"></i> Talent Directory</a>
+                </li>
+                <li class="nav-item">
+                    <a href="contributions.html" class="nav-link"><i class="fa-solid fa-users"></i> Contributors</a>
+                </li>
 
-                <li class="nav-item">
-                    <a href="#featured" class="nav-link">Featured Projects</a>
-                </li>
-                <li class="nav-item">
-                    <a href="#categories" class="nav-link">Categories</a>
-                </li>
-                <li class="nav-item">
-                    <a href="#about" class="nav-link">About</a>
-                </li>
-                <li class="nav-item">
-                    <a href="#platforms" class="nav-link">Socials</a>
-                </li>
                 <div class="sidebar-divider"></div>
                 <div style="display: flex;justify-content: center;">
                     <a href="https://github.com/b1tranger/ou1ts.portal/releases" class="open-app-btn" target="_blank">
@@ -48,22 +81,22 @@
             </ul>
         </nav>
 
-
         <main class="main-content">
 
             <!-- Top Auth Bar -->
             <div class="top-auth-bar">
-                <!-- Mobile Menu Button -->
+                <!-- Mobile Menu Toggle Button -->
                 <button class="mobile-menu-button" id="mobileMenuToggle">☰</button>
 
                 <!-- Auth Section -->
                 <div class="auth-section">
-                    <button class="auth-btn" id="authBtn" onclick="openAuthModal('login')">
+                    <a href="#profile" class="auth-btn" id="authBtn">
                         <i class="fa-solid fa-right-to-bracket"></i>
                         <span>Login</span>
-                    </button>
+                    </a>
                     <div class="user-info" id="userInfo" style="display: none;">
-                        <div class="user-details" id="userDetails"></div>
+                        <a href="#profile" class="user-details" id="userDetails"
+                            style="text-decoration: none; color: inherit;"></a>
                         <button class="logout-btn" id="logoutBtn" onclick="handleLogout()">
                             <i class="fa-solid fa-right-from-bracket"></i>
                         </button>
@@ -71,25 +104,24 @@
                 </div>
             </div>
 
+            <!-- ==========================================
+                 HOME VIEW ELEMENTS
+                 ========================================== -->
+
             <!-- Hero Section -->
             <section class="hero-section">
-
-
                 <h1 class="hero-title">
                     oU1TS Portal
                 </h1>
-
                 <p class="hero-description">
-                    Projects for and by the students of UITS.<br><small style="color: #ffffff67;">Resources | Guides |
-                        References</small>
+                    Projects for and by the students of UITS.<br>
+                    <small style="color: #ffffff67;">Resources | Guides | References</small>
                 </p>
-
                 <a href="https://forms.gle/UR1HSavWJYdPBPnC8" class="submit-btn" target="_blank">
                     <i class="fa-solid fa-plus"></i>
                     Submit Resource
                 </a>
             </section>
-
 
             <!-- Featured Projects Marquee -->
             <section class="featured-section" id="featured">
@@ -104,113 +136,62 @@
                             href="https://ou1ts.github.io/" target="_blank">oU1TS initiative</a></span></p>
             </section>
 
-            <!-- Category Cards Grid -->
-            <section class="category-cards-section" id="categories">
-                <div class="category-cards-grid">
-
-                    <a href="materials.html" class="category-card">
-                        <div class="card-icon" style="background: linear-gradient(135deg, #f3e5f5, #e1bee7);">
-                            <i class="fa-solid fa-graduation-cap" style="color: #7b1fa2;"></i>
-                        </div>
-                        <div class="card-content">
-                            <h3>Materials</h3>
-                            <p>Academic Resources and Links</p>
-                        </div>
-                        <div class="card-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+            <!-- Playful Floating Navigation Canvas -->
+            <section class="floating-nav-container">
+                <h2 class="category-title" style="text-align:center; margin-bottom: 2rem;">Explore Hub Resources</h2>
+                <div class="floating-nav-canvas" id="floatingCanvas">
+                    <a href="#materials" class="floating-bubble bubble-materials">
+                        <i class="fa-solid fa-graduation-cap"></i>
+                        <span>Materials</span>
                     </a>
-
-                    <a href="tools.html" class="category-card">
-                        <div class="card-icon" style="background: linear-gradient(135deg, #e8f5e9, #c8e6c9);">
-                            <i class="fa-solid fa-book-open" style="color: #388e3c;"></i>
-                        </div>
-                        <div class="card-content">
-                            <h3>Tools</h3>
-                            <p>Projects</p>
-                        </div>
-                        <div class="card-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+                    <a href="#tools" class="floating-bubble bubble-tools">
+                        <i class="fa-solid fa-book-open"></i>
+                        <span>Tools</span>
                     </a>
-                    <a href="guidance.html" class="category-card">
-                        <div class="card-icon" style="background: linear-gradient(135deg, #e1f5fe, #b3e5fc);">
-                            <i class="fa-solid fa-lightbulb" style="color: #0288d1;"></i>
-                        </div>
-                        <div class="card-content">
-                            <h3>Guidance</h3>
-                            <p>Tips & Tutorials</p>
-                        </div>
-                        <div class="card-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+                    <a href="#guidance" class="floating-bubble bubble-guidance">
+                        <i class="fa-solid fa-lightbulb"></i>
+                        <span>Guidance</span>
                     </a>
-
-                    <a href="community.html" class="category-card">
-                        <div class="card-icon" style="background: linear-gradient(135deg, #fce4ec, #f8bbd9);">
-                            <i class="fa-solid fa-share-nodes" style="color: #c2185b;"></i>
-                        </div>
-                        <div class="card-content">
-                            <h3>Community</h3>
-                            <p>Groups & Social</p>
-                        </div>
-                        <div class="card-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+                    <a href="#community" class="floating-bubble bubble-community">
+                        <i class="fa-solid fa-share-nodes"></i>
+                        <span>Community</span>
                     </a>
-
-
-                    <a href="courses.html" class="category-card">
-                        <div class="card-icon" style="background: linear-gradient(135deg, #e0f7fa, #b2ebf2);">
-                            <i class="fa-brands fa-github" style="color: #00838f;"></i>
-                        </div>
-                        <div class="card-content">
-                            <h3>Course Repos</h3>
-                            <p>GitHub Repositories</p>
-                        </div>
-                        <div class="card-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+                    <a href="#courses" class="floating-bubble bubble-courses">
+                        <i class="fa-brands fa-github"></i>
+                        <span>Course Repos</span>
                     </a>
-                    <a href="portfolios.html" class="category-card">
-                        <div class="card-icon" style="background: linear-gradient(135deg, #fff3e0, #ffe0b2);">
-                            <i class="fa-solid fa-user" style="color: #f57c00;"></i>
-                        </div>
-                        <div class="card-content">
-                            <h3>Portfolios</h3>
-                            <p>Showcases</p>
-                        </div>
-                        <div class="card-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+                    <a href="#portfolios" class="floating-bubble bubble-portfolios">
+                        <i class="fa-solid fa-user"></i>
+                        <span>Portfolios</span>
                     </a>
-                    <a href="official.html" class="category-card">
-                        <div class="card-icon" style="background: linear-gradient(135deg, #e3f2fd, #bbdefb);">
-                            <i class="fa-solid fa-globe" style="color: #1976d2;"></i>
-                        </div>
-                        <div class="card-content">
-                            <h3>Official UITS</h3>
-                            <p>Portals & Notices</p>
-                        </div>
-                        <div class="card-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+                    <a href="#official" class="floating-bubble bubble-official">
+                        <i class="fa-solid fa-globe"></i>
+                        <span>Official UITS</span>
                     </a>
-                    <!-- Divider -->
-                    <div style="grid-column: 1 / -1; border-top: 1px solid rgba(255,255,255,0.1); margin: 0.5rem 0;">
-                    </div>
-
-                    <a href="contributions.html" class="category-card">
-                        <div class="card-icon" style="background: linear-gradient(135deg, #e8f5e9, #c8e6c9);">
-                            <i class="fa-solid fa-users" style="color: #388e3c;"></i>
-                        </div>
-                        <div class="card-content">
-                            <h3>Contributors</h3>
-                            <p>Resource Submitters</p>
-                        </div>
-                        <div class="card-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+                    <a href="#inspirations" class="floating-bubble bubble-inspirations">
+                        <i class="fa-solid fa-wand-magic-sparkles"></i>
+                        <span>Inspirations</span>
                     </a>
-
-                    <a href="inspirations.html" class="category-card">
-                        <div class="card-icon" style="background: linear-gradient(135deg, #e8eaf6, #c5cae9);">
-                            <i class="fa-solid fa-wand-magic-sparkles" style="color: #3f51b5;"></i>
-                        </div>
-                        <div class="card-content">
-                            <h3>Inspirations</h3>
-                            <p>Lacking ideas? See what others are doing and make one for your University!</p>
-                        </div>
-                        <div class="card-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+                    <!-- <a href="#profile" class="floating-bubble bubble-profile">
+                        <i class="fa-solid fa-user-shield"></i>
+                        <span>User Profile</span>
+                    </a> -->
+                    <a href="#capstones" class="floating-bubble bubble-capstones">
+                        <i class="fa-solid fa-diagram-project"></i>
+                        <span>Capstones</span>
                     </a>
-
-
-
-
+                    <a href="#mentors" class="floating-bubble bubble-mentors">
+                        <i class="fa-solid fa-users-rectangle"></i>
+                        <span>Mentors</span>
+                    </a>
+                    <a href="#talent" class="floating-bubble bubble-talent">
+                        <i class="fa-solid fa-briefcase"></i>
+                        <span>Talent Directory</span>
+                    </a>
+                    <a href="contributions.html" class="floating-bubble bubble-contributors">
+                        <i class="fa-solid fa-users"></i>
+                        <span>Contributors</span>
+                    </a>
                 </div>
             </section>
             <br><br>
@@ -231,13 +212,10 @@
                             project in a sense that new projects can be listed here in the future and there are
                             practically limitless options to organize that list. There is an app version of this if
                             anyone fancies that.</p>
-
                         <p style="margin-top: 1rem;">Reach out to us in any of the social platforms (preferably
                             Telegram/Discord) if you have any feedback or just want to talk about
                             doing projects together.</p>
-
-                        <p style="margin-top: 1rem;">Jazakallahu khair, o wanderer of life!
-                        </p>
+                        <p style="margin-top: 1rem;">Jazakallahu khair, o wanderer of life!</p>
                     </div>
                 </div>
             </div>
@@ -246,7 +224,6 @@
             <div class="category-section" id="platforms">
                 <h2 class="category-title">Socials</h2>
                 <div class="resources-grid socials-grid">
-
                     <a href="https://facebook.com/groups/1074592960836263/" target="_blank">
                         <p class="resource-card" style="text-align: center;align-items: center;"><i
                                 class="fa-brands fa-facebook" style="color: white;font-size: 2rem;"></i></p>
@@ -255,8 +232,6 @@
                         <p class="resource-card" style="text-align: center;align-items: center;"><i
                                 class="fa-brands fa-telegram" style="color: white;font-size: 2rem;"></i></p>
                     </a>
-
-
                     <a href="https://discord.gg/BdmArz6FHY" target="_blank">
                         <p class="resource-card" style="text-align: center;align-items: center;"><i
                                 class="fa-brands fa-discord" style="color: white;font-size: 2rem;"></i></p>
@@ -272,13 +247,13 @@
                 </div>
             </div>
 
+            <!-- App Download Section -->
             <div class="category-section" id="download-qr">
                 <h2 class="category-title">Stable App (v2.0)</h2>
                 <img src="https://github.com/user-attachments/assets/84b61e38-12c6-44bb-b860-cad7e270d54c"
                     style="max-width: 300px;width: 50vw;margin: auto;border-radius:15px;display: flex;margin-top: 3rem;">
-
             </div>
-            <!-- <section> -->
+
             <div class="hero-badge"
                 style="display: flex;justify-content: center;align-items: center;width: fit-content;margin: auto;">
                 <i class="fa-solid fa-link"></i>
@@ -289,16 +264,361 @@
             </div>
             <br>
             <p style="text-align: center;">Redesign inspired by <a href="https://uiulinks.vercel.app/" target="_blank"
-                    style="color: rgba(255, 255, 255, 0.377);">https://uiulinks.vercel.app/</p>
-            <!-- </section> -->
+                    style="color: rgba(255, 255, 255, 0.377);">https://uiulinks.vercel.app/</a></p>
+
+            <div id="GROUP_SPA_SECTIONS">
+
+                <!-- ==========================================
+                 SPA INTERNAL VIEW CONTAINERS
+                 ========================================== -->
+
+                <!-- Materials View -->
+                <div id="materialsView" class="spa-view category-page">
+                    <div class="back-btn-container">
+                        <a href="#" class="back-btn"><i class="fa-solid fa-arrow-left"></i> Back to Hub</a>
+                    </div>
+                    <header class="category-header">
+                        <div class="category-icon" style="background: linear-gradient(135deg, #f3e5f5, #e1bee7);">
+                            <i class="fa-solid fa-graduation-cap" style="color: #7b1fa2;"></i>
+                        </div>
+                        <div class="category-info">
+                            <h1>Materials</h1>
+                            <p>Academic Resources and Links</p>
+                        </div>
+                        <a href="https://forms.gle/UR1HSavWJYdPBPnC8" target="_blank" class="add-link-btn">
+                            <i class="fa-solid fa-plus"></i> ADD LINK
+                        </a>
+                    </header>
+                    <div class="project-list"></div>
+                </div>
+
+                <!-- Tools View -->
+                <div id="toolsView" class="spa-view category-page">
+                    <div class="back-btn-container">
+                        <a href="#" class="back-btn"><i class="fa-solid fa-arrow-left"></i> Back to Hub</a>
+                    </div>
+                    <header class="category-header">
+                        <div class="category-icon" style="background: linear-gradient(135deg, #e8f5e9, #c8e6c9);">
+                            <i class="fa-solid fa-book-open" style="color: #388e3c;"></i>
+                        </div>
+                        <div class="category-info">
+                            <h1>Tools</h1>
+                            <p>Projects & Web Utilities</p>
+                        </div>
+                        <a href="https://forms.gle/UR1HSavWJYdPBPnC8" target="_blank" class="add-link-btn">
+                            <i class="fa-solid fa-plus"></i> ADD LINK
+                        </a>
+                    </header>
+                    <div class="project-list"></div>
+                </div>
+
+                <!-- Guidance View -->
+                <div id="guidanceView" class="spa-view category-page">
+                    <div class="back-btn-container">
+                        <a href="#" class="back-btn"><i class="fa-solid fa-arrow-left"></i> Back to Hub</a>
+                    </div>
+                    <header class="category-header">
+                        <div class="category-icon" style="background: linear-gradient(135deg, #e1f5fe, #b3e5fc);">
+                            <i class="fa-solid fa-lightbulb" style="color: #0288d1;"></i>
+                        </div>
+                        <div class="category-info">
+                            <h1>Guidance</h1>
+                            <p>Tips & Tutorials</p>
+                        </div>
+                        <a href="https://forms.gle/UR1HSavWJYdPBPnC8" target="_blank" class="add-link-btn">
+                            <i class="fa-solid fa-plus"></i> ADD LINK
+                        </a>
+                    </header>
+                    <div class="project-list"></div>
+                </div>
+
+                <!-- Community View -->
+                <div id="communityView" class="spa-view category-page">
+                    <div class="back-btn-container">
+                        <a href="#" class="back-btn"><i class="fa-solid fa-arrow-left"></i> Back to Hub</a>
+                    </div>
+                    <header class="category-header">
+                        <div class="category-icon" style="background: linear-gradient(135deg, #fce4ec, #f8bbd9);">
+                            <i class="fa-solid fa-share-nodes" style="color: #c2185b;"></i>
+                        </div>
+                        <div class="category-info">
+                            <h1>Community</h1>
+                            <p>Groups & Social channels</p>
+                        </div>
+                        <a href="https://forms.gle/UR1HSavWJYdPBPnC8" target="_blank" class="add-link-btn">
+                            <i class="fa-solid fa-plus"></i> ADD LINK
+                        </a>
+                    </header>
+                    <div class="project-list"></div>
+                </div>
+
+                <!-- Course Repos View -->
+                <div id="coursesView" class="spa-view category-page">
+                    <div class="back-btn-container">
+                        <a href="#" class="back-btn"><i class="fa-solid fa-arrow-left"></i> Back to Hub</a>
+                    </div>
+                    <header class="category-header">
+                        <div class="category-icon" style="background: linear-gradient(135deg, #e0f7fa, #b2ebf2);">
+                            <i class="fa-brands fa-github" style="color: #00838f;"></i>
+                        </div>
+                        <div class="category-info">
+                            <h1>Course Repositories</h1>
+                            <p>Academic GitHub Repositories</p>
+                        </div>
+                        <a href="https://forms.gle/UR1HSavWJYdPBPnC8" target="_blank" class="add-link-btn">
+                            <i class="fa-solid fa-plus"></i> ADD REPO
+                        </a>
+                    </header>
+                    <div class="course-list"></div>
+                </div>
+
+                <!-- Portfolios View -->
+                <div id="portfoliosView" class="spa-view category-page">
+                    <div class="back-btn-container">
+                        <a href="#" class="back-btn"><i class="fa-solid fa-arrow-left"></i> Back to Hub</a>
+                    </div>
+                    <header class="category-header">
+                        <div class="category-icon" style="background: linear-gradient(135deg, #fff3e0, #ffe0b2);">
+                            <i class="fa-solid fa-user" style="color: #f57c00;"></i>
+                        </div>
+                        <div class="category-info">
+                            <h1>Portfolios</h1>
+                            <p>Student Showcases</p>
+                        </div>
+                        <a href="https://forms.gle/UR1HSavWJYdPBPnC8" target="_blank" class="add-link-btn">
+                            <i class="fa-solid fa-plus"></i> ADD LINK
+                        </a>
+                    </header>
+                    <div class="project-list"></div>
+                </div>
+
+                <!-- Official UITS View -->
+                <div id="officialView" class="spa-view category-page">
+                    <div class="back-btn-container">
+                        <a href="#" class="back-btn"><i class="fa-solid fa-arrow-left"></i> Back to Hub</a>
+                    </div>
+                    <header class="category-header">
+                        <div class="category-icon" style="background: linear-gradient(135deg, #e3f2fd, #bbdefb);">
+                            <i class="fa-solid fa-globe" style="color: #1976d2;"></i>
+                        </div>
+                        <div class="category-info">
+                            <h1>Official UITS</h1>
+                            <p>Portals & Notices</p>
+                        </div>
+                        <a href="https://forms.gle/UR1HSavWJYdPBPnC8" target="_blank" class="add-link-btn">
+                            <i class="fa-solid fa-plus"></i> ADD LINK
+                        </a>
+                    </header>
+                    <div class="project-list"></div>
+                </div>
+
+                <!-- Inspirations View -->
+                <div id="inspirationsView" class="spa-view category-page">
+                    <div class="back-btn-container">
+                        <a href="#" class="back-btn"><i class="fa-solid fa-arrow-left"></i> Back to Hub</a>
+                    </div>
+                    <header class="category-header">
+                        <div class="category-icon" style="background: linear-gradient(135deg, #e8eaf6, #c5cae9);">
+                            <i class="fa-solid fa-wand-magic-sparkles" style="color: #3f51b5;"></i>
+                        </div>
+                        <div class="category-info">
+                            <h1>Inspirations</h1>
+                            <p>Project portals and hubs from other Universities</p>
+                        </div>
+                        <a href="https://forms.gle/UR1HSavWJYdPBPnC8" target="_blank" class="add-link-btn">
+                            <i class="fa-solid fa-plus"></i> ADD LINK
+                        </a>
+                    </header>
+                    <div class="inspirations-list" style="padding: 1rem;"></div>
+                </div>
+
+                <!-- User Profile View -->
+                <div id="profileView" class="spa-view category-page">
+                    <div class="back-btn-container">
+                        <a href="#" class="back-btn"><i class="fa-solid fa-arrow-left"></i> Back to Hub</a>
+                    </div>
+                    <header class="category-header">
+                        <div class="category-icon" style="background: linear-gradient(135deg, #ede7f6, #d1c4e9);">
+                            <i class="fa-solid fa-user-shield" style="color: #5e35b1;"></i>
+                        </div>
+                        <div class="category-info">
+                            <h1>User Profile</h1>
+                            <p>Authentication and Starred metrics dashboard</p>
+                        </div>
+                    </header>
+
+                    <!-- Unauthenticated Demo tabbed form -->
+                    <div class="profile-connection-panel" id="profileUnauthForm" style="display: none;">
+                        <div class="profile-auth-tabs">
+                            <div class="profile-auth-tab active-tab" data-action="login">Login</div>
+                            <div class="profile-auth-tab" data-action="register">Register</div>
+                        </div>
+
+                        <div id="profileViewAuthError" class="auth-error"></div>
+                        <div id="profileViewAuthSuccess" class="auth-success"></div>
+
+                        <button type="button" class="google-login-btn" onclick="handleGoogleLogin()"
+                            style="margin-bottom: 1.5rem; width:100%;">
+                            <i class="fa-brands fa-google"></i> Continue with Google
+                        </button>
+
+                        <div class="auth-divider">
+                            <span style="display:block;">or continue with email credentials</span>
+                        </div>
+
+                        <!-- Login tab -->
+                        <form id="profileLoginForm" onsubmit="handleProfileViewLogin(event)">
+                            <div class="form-group">
+                                <label>Email Address</label>
+                                <input type="email" id="profileLoginEmail" required placeholder="name@email.com">
+                            </div>
+                            <div class="form-group">
+                                <label>Password</label>
+                                <input type="password" id="profileLoginPassword" required placeholder="••••••••">
+                            </div>
+                            <button type="submit" class="auth-submit-btn">Login to Database</button>
+                        </form>
+
+                        <!-- Register tab -->
+                        <form id="profileRegisterForm" style="display: none;"
+                            onsubmit="handleProfileViewRegister(event)">
+                            <div class="form-group">
+                                <label>Student ID (10+ digits)</label>
+                                <input type="text" id="profileRegisterStudentId" required placeholder="043xxxxxxxxxx"
+                                    pattern="\d{10,}">
+                            </div>
+                            <div class="form-group">
+                                <label>Email Address</label>
+                                <input type="email" id="profileRegisterEmail" required placeholder="name@email.com">
+                            </div>
+                            <div class="form-group">
+                                <label>Password</label>
+                                <input type="password" id="profileRegisterPassword" required
+                                    placeholder="Minimum 6 characters" minlength="6">
+                            </div>
+                            <div class="form-group">
+                                <label>Confirm Password</label>
+                                <input type="password" id="profileRegisterConfirmPassword" required
+                                    placeholder="Confirm password">
+                            </div>
+                            <button type="submit" class="auth-submit-btn">Register Student</button>
+                        </form>
+                    </div>
+
+                    <!-- Authenticated profile dashboard -->
+                    <div class="profile-dashboard" id="profileDetailsArea" style="display: none;">
+                        <!-- Populated dynamically -->
+                    </div>
+                </div>
+
+                <!-- Capstone Projects View -->
+                <div id="capstonesView" class="spa-view category-page">
+                    <div class="back-btn-container">
+                        <a href="#" class="back-btn"><i class="fa-solid fa-arrow-left"></i> Back to Hub</a>
+                    </div>
+                    <header class="category-header">
+                        <div class="category-icon" style="background: linear-gradient(135deg, #ffebee, #ffcdd2);">
+                            <i class="fa-solid fa-diagram-project" style="color: #e53935;"></i>
+                        </div>
+                        <div class="category-info">
+                            <h1>Capstone Projects</h1>
+                            <p>Undergraduate thesis showcases and final year projects from UITS students</p>
+                        </div>
+                    </header>
+
+                    <!-- Spotlight Hero Showcase -->
+                    <div class="capstone-spotlight" id="capstoneSpotlight">
+                        <!-- Populated dynamically -->
+                    </div>
+
+                    <h2 class="category-title" style="margin-bottom: 1.5rem;">Project Gallery</h2>
+                    <div class="capstone-gallery" id="capstoneGallery">
+                        <!-- Populated dynamically -->
+                    </div>
+                </div>
+
+                <!-- Industry Mentors View -->
+                <div id="mentorsView" class="spa-view category-page">
+                    <div class="back-btn-container">
+                        <a href="#" class="back-btn"><i class="fa-solid fa-arrow-left"></i> Back to Hub</a>
+                    </div>
+                    <header class="category-header">
+                        <div class="category-icon" style="background: linear-gradient(135deg, #e0f2f1, #b2dfdb);">
+                            <i class="fa-solid fa-users-rectangle" style="color: #00695c;"></i>
+                        </div>
+                        <div class="category-info">
+                            <h1>Industry Mentors</h1>
+                            <p>Reach out to UITS senior alumni active in the modern tech ecosystem</p>
+                        </div>
+                    </header>
+
+                    <h2 class="category-title" style="margin-bottom: 1rem;">Featured Seniors</h2>
+                    <div class="mentors-carousel-container">
+                        <div class="mentors-carousel-track" id="mentorsCarouselTrack">
+                            <!-- Populated dynamically -->
+                        </div>
+                    </div>
+
+                    <h2 class="category-title" style="margin-bottom: 1.5rem;">Alumni Directory</h2>
+                    <div class="mentor-directory-grid" id="mentorsDirectoryGrid">
+                        <!-- Populated dynamically -->
+                    </div>
+                </div>
+
+                <!-- "Hire Us" Talent Directory View -->
+                <div id="talentView" class="spa-view category-page">
+                    <div class="back-btn-container">
+                        <a href="#" class="back-btn"><i class="fa-solid fa-arrow-left"></i> Back to Hub</a>
+                    </div>
+                    <header class="category-header">
+                        <div class="category-icon" style="background: linear-gradient(135deg, #fffde7, #fff9c4);">
+                            <i class="fa-solid fa-briefcase" style="color: #fbc02d;"></i>
+                        </div>
+                        <div class="category-info">
+                            <h1>"Hire Us" Talent Directory</h1>
+                            <p>Browse portfolio profiles and candidates looking for technical interviews</p>
+                        </div>
+                    </header>
+
+                    <div class="filter-bar" id="talentFilterBar">
+                        <!-- Populated dynamically -->
+                    </div>
+
+                    <div class="talent-list" id="talentList">
+                        <!-- Populated dynamically -->
+                    </div>
+                </div>
+
+                <!-- Hire Social Popup Modal Overlay -->
+                <div class="hire-modal-overlay" id="hireModalOverlay"
+                    onclick="if(event.target===this) window.SPA.closeHireModal()">
+                    <!-- Populated dynamically -->
+                </div>
+
+            </div>
+
         </main>
     </div>
 
-    <script src="js/data-renderer.js" data-page="featured"></script>
+    <!-- Scripts -->
+    <script>
+        function copyLink(url) {
+            navigator.clipboard.writeText(url).then(() => {
+                alert("Link copied to clipboard!");
+            });
+        }
+        function toggleDropdown(button) {
+            const dropdown = button.parentElement;
+            dropdown.classList.toggle('active');
+        }
+    </script>
     <script src="env-config.js"></script>
     <script src="js/supabase-config.js"></script>
     <script src="js/auth-modal.js"></script>
     <script src="js/auth.js"></script>
+    <script src="js/stars.js"></script>
+    <script src="js/data-renderer.js"></script>
+    <script src="js/spa-controller.js"></script>
     <script src="script.js"></script>
 </body>
 

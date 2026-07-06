@@ -1,4 +1,5 @@
 // Authentication Module for oU1TS Portal
+// Integrates with Supabase, or falls back to a robust LocalStorage database when offline/unconfigured.
 
 const Auth = {
     currentUser: null,
@@ -9,13 +10,14 @@ const Auth = {
         
         // Check if Supabase client is available
         if (!supabase) {
-            console.error('Supabase client not initialized. Auth features disabled.');
+            console.log('[Auth] Supabase client not initialized. Using LocalStorage fallback.');
+            this.loadLocalSession();
             this.updateUI();
             return;
         }
 
         try {
-            // Check for existing session
+            // Check for existing Supabase session
             const { data: { session } } = await supabase.auth.getSession();
             if (session) {
                 await this.setUser(session.user);
@@ -31,12 +33,13 @@ const Auth = {
             });
         } catch (error) {
             console.error('Auth initialization error:', error);
+            this.loadLocalSession();
         }
 
         this.updateUI();
     },
 
-    // Set current user and fetch profile
+    // Set current user and fetch profile from Supabase
     async setUser(user) {
         const supabase = window.supabaseClient;
         if (!supabase) return;
@@ -82,9 +85,23 @@ const Auth = {
         }
     },
 
+    // Load session from localStorage
+    loadLocalSession() {
+        const localSession = localStorage.getItem('local_session');
+        if (localSession) {
+            try {
+                this.currentUser = JSON.parse(localSession);
+            } catch (e) {
+                localStorage.removeItem('local_session');
+                this.currentUser = null;
+            }
+        }
+    },
+
     // Clear user data
     clearUser() {
         this.currentUser = null;
+        localStorage.removeItem('local_session');
         this.updateUI();
     },
 
@@ -96,16 +113,31 @@ const Auth = {
 
     // Update student ID for current user
     async updateStudentId(studentId) {
-        const supabase = window.supabaseClient;
-        if (!supabase) throw new Error('Authentication service unavailable. Please refresh the page.');
-
-        if (!this.currentUser?.id) {
-            throw new Error('No active user session found.');
-        }
-
         const digitsOnly = studentId.replace(/\D/g, '');
         if (!this.validateStudentId(digitsOnly)) {
             throw new Error('Student ID must be at least 10 digits');
+        }
+
+        const supabase = window.supabaseClient;
+        if (!supabase) {
+            // Local fallback update
+            if (!this.currentUser) throw new Error('No active session.');
+            
+            const users = JSON.parse(localStorage.getItem('local_users') || '[]');
+            const userIdx = users.findIndex(u => u.id === this.currentUser.id);
+            if (userIdx !== -1) {
+                users[userIdx].studentId = digitsOnly;
+                localStorage.setItem('local_users', JSON.stringify(users));
+            }
+            
+            this.currentUser.studentId = digitsOnly;
+            localStorage.setItem('local_session', JSON.stringify(this.currentUser));
+            this.updateUI();
+            return;
+        }
+
+        if (!this.currentUser?.id) {
+            throw new Error('No active user session found.');
         }
 
         const { error } = await supabase
@@ -124,9 +156,6 @@ const Auth = {
 
     // Register new user
     async register(studentId, email, password) {
-        const supabase = window.supabaseClient;
-        if (!supabase) throw new Error('Authentication service unavailable. Please refresh the page.');
-
         // Validate student ID
         if (!this.validateStudentId(studentId)) {
             throw new Error('Student ID must be at least 10 digits');
@@ -140,6 +169,22 @@ const Auth = {
         // Validate password
         if (!password || password.length < 6) {
             throw new Error('Password must be at least 6 characters');
+        }
+
+        const supabase = window.supabaseClient;
+        if (!supabase) {
+            // Local fallback signup
+            const users = JSON.parse(localStorage.getItem('local_users') || '[]');
+            const exists = users.some(u => u.email.toLowerCase() === email.toLowerCase());
+            if (exists) {
+                throw new Error('Email is already registered in local database.');
+            }
+
+            const id = 'local_' + Math.random().toString(36).substring(2, 11);
+            const newUser = { id, studentId, email, password };
+            users.push(newUser);
+            localStorage.setItem('local_users', JSON.stringify(users));
+            return newUser;
         }
 
         const { data, error } = await supabase.auth.signUp({
@@ -159,7 +204,23 @@ const Auth = {
     // Login user
     async login(email, password) {
         const supabase = window.supabaseClient;
-        if (!supabase) throw new Error('Authentication service unavailable. Please refresh the page.');
+        if (!supabase) {
+            // Local fallback login
+            const users = JSON.parse(localStorage.getItem('local_users') || '[]');
+            const user = users.find(u => u.email.toLowerCase() === email.toLowerCase() && u.password === password);
+            if (!user) {
+                throw new Error('Invalid email or password.');
+            }
+
+            this.currentUser = {
+                id: user.id,
+                email: user.email,
+                studentId: user.studentId
+            };
+            localStorage.setItem('local_session', JSON.stringify(this.currentUser));
+            this.updateUI();
+            return this.currentUser;
+        }
 
         const { data, error } = await supabase.auth.signInWithPassword({
             email: email,
@@ -170,10 +231,23 @@ const Auth = {
         return data;
     },
 
-    // Login with Google OAuth
+    // Login with Google OAuth (fallback to mock Google account)
     async loginWithGoogle() {
         const supabase = window.supabaseClient;
-        if (!supabase) throw new Error('Authentication service unavailable. Please refresh the page.');
+        if (!supabase) {
+            // Local mock Google OAuth
+            this.currentUser = {
+                id: 'local_oauth_google',
+                email: 'google.user@uits.edu.bd',
+                studentId: 'OAUTH_USER'
+            };
+            localStorage.setItem('local_session', JSON.stringify(this.currentUser));
+            this.updateUI();
+            
+            // Check if profile needs student ID complete
+            openAuthModal('complete-profile');
+            return this.currentUser;
+        }
 
         const { data, error } = await supabase.auth.signInWithOAuth({
             provider: 'google',
@@ -193,10 +267,15 @@ const Auth = {
     // Logout user
     async logout() {
         const supabase = window.supabaseClient;
-        if (!supabase) throw new Error('Authentication service unavailable. Please refresh the page.');
+        if (!supabase) {
+            // Local session clear
+            this.clearUser();
+            return;
+        }
         
         const { error } = await supabase.auth.signOut();
         if (error) throw error;
+        this.clearUser();
     },
 
     // Update UI based on auth state
@@ -204,32 +283,34 @@ const Auth = {
         const authBtn = document.getElementById('authBtn');
         const userInfo = document.getElementById('userInfo');
         const userDetails = document.getElementById('userDetails');
-        const logoutBtn = document.getElementById('logoutBtn');
 
-        if (!authBtn) return; // Not on a page with auth UI
-
-        if (this.currentUser) {
-            // User is logged in
-            authBtn.style.display = 'none';
-            if (userInfo) {
-                userInfo.style.display = 'flex';
-                if (userDetails) {
-                    userDetails.innerHTML = `
-                        <span class="user-id">${this.currentUser.studentId}</span>
-                        <span class="user-email">${this.currentUser.email}</span>
-                    `;
+        if (authBtn) {
+            if (this.currentUser) {
+                authBtn.style.display = 'none';
+                if (userInfo) {
+                    userInfo.style.display = 'flex';
+                    if (userDetails) {
+                        userDetails.innerHTML = `
+                            <span class="user-id">${this.currentUser.studentId}</span>
+                            <span class="user-email">${this.currentUser.email}</span>
+                        `;
+                    }
                 }
-            }
-        } else {
-            // User is logged out
-            authBtn.style.display = 'flex';
-            if (userInfo) {
-                userInfo.style.display = 'none';
+            } else {
+                authBtn.style.display = 'flex';
+                if (userInfo) {
+                    userInfo.style.display = 'none';
+                }
             }
         }
 
-        // Update star buttons visibility
+        // Update star buttons across all sections
         this.updateStarButtons();
+
+        // Trigger SPA profile view re-render if active
+        if (window.SPA && window.SPA.currentRoute === 'profile') {
+            window.SPA.renderProfileView();
+        }
     },
 
     // Show/hide star buttons based on auth state
@@ -448,13 +529,87 @@ async function handleGoogleLogin() {
         }
         
         await Auth.loginWithGoogle();
-        // OAuth redirects, so this won't execute unless there's an error
+        if (!window.supabaseClient) {
+            // local storage completes immediately without redirect
+            closeAuthModal();
+        }
     } catch (error) {
         showAuthError(error.message || 'Google login failed. Please try again.');
         if (googleBtn) {
             googleBtn.disabled = false;
             googleBtn.innerHTML = '<i class="fa-brands fa-google"></i> Continue with Google';
         }
+    }
+}
+
+// Handlers for the form inside User Profile view
+async function handleProfileViewLogin(e) {
+    e.preventDefault();
+    const errorEl = document.getElementById('profileViewAuthError');
+    const successEl = document.getElementById('profileViewAuthSuccess');
+    if (errorEl) errorEl.style.display = 'none';
+    if (successEl) successEl.style.display = 'none';
+
+    const email = document.getElementById('profileLoginEmail').value;
+    const password = document.getElementById('profileLoginPassword').value;
+    const submitBtn = e.target.querySelector('button[type="submit"]');
+
+    try {
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Authenticating...';
+        await Auth.login(email, password);
+    } catch (err) {
+        if (errorEl) {
+            errorEl.textContent = err.message || 'Login failed.';
+            errorEl.style.display = 'block';
+        }
+    } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Login to Database';
+    }
+}
+
+async function handleProfileViewRegister(e) {
+    e.preventDefault();
+    const errorEl = document.getElementById('profileViewAuthError');
+    const successEl = document.getElementById('profileViewAuthSuccess');
+    if (errorEl) errorEl.style.display = 'none';
+    if (successEl) successEl.style.display = 'none';
+
+    const studentId = document.getElementById('profileRegisterStudentId').value;
+    const email = document.getElementById('profileRegisterEmail').value;
+    const password = document.getElementById('profileRegisterPassword').value;
+    const confirmPassword = document.getElementById('profileRegisterConfirmPassword').value;
+    const submitBtn = e.target.querySelector('button[type="submit"]');
+
+    if (password !== confirmPassword) {
+        if (errorEl) {
+            errorEl.textContent = 'Passwords do not match.';
+            errorEl.style.display = 'block';
+        }
+        return;
+    }
+
+    try {
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Creating user...';
+        await Auth.register(studentId, email, password);
+        if (successEl) {
+            successEl.textContent = 'Account created successfully! Switching to Login tab...';
+            successEl.style.display = 'block';
+        }
+        setTimeout(() => {
+            const loginTab = document.querySelector('.profile-auth-tab[data-action="login"]');
+            if (loginTab) loginTab.click();
+        }, 1500);
+    } catch (err) {
+        if (errorEl) {
+            errorEl.textContent = err.message || 'Registration failed.';
+            errorEl.style.display = 'block';
+        }
+    } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Register Student';
     }
 }
 
@@ -466,9 +621,7 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
         // Retry after a short delay
         setTimeout(() => {
-            if (window.supabaseClient) {
-                Auth.init();
-            }
+            Auth.init();
         }, 500);
     }
 });

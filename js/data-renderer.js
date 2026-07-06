@@ -1,28 +1,10 @@
 // js/data-renderer.js
-// Handles dynamic rendering of JSON data for portal pages and integration with Stars.js
+// Handles dynamic rendering of JSON data for portal SPA pages and integration with Stars.js
 
 (function () {
-    const scriptTag = document.currentScript;
-    const pageType = scriptTag ? scriptTag.getAttribute('data-page') : null;
-
-    if (!pageType) {
-        console.error("Data Renderer: Missing 'data-page' attribute on script tag.");
-        return;
-    }
-
-    // Initialize fetching data
-    document.addEventListener('DOMContentLoaded', () => {
-        loadAndRender();
-    });
-
-    async function loadAndRender() {
-        try {
-            const response = await fetch(`json/${pageType}.json`);
-            if (!response.ok) {
-                throw new Error(`Failed to fetch JSON data for: ${pageType}`);
-            }
-            const data = await response.json();
-
+    // Expose DataRenderer to window
+    window.DataRenderer = {
+        render(pageType, data) {
             if (pageType === 'featured') {
                 renderFeatured(data);
             } else if (pageType === 'courses') {
@@ -30,22 +12,35 @@
             } else if (pageType === 'inspirations') {
                 renderInspirations(data);
             } else {
-                renderStandardList(data);
+                renderStandardList(pageType, data);
+            }
+        }
+    };
+
+    // Load featured project marquee immediately on page load
+    document.addEventListener('DOMContentLoaded', () => {
+        loadFeatured();
+    });
+
+    async function loadFeatured() {
+        try {
+            const response = await fetch('json/featured.json');
+            if (response.ok) {
+                const data = await response.json();
+                renderFeatured(data);
             }
         } catch (error) {
-            console.error('Error rendering portal data:', error);
+            console.error('Error rendering featured marquee:', error);
         }
     }
 
     // Standard renderer for: materials, community, guidance, official, tools, portfolios
-    function renderStandardList(items) {
-        const container = document.querySelector('.project-list');
+    function renderStandardList(pageType, items) {
+        const container = document.querySelector(`#${pageType}View .project-list`);
         if (!container) return;
 
-        // Clear existing static items (except description or header controls)
-        // Keep elements like .page-description or .notif-actions if they exist
-        const staticItems = container.querySelectorAll('.project-item');
-        staticItems.forEach(el => el.remove());
+        // Clear existing items
+        container.innerHTML = '';
 
         items.forEach((item, index) => {
             const projectItem = document.createElement('div');
@@ -96,6 +91,9 @@
                 `;
             }
 
+            // Disable class for star button if not logged in
+            const starClass = window.Auth && window.Auth.isLoggedIn() ? 'star-btn' : 'star-btn disabled';
+
             projectItem.innerHTML = `
                 <span class="project-number">${indexStr}</span>
                 <div class="project-icon"${iconBg}>
@@ -107,7 +105,7 @@
                     ${extraHtml}
                 </div>
                 <div class="project-actions">
-                    <button class="star-btn disabled" onclick="Stars.toggleStar('${item.id}')" title="Login to star resources">
+                    <button class="${starClass}" onclick="window.Stars.toggleStar('${item.id}')" title="Login to star resources">
                         <i class="fa-solid fa-star"></i>
                         <span class="star-count">0</span>
                     </button>
@@ -126,23 +124,24 @@
 
     // Renderer for courses dropdown list
     function renderCourses(sections) {
-        const container = document.querySelector('.course-list');
+        const container = document.querySelector('#coursesView .course-list');
         if (!container) return;
 
-        container.innerHTML = ''; // Clear static dropdowns
+        container.innerHTML = ''; // Clear dropdowns
 
         sections.forEach((section, sIndex) => {
             const dropdown = document.createElement('div');
             dropdown.className = 'course-dropdown';
 
             const itemsHtml = section.items.map(item => {
+                const starClass = window.Auth && window.Auth.isLoggedIn() ? 'star-btn' : 'star-btn disabled';
                 return `
                     <div class="repo-item" data-resource-id="${item.id}">
                         <i class="${item.iconClass}"></i>
                         <div class="repo-info">
                             ${item.rawHtml}
                         </div>
-                        <button class="star-btn disabled" onclick="Stars.toggleStar('${item.id}')" title="Login to star resources">
+                        <button class="${starClass}" onclick="window.Stars.toggleStar('${item.id}')" title="Login to star resources">
                             <i class="fa-solid fa-star"></i>
                             <span class="star-count">0</span>
                         </button>
@@ -173,16 +172,17 @@
 
     // Renderer for inspirations dropdown list
     function renderInspirations(sections) {
-        const container = document.querySelector('.inspirations-list');
+        const container = document.querySelector('#inspirationsView .inspirations-list');
         if (!container) return;
 
-        container.innerHTML = ''; // Clear static dropdowns
+        container.innerHTML = ''; // Clear dropdowns
 
         sections.forEach(section => {
             const dropdown = document.createElement('div');
             dropdown.className = 'course-dropdown';
 
             const itemsHtml = section.items.map(item => {
+                const starClass = window.Auth && window.Auth.isLoggedIn() ? 'star-btn' : 'star-btn disabled';
                 return `
                     <div class="repo-item" data-resource-id="${item.id}">
                         <i class="fa-solid fa-link"></i>
@@ -190,7 +190,7 @@
                             <a href="${item.url}" target="_blank">${item.title}</a>
                             <p>${item.description}</p>
                         </div>
-                        <button class="star-btn disabled" onclick="Stars.toggleStar('${item.id}')" title="Login to star resources">
+                        <button class="${starClass}" onclick="window.Stars.toggleStar('${item.id}')" title="Login to star resources">
                             <i class="fa-solid fa-star"></i>
                             <span class="star-count">0</span>
                         </button>
