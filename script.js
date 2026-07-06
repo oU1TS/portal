@@ -54,20 +54,39 @@ if (overlay) {
     overlay.addEventListener('click', closeMobileMenu);
 }
 
-// Smooth scrolling for navigation links
+// Smooth scrolling for navigation links / hash routing compatibility
 document.querySelectorAll('.nav-link').forEach(link => {
     link.addEventListener('click', (e) => {
+        const href = link.getAttribute('href');
         // Check if it's an anchor link for scrolling
-        if (link.getAttribute('href').startsWith('#')) {
-            e.preventDefault();
-            const targetId = link.getAttribute('href').substring(1);
-            const targetElement = document.getElementById(targetId);
-
-            if (targetElement) {
-                targetElement.scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'start'
-                });
+        if (href.startsWith('#')) {
+            const targetId = href.substring(1);
+            const scrollTargets = ['featured', 'about', 'platforms', 'download-qr'];
+            
+            if (scrollTargets.includes(targetId)) {
+                e.preventDefault();
+                // Go to home view first if in a sub-view
+                if (window.location.hash !== '') {
+                    window.location.hash = '';
+                    // Delay scroll slightly to allow home view to render
+                    setTimeout(() => {
+                        const targetElement = document.getElementById(targetId);
+                        if (targetElement) {
+                            targetElement.scrollIntoView({
+                                behavior: 'smooth',
+                                block: 'start'
+                            });
+                        }
+                    }, 400);
+                } else {
+                    const targetElement = document.getElementById(targetId);
+                    if (targetElement) {
+                        targetElement.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                }
             }
         }
 

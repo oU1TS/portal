@@ -1,0 +1,68 @@
+[
+  {
+    "id": "capstone-uits-portal",
+    "title": "oU1TS Academic & Social Portal",
+    "description": "A centralized SPA web application designed for UITS students to share academic resources, find project partners, and connect with mentors in the tech industry.",
+    "batch": "Batch 51",
+    "semester": "Fall 2025",
+    "team": ["Shamiur Hasan", "GSM Urady"],
+    "visitUrl": "https://github.com/b1tranger/ou1ts.portal",
+    "tags": ["SPA", "Vanilla JS", "Supabase", "CSS3"],
+    "image": "oU1TS-portal.webp"
+  },
+  {
+    "id": "capstone-blood-donation",
+    "title": "Blood Donation & Urgent Alert Network",
+    "description": "An emergency blood matching platform that utilizes geographical locations to connect local donors with UITS community members in critical health situations.",
+    "batch": "Batch 51",
+    "semester": "Fall 2025",
+    "team": ["Robiul Islam", "Akib Reza"],
+    "visitUrl": "https://bd-ou1ts.netlify.app/",
+    "tags": ["Node.js", "Express", "MongoDB", "Geolocation"],
+    "image": "tools-icon/logo-bd.png"
+  },
+  {
+    "id": "capstone-cyber-sec-wing",
+    "title": "Cyber Security Resource & Lab Simulator",
+    "description": "An interactive environment featuring sandboxed challenges for training students in penetration testing, threat hunting, and modern cybersecurity protocols.",
+    "batch": "Batch 52",
+    "semester": "Spring 2026",
+    "team": ["Sadiasemim", "Masud Rahman"],
+    "visitUrl": "https://uitssec.github.io/",
+    "tags": ["Docker", "Go", "React", "Linux Sandbox"],
+    "image": "https://res.cloudinary.com/b1tranger/image/upload/v1757773769/nobg_UITS_Cyber_Security_Wing_FB_logo_admu5c.png"
+  },
+  {
+    "id": "capstone-uits-bot",
+    "title": "UITS Bot & Routine Automation System",
+    "description": "A utility ecosystem for student routine formatting, automatic CGPA tracking, and handwritten lecture notes storage using Telegram API integration.",
+    "batch": "Batch 50",
+    "semester": "Spring 2025",
+    "team": ["Akib Reza", "Sayra Rahman"],
+    "visitUrl": "http://akibreza.github.io/uitsBOT",
+    "tags": ["Python", "Telegram Bot", "PostgreSQL", "CRON Scheduler"],
+    "image": "materials-icon/UITS-Bot.webp"
+  },
+  {
+    "id": "capstone-research-archive",
+    "title": "Academic Research & Thesis Repository",
+    "description": "A collaborative platform dedicated to cataloging and storing research drafts, undergraduate thesis works, and publication articles from UITS CSE.",
+    "batch": "Batch 52",
+    "semester": "Spring 2026",
+    "team": ["Ayman Rahman", "Lamia Kawsar"],
+    "visitUrl": "https://research-uits.rf.gd/",
+    "tags": ["PHP", "MySQL", "Tailwind CSS", "PDF indexing"],
+    "image": "materials-icon/b1t-acad.webp"
+  },
+  {
+    "id": "capstone-uni-scheduler",
+    "title": "Smart Academic Calendar & Room Allocator",
+    "description": "A responsive planning tool built to prevent timetable conflicts and optimize class allocations across UITS campuses dynamically.",
+    "batch": "Batch 50",
+    "semester": "Spring 2025",
+    "team": ["Zirconium", "Jahirul Islam"],
+    "visitUrl": "https://university-companion.netlify.app/",
+    "tags": ["JavaScript", "Calendar APIs", "CSS Grid", "localStorage"],
+    "image": "icons/logo.png"
+  }
+]

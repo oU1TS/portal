@@ -1,0 +1,82 @@
+[
+  {
+    "id": "mentor-sakib",
+    "name": "Md. Sakib Hosen",
+    "title": "Software Engineer",
+    "company": "Google",
+    "experience": "3+ years in Cloud Infrastructure",
+    "batch": "Batch 48 Alumni",
+    "stars": 5,
+    "email": "md.sakib.hos3n@gmail.com",
+    "socials": {
+      "linkedin": "https://linkedin.com/in/sakib-hosen-uits",
+      "github": "https://github.com/mdsakibhosen",
+      "telegram": "https://t.me/sakib_hosen"
+    },
+    "skills": ["Go", "Kubernetes", "GCP", "Python"]
+  },
+  {
+    "id": "mentor-shamiur",
+    "name": "Shamiur Hasan",
+    "title": "Full Stack Developer",
+    "company": "Brain Station 23",
+    "experience": "2+ years in Web Solutions",
+    "batch": "Batch 50 Alumni",
+    "stars": 5,
+    "email": "shamiurhasan100@gmail.com",
+    "socials": {
+      "linkedin": "https://linkedin.com/in/shamiur-hasan",
+      "github": "https://github.com/shamiurhasan",
+      "telegram": "https://t.me/shamiur_hasan"
+    },
+    "skills": ["React", "Node.js", "GraphQL", "AWS"]
+  },
+  {
+    "id": "mentor-masud",
+    "name": "Masud Rahman",
+    "title": "Mobile App Engineer",
+    "company": "Pathao",
+    "experience": "3 years in Flutter/iOS",
+    "batch": "Batch 49 Alumni",
+    "stars": 4,
+    "email": "masudrahman998@gmail.com",
+    "socials": {
+      "linkedin": "https://linkedin.com/in/masudrahman",
+      "github": "https://github.com/masudrahman",
+      "telegram": "https://t.me/masud_rahman"
+    },
+    "skills": ["Flutter", "Dart", "Swift", "Firebase"]
+  },
+  {
+    "id": "mentor-ayman",
+    "name": "Ayman Rahman",
+    "title": "DevOps Architect",
+    "company": "Selise",
+    "experience": "2 years in CI/CD Automation",
+    "batch": "Batch 51 Alumni",
+    "stars": 4,
+    "email": "ayman788.9812@gmail.com",
+    "socials": {
+      "linkedin": "https://linkedin.com/in/ayman-rahman",
+      "github": "https://github.com/ayman788",
+      "telegram": "https://t.me/ayman_rahman"
+    },
+    "skills": ["Docker", "Jenkins", "Terraform", "Linux"]
+  },
+  {
+    "id": "mentor-sayra",
+    "name": "Sayra Rahman",
+    "title": "UI/UX Designer",
+    "company": "TigerIT",
+    "experience": "2+ years in Product Design",
+    "batch": "Batch 50 Alumni",
+    "stars": 5,
+    "email": "sayrarahman00@gmail.com",
+    "socials": {
+      "linkedin": "https://linkedin.com/in/sayra-rahman",
+      "github": "https://github.com/sayra00",
+      "telegram": "https://t.me/sayra_designer"
+    },
+    "skills": ["Figma", "Adobe XD", "User Research", "Prototyping"]
+  }
+]

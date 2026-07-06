@@ -1,0 +1,72 @@
+[
+  {
+    "id": "talent-gsm",
+    "name": "GSM Urady",
+    "role": "Frontend Developer",
+    "sector": "Web Development",
+    "skills": ["JavaScript", "CSS3", "React", "HTML5"],
+    "bio": "Ambitious frontend developer passionate about building premium, high-fidelity responsive user interfaces and modern Single Page Applications.",
+    "socials": {
+      "linkedin": "https://linkedin.com/in/gsm-urady",
+      "github": "https://github.com/gsmurady123",
+      "telegram": "https://t.me/gsm_urady",
+      "email": "gsmurady123@gmail.com"
+    }
+  },
+  {
+    "id": "talent-mahi",
+    "name": "Ismiuddin Mahi",
+    "role": "Backend Engineer",
+    "sector": "Web Development",
+    "skills": ["Node.js", "Express", "PostgreSQL", "REST APIs"],
+    "bio": "Backend architecture enthusiast specialized in structured API design, relational databases, and secure authentication models.",
+    "socials": {
+      "linkedin": "https://linkedin.com/in/ismiuddin-mahi",
+      "github": "https://github.com/ismiuddinmahi25",
+      "telegram": "https://t.me/ismiuddin_mahi",
+      "email": "ismiuddinmahi25@gmail.com"
+    }
+  },
+  {
+    "id": "talent-lamia",
+    "name": "Lamia Kawsar",
+    "role": "Mobile Developer",
+    "sector": "Mobile Apps",
+    "skills": ["Flutter", "Dart", "Firebase", "State Management"],
+    "bio": "Cross-platform mobile application designer focusing on fluid gestures, smooth transitions, and local database caching techniques.",
+    "socials": {
+      "linkedin": "https://linkedin.com/in/lamia-kawsar",
+      "github": "https://github.com/lamiakawsar0593",
+      "telegram": "https://t.me/lamia_kawsar",
+      "email": "lamiakawsar0593@gmail.com"
+    }
+  },
+  {
+    "id": "talent-sayra",
+    "name": "Sayra Rahman",
+    "role": "UI/UX & Product Designer",
+    "sector": "UI/UX Design",
+    "skills": ["Figma", "Wireframing", "User Journeys", "CSS Grid"],
+    "bio": "Creating high-fidelity mockups, responsive grid systems, and user-centric wireframes for corporate websites and mobile apps.",
+    "socials": {
+      "linkedin": "https://linkedin.com/in/sayra-rahman",
+      "github": "https://github.com/sayrarahman00",
+      "telegram": "https://t.me/sayrarahman",
+      "email": "sayrarahman00@gmail.com"
+    }
+  },
+  {
+    "id": "talent-supto",
+    "name": "Md. Supto",
+    "role": "AI/ML Engineer",
+    "sector": "AI/ML & Data Science",
+    "skills": ["Python", "TensorFlow", "Pandas", "Scikit-Learn"],
+    "bio": "Building data intelligence pipelines and predictive machine learning models to solve complex real-world classification problems.",
+    "socials": {
+      "linkedin": "https://linkedin.com/in/mdsupto",
+      "github": "https://github.com/mdsupto718",
+      "telegram": "https://t.me/mdsupto",
+      "email": "mdsupto718@gmail.com"
+    }
+  }
+]
