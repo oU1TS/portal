@@ -18,78 +18,55 @@
 </head>
 
 <body>
+    <!-- Centered Intro Preloader -->
+    <div class="portal-preloader" id="portalPreloader">
+        <div class="preloader-content" id="preloaderContent">
+            <h1 class="preloader-title" id="preloaderTitle">oU1TS Portal</h1>
+            <p class="preloader-tagline" id="preloaderTagline">Unified Academic Ecosystem</p>
+            <div class="preloader-line" id="preloaderLine"></div>
+        </div>
+    </div>
+
+    <!-- Floating Submit Button with Blurred Background -->
+    <a href="https://forms.gle/UR1HSavWJYdPBPnC8" class="submit-btn floating-submit-btn" id="floatingSubmitBtn"
+        target="_blank" title="Submit a new resource">
+        <i class="fa-solid fa-plus"></i>
+        <span>Submit Resource</span>
+    </a>
+
     <div class="overlay" id="overlay"></div>
     <div class="container homepage-container">
 
-        <!-- Sidebar Navigation -->
-        <nav class="sidebar" id="sidebar">
-            <div class="sidebar-header">
-                <h2>Navigation</h2>
-                <p>Quick access to resources</p>
-            </div>
-            <ul class="nav-menu">
-                <li class="nav-item">
-                    <a href="#" class="nav-link"><i class="fa-solid fa-house"></i> Home</a>
-                </li>
-                <li class="nav-item">
-                    <a href="#profile" class="nav-link"><i class="fa-solid fa-user-shield"></i> Profile</a>
-                </li>
-                <li class="nav-item">
-                    <a href="#materials" class="nav-link"><i class="fa-solid fa-graduation-cap"></i> Materials</a>
-                </li>
-                <li class="nav-item">
-                    <a href="#tools" class="nav-link"><i class="fa-solid fa-book-open"></i> Tools</a>
-                </li>
-                <li class="nav-item">
-                    <a href="#guidance" class="nav-link"><i class="fa-solid fa-lightbulb"></i> Guidance</a>
-                </li>
-                <li class="nav-item">
-                    <a href="#community" class="nav-link"><i class="fa-solid fa-share-nodes"></i> Community</a>
-                </li>
-                <li class="nav-item">
-                    <a href="#courses" class="nav-link"><i class="fa-brands fa-github"></i> Course Repos</a>
-                </li>
-                <li class="nav-item">
-                    <a href="#portfolios" class="nav-link"><i class="fa-solid fa-user"></i> Portfolios</a>
-                </li>
-                <li class="nav-item">
-                    <a href="#official" class="nav-link"><i class="fa-solid fa-globe"></i> Official UITS</a>
-                </li>
-                <li class="nav-item">
-                    <a href="#inspirations" class="nav-link"><i class="fa-solid fa-wand-magic-sparkles"></i>
-                        Inspirations</a>
-                </li>
-                <li class="nav-item">
-                    <a href="#capstones" class="nav-link"><i class="fa-solid fa-diagram-project"></i> Capstones</a>
-                </li>
-                <li class="nav-item">
-                    <a href="#mentors" class="nav-link"><i class="fa-solid fa-users-rectangle"></i> Mentors</a>
-                </li>
-                <li class="nav-item">
-                    <a href="#talent" class="nav-link"><i class="fa-solid fa-briefcase"></i> Talent Directory</a>
-                </li>
-                <li class="nav-item">
-                    <a href="contributions.html" class="nav-link"><i class="fa-solid fa-users"></i> Contributors</a>
-                </li>
 
-                <div class="sidebar-divider"></div>
-                <div style="display: flex;justify-content: center;">
-                    <a href="https://github.com/b1tranger/ou1ts.portal/releases" class="open-app-btn" target="_blank">
-                        Open in App
-                    </a>
-                </div>
-            </ul>
-        </nav>
 
         <main class="main-content">
 
             <!-- Top Auth Bar -->
             <div class="top-auth-bar">
-                <!-- Mobile Menu Toggle Button -->
-                <button class="mobile-menu-button" id="mobileMenuToggle">☰</button>
+                <!-- Top-Left Site Brand / Logo Area -->
+                <div class="top-left-brand-area">
+                    <!-- <button class="mobile-menu-button" id="mobileMenuToggle">☰</button> -->
+                    <div class="brand-wrapper">
+                        <a href="#" class="site-brand" id="siteBrand" title="oU1TS Portal Home">
+                            <span class="brand-title">oU1TS Portal</span>
+                        </a>
+                        <div class="brand-subtitles" id="brandSubtitles">
+                            <p class="brand-typewriter" id="brandTypewriter"></p>
+                            <p class="brand-sub-tags" id="brandSubTags"><small>Resources | Guides | References</small>
+                            </p>
+                        </div>
+                    </div>
+                </div>
 
                 <!-- Auth Section -->
                 <div class="auth-section">
+                    <a href="#" id="mobile-changelog-btn" class="view-changelog-btn top-changelog-btn"
+                        onclick="if(window.ChangelogModal){window.ChangelogModal.checkAndShowChangelog(true);}return false;"
+                        title="View Changelog">
+                        <i class="fa-solid fa-bullhorn" style="color: #38bdf8;"></i>
+                        <span>Changelog</span>
+                        <!-- <span class="changelog-badge-pill">v1.6</span> -->
+                    </a>
                     <a href="#profile" class="auth-btn" id="authBtn">
                         <i class="fa-solid fa-right-to-bracket"></i>
                         <span>Login</span>
@@ -108,32 +85,33 @@
                  HOME VIEW ELEMENTS
                  ========================================== -->
 
-            <!-- Hero Section -->
-            <section class="hero-section">
-                <h1 class="hero-title">
-                    oU1TS Portal
-                </h1>
-                <p class="hero-description">
-                    Projects for and by the students of UITS.<br>
-                    <small style="color: #ffffff67;">Resources | Guides | References</small>
-                </p>
-                <a href="https://forms.gle/UR1HSavWJYdPBPnC8" class="submit-btn" target="_blank">
-                    <i class="fa-solid fa-plus"></i>
-                    Submit Resource
-                </a>
-            </section>
-
-            <!-- Featured Projects Marquee -->
+            <!-- Featured Projects Changing Gallery View -->
             <section class="featured-section" id="featured">
-                <h2 class="category-title">Featured Projects</h2>
-                <div class="marquee-container">
-                    <div class="marquee-track">
-                        <!-- Dynamically populated via JSON -->
+                <div class="featured-gallery-container" id="featuredGallery">
+                    <!-- Top-Left Corner Label Inside Container -->
+                    <div class="gallery-corner-label">
+                        <span class="gallery-corner-title"><i class="fa-solid fa-star"></i> Featured Projects</span>
+                        <span class="gallery-live-badge"><i class="fa-solid fa-fire"></i> Top Ranked</span>
                     </div>
+
+                    <div class="gallery-track" id="galleryTrack">
+                        <!-- Populated dynamically via JSON & Database rankings -->
+                    </div>
+
+                    <!-- Gallery Navigation Controls -->
+                    <button class="gallery-arrow gallery-prev" id="galleryPrev" aria-label="Previous Project">
+                        <i class="fa-solid fa-chevron-left"></i>
+                    </button>
+                    <button class="gallery-arrow gallery-next" id="galleryNext" aria-label="Next Project">
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </button>
+
+                    <!-- Gallery Pagination Indicators -->
+                    <div class="gallery-indicators" id="galleryIndicators"></div>
                 </div>
-                <br><br>
-                <p class="hero-tagline" style="text-align: center;">visit <span class="repo-info"><a
-                            href="https://ou1ts.github.io/" target="_blank">oU1TS initiative</a></span></p>
+
+                <!-- <p class="hero-tagline" style="text-align: center; margin-top: 1.5rem;">visit <span class="repo-info"><a
+                            href="https://ou1ts.github.io/" target="_blank">oU1TS initiative</a></span></p> -->
             </section>
 
             <!-- Playful Floating Navigation Canvas -->
@@ -198,73 +176,38 @@
 
 
 
-            <!-- About Section -->
-            <div class="category-section" id="about">
+            <!-- About & Socials Section (Merged & Clean Background) -->
+            <div class="category-section about-clean-section" id="about">
                 <h2 class="category-title">About This Portal</h2>
-                <div class="resources-grid">
-                    <div class="resource-card" style="grid-column: 1 / -1;">
-                        <h3>Academic Resources Portal</h3>
-                        <p>"oU1TS" is an initiative to build the foundation of an online student-centered community for
-                            UITS. We seek people who are inherently ambitious about their career and want to pursue a
-                            productive university life. No matter the struggles that lie in the face of reality.</p>
-                        <p>This portal is just another effort at listing projects regarding UITS from its students. It's
-                            a scalable
-                            project in a sense that new projects can be listed here in the future and there are
-                            practically limitless options to organize that list. There is an app version of this if
-                            anyone fancies that.</p>
-                        <p style="margin-top: 1rem;">Reach out to us in any of the social platforms (preferably
-                            Telegram/Discord) if you have any feedback or just want to talk about
-                            doing projects together.</p>
-                        <p style="margin-top: 1rem;">Jazakallahu khair, o wanderer of life!</p>
-                    </div>
+                <div class="about-socials-row">
+                    <a href="https://facebook.com/groups/1074592960836263/" target="_blank" rel="noopener noreferrer"
+                        class="about-social-icon" title="Facebook Group">
+                        <i class="fa-brands fa-facebook"></i>
+                    </a>
+                    <a href="https://t.me/s/oUITS_ORnU" target="_blank" rel="noopener noreferrer"
+                        class="about-social-icon" title="Telegram Channel">
+                        <i class="fa-brands fa-telegram"></i>
+                    </a>
+                    <a href="https://discord.gg/BdmArz6FHY" target="_blank" rel="noopener noreferrer"
+                        class="about-social-icon" title="Discord Community">
+                        <i class="fa-brands fa-discord"></i>
+                    </a>
+                    <a href="https://github.com/oU1TS" target="_blank" rel="noopener noreferrer"
+                        class="about-social-icon" title="GitHub Organization">
+                        <i class="fa-brands fa-github"></i>
+                    </a>
+                    <a href="https://www.reddit.com/r/oU1TS/" target="_blank" rel="noopener noreferrer"
+                        class="about-social-icon" title="Reddit Subreddit">
+                        <i class="fa-brands fa-reddit"></i>
+                    </a>
+                </div>
+                <div class="about-clean-content">
+                    <p>"oU1TS" is a student-centered initiative building an ambitious, productive academic community for
+                        UITS. This portal centralizes student-made projects, course repositories, and study resources
+                        into a scalable, collaborative ecosystem.</p>
                 </div>
             </div>
 
-            <!-- Socials Section -->
-            <div class="category-section" id="platforms">
-                <h2 class="category-title">Socials</h2>
-                <div class="resources-grid socials-grid">
-                    <a href="https://facebook.com/groups/1074592960836263/" target="_blank">
-                        <p class="resource-card" style="text-align: center;align-items: center;"><i
-                                class="fa-brands fa-facebook" style="color: white;font-size: 2rem;"></i></p>
-                    </a>
-                    <a href="https://t.me/s/oUITS_ORnU" target="_blank">
-                        <p class="resource-card" style="text-align: center;align-items: center;"><i
-                                class="fa-brands fa-telegram" style="color: white;font-size: 2rem;"></i></p>
-                    </a>
-                    <a href="https://discord.gg/BdmArz6FHY" target="_blank">
-                        <p class="resource-card" style="text-align: center;align-items: center;"><i
-                                class="fa-brands fa-discord" style="color: white;font-size: 2rem;"></i></p>
-                    </a>
-                    <a href="https://github.com/oU1TS" target="_blank">
-                        <p class="resource-card" style="text-align: center;align-items: center;"><i
-                                class="fa-brands fa-github" style="color: white;font-size: 2rem;"></i></p>
-                    </a>
-                    <a href="https://www.reddit.com/r/oU1TS/" target="_blank">
-                        <p class="resource-card" style="text-align: center;align-items: center;"><i
-                                class="fa-brands fa-reddit" style="color: white;font-size: 2rem;"></i></p>
-                    </a>
-                </div>
-            </div>
-
-            <!-- App Download Section -->
-            <!-- <div class="category-section" id="download-qr">
-                <h2 class="category-title">Stable App (v2.0)</h2>
-                <img src="https://github.com/user-attachments/assets/84b61e38-12c6-44bb-b860-cad7e270d54c"
-                    style="max-width: 300px;width: 50vw;margin: auto;border-radius:15px;display: flex;margin-top: 3rem;">
-            </div> -->
-
-            <div class="hero-badge"
-                style="display: flex;justify-content: center;align-items: center;width: fit-content;margin: auto;">
-                <i class="fa-solid fa-link"></i>
-                <span class="repo-info"><a href="https://github.com/b1tranger/ou1ts.portal" target="_blank">Source
-                        Code</a> | <a href="https://b1tacad.netlify.app/misc/university_projects"
-                        target="_blank">References</a></span>
-                <span class="badge-dot"></span>
-            </div>
-            <br>
-            <p style="text-align: center;">Redesign inspired by <a href="https://uiulinks.vercel.app/" target="_blank"
-                    style="color: rgba(255, 255, 255, 0.377);">https://uiulinks.vercel.app/</a></p>
 
             <div id="GROUP_SPA_SECTIONS">
 
@@ -597,7 +540,67 @@
 
             </div>
 
+            <!-- Footer Links (Modeled on ou1ts.github.io) -->
+            <div class="about-footer-links">
+                <a href="https://github.com/oU1TS/portal" target="_blank" rel="noopener noreferrer"
+                    class="about-footer-link">
+                    <i class="fa-brands fa-github"></i> Source Code
+                </a>
+                <a href="https://b1tranger.netlify.app/render.html?file=https%3A%2F%2Fgithub.com%2FoU1TS%2Fportal%2Fblob%2Fmain%2Fdoc%2FDOCUMENTATION.md"
+                    target="_blank" rel="noopener noreferrer" class="about-footer-link">
+                    <i class="fa-solid fa-book-open"></i> Documentation
+                </a>
+            </div>
+
         </main>
+    </div>
+
+    <!-- Desktop Floating Changelog Trigger (Bottom-Left) -->
+    <button type="button" id="desktop-changelog-btn" class="changelog-desktop-btn view-changelog-btn"
+        onclick="if(window.ChangelogModal){window.ChangelogModal.checkAndShowChangelog(true);}return false;"
+        title="View Changelog / What's New" aria-label="View Changelog">
+        <i class="fa-solid fa-bullhorn"></i>
+        <span>Changelog</span>
+        <span class="changelog-badge-pill">v1.6</span>
+    </button>
+
+    <!-- Changelog / What's New Modal -->
+    <div id="changelog-modal" class="changelog-modal-overlay" style="display: none;" role="dialog"
+        aria-labelledby="changelog-modal-title" aria-modal="true">
+        <div class="changelog-modal-content">
+            <button id="close-changelog-modal" class="changelog-close-btn" title="Close" aria-label="Close modal">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div class="changelog-modal-header">
+                <div class="changelog-header-title">
+                    <div class="changelog-header-icon">
+                        <i class="fa-solid fa-bullhorn"></i>
+                    </div>
+                    <div class="changelog-title-group">
+                        <h2 id="changelog-modal-title">What's New in oU1TS Portal</h2>
+                        <div class="changelog-subtitle">
+                            <span>Latest updates</span>
+                            <span id="changelog-version-badge" class="changelog-version-badge">v1.1</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="changelog-modal-body" class="changelog-modal-body">
+                <!-- Dynamically populated from changes.json -->
+            </div>
+            <div class="changelog-modal-footer">
+                <div class="changelog-doc-hint">
+                    <i class="fa-solid fa-book-open"></i>
+                    <span>Full release history in <a href="doc/DOCUMENTATION.md" target="_blank"
+                            rel="noopener noreferrer">Documentation</a>.</span>
+                </div>
+                <div class="changelog-footer-actions">
+                    <button id="changelog-modal-got-it-btn" class="changelog-got-it-btn" type="button">
+                        <i class="fa-solid fa-check"></i> Got it
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- Scripts -->
@@ -619,6 +622,7 @@
     <script src="js/stars.js"></script>
     <script src="js/data-renderer.js"></script>
     <script src="js/spa-controller.js"></script>
+    <script src="js/changelog-modal.js"></script>
     <script src="script.js"></script>
 </body>
 

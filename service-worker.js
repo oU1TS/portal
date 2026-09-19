@@ -1,9 +1,13 @@
-const CACHE_NAME = 'ou1ts-portal-v1';
+const CACHE_NAME = 'ou1ts-portal-v1.6';
 const ASSETS_TO_CACHE = [
     '/',
     '/index.html',
     '/style.css',
     '/script.js',
+    '/changes.json',
+    '/js/changelog-modal.js',
+    '/js/spa-controller.js',
+    '/js/data-renderer.js',
     '/manifest.json',
     '/icons/icon.webp',
     '/official.html',
