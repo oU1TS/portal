@@ -24,37 +24,45 @@ This project is an Academic Resources Portal called "oU1TS Portal" designed to s
 
 ```
 ou1ts.portal/
-├── index.html          # Homepage with hero, categories, featured marquee (dynamic marquee)
-├── official.html       # Official UITS - Portals & Notices (dynamic list)
-├── materials.html      # Materials - Drive & Other links (dynamic list)
-├── tools.html          # Tools - Projects (dynamic list)
-├── community.html      # Community - Groups & Social (dynamic list)
-├── portfolios.html     # Portfolios - Showcases (dynamic list)
-├── courses.html        # Course Repositories - GitHub repos per course (dynamic lists)
-├── guidance.html       # Guidance - Tips & Tutorials (dynamic list)
-├── contributions.html  # Contributors - Dynamic page with Google Sheets integration
-├── style.css           # Main stylesheet (shared across all pages)
-├── script.js           # JavaScript functionality (sidebar, mobile menu)
-├── inspirations.html   # Inspirations - Portals from other universities (dynamic lists)
-├── json/               # Dynamic data source folder
-│   ├── community.json  # Data for community.html
-│   ├── courses.json    # Data for courses.html
-│   ├── featured.json   # Data for index.html featured marquee
-│   ├── guidance.json   # Data for guidance.html
-│   ├── inspirations.json # Data for inspirations.html
-│   ├── materials.json  # Data for materials.html
-│   ├── official.json   # Data for official.html
-│   ├── portfolios.json # Data for portfolios.html
-│   └── tools.json      # Data for tools.html
-├── js/                 # JavaScript modules
-│   ├── supabase-config.js  # Supabase client configuration
-│   ├── auth-modal.js       # Reusable Auth Modal HTML injection
-│   ├── auth.js             # Authentication logic (login, register, logout)
-│   ├── stars.js            # Resource starring and ranking logic
-│   └── data-renderer.js    # Universal JSON data fetching and rendering engine
-├── portfolio-icon/     # Icons and assets for portfolio section
+├── index.html          # Main portal entry & Single Page Application (SPA) container
+├── style.css           # Global unified stylesheet (glassmorphism, animations, responsive rules)
+├── script.js           # Core controllers: intro preloader docking, brand typewriter, idle auto-scroll
+├── changes.json        # Structured visitor changelog dataset (versioned release notes)
+├── service-worker.js   # Service Worker with PWA offline caching & CACHE_NAME version detection
+├── manifest.json       # Web App Manifest for mobile installation
+├── official.html       # Standalone subview fallback: Official UITS portals
+├── materials.html      # Standalone subview fallback: Study resources & Drive links
+├── tools.html          # Standalone subview fallback: Student developer utilities
+├── community.html      # Standalone subview fallback: Social groups & channels
+├── portfolios.html     # Standalone subview fallback: Student portfolios & developer tags
+├── courses.html        # Standalone subview fallback: GitHub course repositories
+├── guidance.html       # Standalone subview fallback: Student tutorials & guides
+├── inspirations.html   # Standalone subview fallback: Inspiring portals
+├── contributions.html  # Dynamic contributor showcase integrated with Google Sheets
+├── json/               # Curated JSON data source files
+│   ├── capstones.json  # Capstone projects dataset
+│   ├── community.json  # Social channels & club links
+│   ├── courses.json    # Course repos by semester
+│   ├── guidance.json   # Tips, guides & tutorials
+│   ├── inspirations.json # Other academic portals
+│   ├── materials.json  # Department resources & links
+│   ├── mentors.json    # Student mentors directory
+│   ├── official.json   # University portal notices
+│   ├── portfolios.json # Student portfolios
+│   └── tools.json      # Student developer tools
+├── js/                 # Modular JavaScript architecture
+│   ├── auth.js             # Authentication logic (Email & Google OAuth)
+│   ├── auth-modal.js       # Reusable authentication modal injection
+│   ├── changelog-modal.js  # What's New changelog modal controller & SW version watcher
+│   ├── data-renderer.js    # Universal JSON data fetching & dynamic DOM rendering
+│   ├── spa-controller.js   # Single Page Application router & subview transitions
+│   ├── stars.js            # Resource starring, upvoting & ranking engine
+│   └── supabase-config.js  # Supabase client initializer
+├── portfolio-icon/     # Icons and graphic assets
 └── doc/
-    └── DOCUMENTATION.md    # This documentation file
+    ├── DOCUMENTATION.md    # Main project technical documentation
+    ├── history.md          # Comprehensive developer release history
+    └── prompts/            # Full unabridged conversation & plan archives
 ```
 
 ---
@@ -63,21 +71,22 @@ ou1ts.portal/
 
 ### Homepage (`index.html`)
 
-The main landing page with the following sections:
+The central SPA entry point featuring modern reactive components:
 
-| Section | Description |
-|---------|-------------|
-| **Hero Section** | Portal title "oU1TS Portal", tagline, and "Submit Resource" button linking to Google Form |
-| **Featured Projects Marquee** | Horizontal auto-scrolling showcase of highlighted student projects |
-| **Category Cards** | 9 clickable cards linking to category pages (Materials, Tools, Community, Course Repos, Portfolios, Official UITS, Guidance, Inspirations, Contributors) |
-| **About Section** | Description of the oU1TS initiative |
-| **Socials Section** | Links to Facebook, Telegram, Discord, GitHub, Reddit |
-| **App Download** | QR code for the mobile app version (v2.0) |
+| Component | Description |
+|-----------|-------------|
+| **Centered Intro Preloader** | Centered brand animation on initial load that smoothly calculates delta vectors to dock directly into `#siteBrand`. |
+| **Top-Left Brand & Typewriter** | Clean header branding where subtitles load via character-by-character typewriter animation once preloader docks. |
+| **Featured Projects Gallery** | Interactive showcase displaying top-ranked projects with integrated corner badges, auto-rotation, and mobile layout. |
+| **Floating Bubbles Canvas** | Dynamic, playful bubble navigation canvas (`#floatingCanvas`) for exploring all portal resource categories. |
+| **7-Second Inactivity Scroll** | Automatically glides the page down to the Explore Hub Resources after 7 seconds of idle time (runs once only). |
+| **Visitor Changelog Modal** | "What's New" modal triggered automatically when `service-worker.js` cache versions change, with desktop and mobile buttons. |
+| **Floating Submit Button** | Glassmorphic floating action button centered at the bottom of the screen linking to the resource submission form. |
+| **SPA Subviews** | Seamless in-place views for categories, capstone gallery, mentors directory, and student talent hiring without full reloads. |
 
 **Sidebar Navigation:**
-- Collapsible sidebar for mobile devices
-- Quick links to all sections
-- "Open in App" button
+- Collapsible sidebar drawer with quick links to all categories, mentors, and talent directory.
+- "Open in App" button and dedicated What's New changelog trigger with a live version badge.
 
 ---
 

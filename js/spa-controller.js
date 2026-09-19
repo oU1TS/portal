@@ -40,6 +40,12 @@
             setTimeout(() => {
                 this.positionFloatingBubbles();
             }, 300);
+
+            window.addEventListener('load', () => {
+                if (!document.body.classList.contains('in-subview')) {
+                    this.positionFloatingBubbles();
+                }
+            });
         },
 
         debounce(func, wait) {
@@ -162,76 +168,167 @@
             const canvas = document.getElementById('floatingCanvas');
             if (!canvas) return;
 
-            const bubbles = canvas.querySelectorAll('.floating-bubble');
+            const bubbles = Array.from(canvas.querySelectorAll('.floating-bubble'));
             const numBubbles = bubbles.length;
             if (numBubbles === 0) return;
 
             const canvasWidth = canvas.offsetWidth;
             const canvasHeight = canvas.offsetHeight;
+            if (canvasWidth <= 0 || canvasHeight <= 0) return;
 
-            // Dimensions of bubble (diameter 110px) plus safety padding
-            const bubbleSize = 110;
+            // Dynamically detect bubble size from DOM (respects responsive CSS styles)
+            const sampleBubble = bubbles[0];
+            const sampleRect = sampleBubble.getBoundingClientRect();
+            let bubbleSize = sampleRect.width;
+            if (!bubbleSize || bubbleSize <= 0) {
+                bubbleSize = canvasWidth <= 480 ? 86 : (canvasWidth <= 768 ? 90 : 110);
+            }
             const radius = bubbleSize / 2;
-            const minDistance = bubbleSize + 25; // Center-to-center minimum distance (135px)
 
-            const placedPositions = [];
+            // Inner padding so buttons do not touch the border (accounting for animation float excursion)
+            const innerPadding = canvasWidth <= 480 ? 10 : (canvasWidth <= 768 ? 14 : 30);
 
-            bubbles.forEach((bubble, index) => {
-                let left = 0;
-                let top = 0;
-                let overlap = true;
-                let attempts = 0;
-                let currentMinDistance = minDistance;
+            // Bounding box for bubble centers
+            const minX = radius + innerPadding;
+            const maxX = Math.max(minX, canvasWidth - radius - innerPadding);
+            const minY = radius + innerPadding;
+            const maxY = Math.max(minY, canvasHeight - radius - innerPadding);
 
-                // Staggered animation classes
-                const animIndex = (index % 4) + 1; // float1, float2, float3, float4
-                bubble.style.animation = `float${animIndex} ${6 + index % 5}s ease-in-out infinite`;
-                bubble.style.animationDelay = `${index * -0.6}s`;
+            const usableWidth = maxX - minX;
+            const usableHeight = maxY - minY;
 
-                // Calculate random positions with collision-detection loop
-                while (overlap && attempts < 250) {
-                    // Stay within canvas margins (5% to 85%)
-                    const pctLeft = 5 + Math.random() * 80;
-                    const pctTop = 5 + Math.random() * 80;
+            // Minimum distance between centers to guarantee NO overlap:
+            // bubbleSize + safety gap for visual distinction and floating animation
+            const gap = canvasWidth <= 480 ? 14 : (canvasWidth <= 768 ? 18 : 24);
+            const targetMinDist = bubbleSize + gap;
+            const absoluteMinDist = bubbleSize + (canvasWidth <= 480 ? 8 : (canvasWidth <= 768 ? 12 : 16)); // Strict geometric separation limit
 
-                    // Convert to pixels for exact distance calculation
-                    left = (pctLeft / 100) * canvasWidth;
-                    top = (pctTop / 100) * canvasHeight;
+            // Compute optimal column and row count for stratified cell layout
+            let cols = Math.max(1, Math.round(Math.sqrt(numBubbles * (usableWidth / Math.max(1, usableHeight)))));
+            if (canvasWidth <= 420) {
+                cols = 2;
+            } else if (canvasWidth <= 768) {
+                cols = Math.max(2, Math.min(cols, 3));
+            }
+            cols = Math.max(1, cols);
+            let rows = Math.ceil(numBubbles / cols);
 
-                    // Keep bubble centers within boundaries
-                    if (left < radius) left = radius;
-                    if (left > canvasWidth - radius) left = canvasWidth - radius;
-                    if (top < radius) top = radius;
-                    if (top > canvasHeight - radius) top = canvasHeight - radius;
+            // Generate stratified cell slot centers with moderate jitter
+            const cellWidth = usableWidth / cols;
+            const cellHeight = usableHeight / rows;
+            const slots = [];
 
-                    // Check for overlaps with already placed bubbles
-                    overlap = false;
-                    for (let i = 0; i < placedPositions.length; i++) {
-                        const other = placedPositions[i];
-                        const dx = left - other.x;
-                        const dy = top - other.y;
-                        const dist = Math.sqrt(dx * dx + dy * dy);
+            for (let r = 0; r < rows; r++) {
+                for (let c = 0; c < cols; c++) {
+                    const cx = minX + (c + 0.5) * cellWidth;
+                    const cy = minY + (r + 0.5) * cellHeight;
+                    // Controlled jitter inside the cell to preserve gap
+                    const jx = (Math.random() - 0.5) * (cellWidth * 0.25);
+                    const jy = (Math.random() - 0.5) * (cellHeight * 0.25);
+                    slots.push({
+                        x: Math.max(minX, Math.min(maxX, cx + jx)),
+                        y: Math.max(minY, Math.min(maxY, cy + jy))
+                    });
+                }
+            }
 
-                        if (dist < currentMinDistance) {
-                            overlap = true;
-                            break;
+            // Shuffle slot positions so categories appear randomly distributed
+            for (let i = slots.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [slots[i], slots[j]] = [slots[j], slots[i]];
+            }
+
+            // Assign initial positions to bubbles
+            const positions = [];
+            for (let i = 0; i < numBubbles; i++) {
+                positions.push(slots[i] ? { x: slots[i].x, y: slots[i].y } : {
+                    x: minX + Math.random() * usableWidth,
+                    y: minY + Math.random() * usableHeight
+                });
+            }
+
+            // Force-directed physics relaxation: iteratively repel overlapping bubbles
+            const iterations = 80;
+            for (let iter = 0; iter < iterations; iter++) {
+                let maxShift = 0;
+
+                for (let i = 0; i < numBubbles; i++) {
+                    for (let j = i + 1; j < numBubbles; j++) {
+                        let dx = positions[j].x - positions[i].x;
+                        let dy = positions[j].y - positions[i].y;
+                        let dist = Math.hypot(dx, dy);
+
+                        if (dist < 0.001) {
+                            dx = (Math.random() - 0.5) * 2;
+                            dy = (Math.random() - 0.5) * 2;
+                            dist = Math.hypot(dx, dy);
+                        }
+
+                        if (dist < targetMinDist) {
+                            const overlap = targetMinDist - dist;
+                            const nx = dx / dist;
+                            const ny = dy / dist;
+                            const push = overlap * 0.5;
+
+                            positions[i].x -= nx * push;
+                            positions[i].y -= ny * push;
+                            positions[j].x += nx * push;
+                            positions[j].y += ny * push;
+
+                            if (push > maxShift) maxShift = push;
                         }
                     }
-
-                    // Ease safety constraints on tight screens/high attempts
-                    if (overlap && attempts > 100) {
-                        currentMinDistance = Math.max(80, currentMinDistance - 5);
-                    }
-
-                    attempts++;
                 }
 
-                // Keep positioning details
-                placedPositions.push({ x: left, y: top });
+                // Strict boundary clamping: keep bubble centers inside innerPadding bounds
+                for (let i = 0; i < numBubbles; i++) {
+                    positions[i].x = Math.max(minX, Math.min(maxX, positions[i].x));
+                    positions[i].y = Math.max(minY, Math.min(maxY, positions[i].y));
+                }
 
-                // Position absolutely using percentages for responsive stretching
-                bubble.style.left = `${((left - radius) / canvasWidth) * 100}%`;
-                bubble.style.top = `${((top - radius) / canvasHeight) * 100}%`;
+                if (maxShift < 0.3) break;
+            }
+
+            // Final safety pass: strictly enforce absolute non-overlap
+            for (let pass = 0; pass < 25; pass++) {
+                let hasOverlap = false;
+                for (let i = 0; i < numBubbles; i++) {
+                    for (let j = i + 1; j < numBubbles; j++) {
+                        let dx = positions[j].x - positions[i].x;
+                        let dy = positions[j].y - positions[i].y;
+                        let dist = Math.hypot(dx, dy);
+
+                        if (dist < absoluteMinDist) {
+                            hasOverlap = true;
+                            if (dist < 0.001) {
+                                dx = 1; dy = 0; dist = 1;
+                            }
+                            const push = (absoluteMinDist - dist) * 0.5;
+                            const nx = dx / dist;
+                            const ny = dy / dist;
+
+                            positions[i].x = Math.max(minX, Math.min(maxX, positions[i].x - nx * push));
+                            positions[i].y = Math.max(minY, Math.min(maxY, positions[i].y - ny * push));
+                            positions[j].x = Math.max(minX, Math.min(maxX, positions[j].x + nx * push));
+                            positions[j].y = Math.max(minY, Math.min(maxY, positions[j].y + ny * push));
+                        }
+                    }
+                }
+                if (!hasOverlap) break;
+            }
+
+            // Apply positions and animations to DOM
+            bubbles.forEach((bubble, index) => {
+                const animIndex = (index % 4) + 1;
+                bubble.style.animation = `float${animIndex} ${6 + (index % 5)}s ease-in-out infinite`;
+                bubble.style.animationDelay = `${index * -0.6}s`;
+
+                // Set positions in percentages relative to canvas dimensions
+                const leftPct = ((positions[index].x - radius) / canvasWidth) * 100;
+                const topPct = ((positions[index].y - radius) / canvasHeight) * 100;
+
+                bubble.style.left = `${leftPct.toFixed(2)}%`;
+                bubble.style.top = `${topPct.toFixed(2)}%`;
             });
         },
 
