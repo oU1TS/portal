@@ -1,11 +1,62 @@
 {
-  "currentVersion": "v1.6",
+  "currentVersion": "v1.9",
   "lastUpdated": "September 2026",
   "documentationUrl": "doc/history.md",
   "history": [
     {
-      "version": "v1.6",
+      "version": "v1.9",
       "badge": "Latest",
+      "date": "28.09.26",
+      "changes": [
+        {
+          "type": "UI/UX",
+          "title": "Optimized Section Spacing & Mobile Bubble Padding",
+          "description": "Reduced top margins for the top auth bar on desktop and featured projects section on mobile, and refined padding around icons and text labels inside mobile floating navigation bubbles."
+        }
+      ]
+    },
+    {
+      "version": "v1.8",
+      "badge": "Previous",
+      "date": "28.09.26",
+      "changes": [
+        {
+          "type": "Bug Fix",
+          "title": "Scroll Persistence for Floating Navigation Canvas",
+          "description": "Prevented mobile scroll gestures from re-arranging category bubbles by ignoring height-only viewport resize events from browser address bars and caching randomized slot allocations for the session."
+        },
+        {
+          "type": "UI/UX",
+          "title": "Eliminated Featured Gallery Layout Shifting (CLS)",
+          "description": "Implemented CSS Grid slide stacking with consistent description line reservation, preventing page height fluctuations and jumps when navigating between projects."
+        },
+        {
+          "type": "UI/UX",
+          "title": "Border-Snapped Bottom-Right Rank Badge",
+          "description": "Repositioned the top-ranked project indicator to sit snapped flush in the bottom-right corner of the featured section container."
+        },
+        {
+          "type": "UI/UX",
+          "title": "Compact Numerical Gallery Counter",
+          "description": "Replaced the horizontal long bar dot indicators with a clean numerical counter (e.g. 01 / 05) with tabular numeral alignment."
+        }
+      ]
+    },
+    {
+      "version": "v1.7",
+      "badge": "Previous",
+      "date": "28.09.26",
+      "changes": [
+        {
+          "type": "UI/UX",
+          "title": "Optimized Section Spacing Across Hub Layout",
+          "description": "Reduced vertical gaps between the Featured Projects gallery, Floating Navigation canvas, and About & Socials section by eliminating extraneous break tags and tightening responsive margins and padding."
+        }
+      ]
+    },
+    {
+      "version": "v1.6",
+      "badge": "Previous",
       "date": "20.09.26",
       "changes": [
         {

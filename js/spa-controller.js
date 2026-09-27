@@ -26,10 +26,14 @@
             // Setup hash listener
             window.addEventListener('hashchange', () => this.handleRouting());
             
-            // Listen for window resize to reposition bubbles
+            // Listen for window resize to reposition bubbles (ignoring vertical scroll height changes on mobile)
+            this.lastWindowWidth = window.innerWidth;
             window.addEventListener('resize', this.debounce(() => {
-                if (!document.body.classList.contains('in-subview')) {
-                    this.positionFloatingBubbles();
+                if (window.innerWidth !== this.lastWindowWidth) {
+                    this.lastWindowWidth = window.innerWidth;
+                    if (!document.body.classList.contains('in-subview')) {
+                        this.positionFloatingBubbles();
+                    }
                 }
             }, 250));
 
@@ -216,34 +220,40 @@
             // Generate stratified cell slot centers with moderate jitter
             const cellWidth = usableWidth / cols;
             const cellHeight = usableHeight / rows;
-            const slots = [];
+            const totalCells = rows * cols;
 
-            for (let r = 0; r < rows; r++) {
-                for (let c = 0; c < cols; c++) {
-                    const cx = minX + (c + 0.5) * cellWidth;
-                    const cy = minY + (r + 0.5) * cellHeight;
-                    // Controlled jitter inside the cell to preserve gap
-                    const jx = (Math.random() - 0.5) * (cellWidth * 0.25);
-                    const jy = (Math.random() - 0.5) * (cellHeight * 0.25);
-                    slots.push({
-                        x: Math.max(minX, Math.min(maxX, cx + jx)),
-                        y: Math.max(minY, Math.min(maxY, cy + jy))
-                    });
+            // Generate or preserve randomized slot mapping & jitter seeds for the current page session
+            if (!this.bubbleSlotOrder || this.bubbleSlotOrder.length !== numBubbles || this.lastCols !== cols || this.lastRows !== rows) {
+                // Generate shuffled slot assignments for the bubbles
+                const cellIndices = Array.from({ length: Math.max(numBubbles, totalCells) }, (_, i) => i % totalCells);
+                for (let i = cellIndices.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [cellIndices[i], cellIndices[j]] = [cellIndices[j], cellIndices[i]];
                 }
+                this.bubbleSlotOrder = cellIndices.slice(0, numBubbles);
+                this.bubbleJitters = Array.from({ length: numBubbles }, () => ({
+                    jx: (Math.random() - 0.5) * 0.25,
+                    jy: (Math.random() - 0.5) * 0.25
+                }));
+                this.lastCols = cols;
+                this.lastRows = rows;
             }
 
-            // Shuffle slot positions so categories appear randomly distributed
-            for (let i = slots.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [slots[i], slots[j]] = [slots[j], slots[i]];
-            }
-
-            // Assign initial positions to bubbles
+            // Assign initial positions to bubbles using the stable session mapping
             const positions = [];
             for (let i = 0; i < numBubbles; i++) {
-                positions.push(slots[i] ? { x: slots[i].x, y: slots[i].y } : {
-                    x: minX + Math.random() * usableWidth,
-                    y: minY + Math.random() * usableHeight
+                const slotIndex = this.bubbleSlotOrder[i] || 0;
+                const r = Math.floor(slotIndex / cols);
+                const c = slotIndex % cols;
+                const cx = minX + (c + 0.5) * cellWidth;
+                const cy = minY + (r + 0.5) * cellHeight;
+                const jitter = this.bubbleJitters[i] || { jx: 0, jy: 0 };
+                const jx = jitter.jx * cellWidth;
+                const jy = jitter.jy * cellHeight;
+
+                positions.push({
+                    x: Math.max(minX, Math.min(maxX, cx + jx)),
+                    y: Math.max(minY, Math.min(maxY, cy + jy))
                 });
             }
 
