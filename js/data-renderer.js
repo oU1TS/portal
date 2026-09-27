@@ -347,13 +347,19 @@
         if (!track || !items || items.length === 0) return;
 
         track.innerHTML = '';
-        if (indicators) indicators.innerHTML = '';
+        if (indicators) {
+            indicators.innerHTML = `
+                <span class="gallery-counter-current" id="galleryCounterCurrent">01</span>
+                <span class="gallery-counter-divider">/</span>
+                <span class="gallery-counter-total" id="galleryCounterTotal">${String(items.length).padStart(2, '0')}</span>
+            `;
+        }
 
         let currentIndex = 0;
         let autoChangeTimer = null;
         const intervalMs = 4800; // Changes project every 4.8 seconds
 
-        // Build Slides & Indicator Dots
+        // Build Slides
         items.forEach((item, index) => {
             // Slide container
             const slide = document.createElement('div');
@@ -392,7 +398,6 @@
                         <span class="gallery-category-pill">${item.category || 'Initiative'}</span>
                     </div>
                     <div class="gallery-info">
-                        <span class="gallery-rank-pill"><i class="fa-solid fa-trophy"></i> ${item.rank || `#${index + 1} Featured`}</span>
                         <h3 class="gallery-title">${item.title}</h3>
                         <p class="gallery-desc">${item.description || 'Verified open resource for UITS students and developers.'}</p>
                         <div class="gallery-action">
@@ -402,22 +407,22 @@
                 </a>
             `;
             track.appendChild(slide);
-
-            // Indicator dot
-            if (indicators) {
-                const dot = document.createElement('button');
-                dot.className = `gallery-dot ${index === 0 ? 'active' : ''}`;
-                dot.setAttribute('aria-label', `Go to project ${index + 1}`);
-                dot.addEventListener('click', () => {
-                    goToSlide(index);
-                    restartAutoTimer();
-                });
-                indicators.appendChild(dot);
-            }
         });
 
         const slides = track.querySelectorAll('.gallery-slide');
-        const dots = indicators ? indicators.querySelectorAll('.gallery-dot') : [];
+        const counterCurrent = document.getElementById('galleryCounterCurrent');
+        const counterTotal = document.getElementById('galleryCounterTotal');
+        const rankText = document.getElementById('galleryRankText');
+
+        if (counterTotal) {
+            counterTotal.textContent = String(items.length).padStart(2, '0');
+        }
+        if (counterCurrent) {
+            counterCurrent.textContent = '01';
+        }
+        if (rankText && items.length > 0) {
+            rankText.textContent = items[0].rank || '#1 Featured';
+        }
 
         function goToSlide(newIndex) {
             if (newIndex < 0) {
@@ -432,9 +437,13 @@
                 s.classList.toggle('active', i === currentIndex);
             });
 
-            dots.forEach((d, i) => {
-                d.classList.toggle('active', i === currentIndex);
-            });
+            if (counterCurrent) {
+                counterCurrent.textContent = String(currentIndex + 1).padStart(2, '0');
+            }
+
+            if (rankText && items[currentIndex]) {
+                rankText.textContent = items[currentIndex].rank || `#${currentIndex + 1} Featured`;
+            }
         }
 
         function nextSlide() {

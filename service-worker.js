@@ -1,4 +1,4 @@
-const CACHE_NAME = 'ou1ts-portal-v1.6';
+const CACHE_NAME = 'ou1ts-portal-v1.9';
 const ASSETS_TO_CACHE = [
     '/',
     '/index.html',

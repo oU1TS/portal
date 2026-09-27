@@ -589,6 +589,8 @@ const SHEET_ID = 'your-new-sheet-id-here';
 
 | Version | Feature / Change | Description |
 | :--- | :--- | :--- |
+| **v3.12** | **Hub Section Spacing Optimization** | Reduced vertical gaps between the Featured Projects gallery, Floating Navigation canvas, and About & Socials section by stripping extraneous break tags and compacting padding and margins. |
+| **v3.11** | **Interactive Preloader, Floating Canvas & Gallery Restructure** | Added gliding intro preloader, dynamic typewriter branding, playful floating bubble canvas, structured featured gallery cards, and interactive visitor changelog modal (`changes.json`). |
 | **v3.10** | **Course Dropdowns Divider Cleanup** | Removed horizontal divider (`<hr>`) lines below all course dropdowns on `courses.html` except for the 'All Courses' dropdown. |
 | **v3.9** | **Dynamic JSON-Driven Rendering** | Replaced static list items on all resource pages and index featured projects marquee with a dynamic fetching loader (`js/data-renderer.js`) pulling data from individual JSON files in `json/`, preserving full Supabase starring compatibility and isolated ranking logic. |
 | **v3.8** | **Reusable Auth Modal Script** | Extracted the hardcoded Auth Modal HTML template into a separate reusable `js/auth-modal.js` script dynamically injected across all category pages, index page, and guidance page. |

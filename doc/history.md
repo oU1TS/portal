@@ -2,6 +2,50 @@
 Tags: [portal, release-notes, changelog, history, preloader, typewriter, gallery, auto-scroll, service-worker]
 -->
 
+# 28.09.26
+
+### **Desktop Top Auth Bar & Mobile Featured Gallery Margin Reduction & Mobile Bubble Padding Refinement**
+- **Desktop Top Auth Bar Margin Reduction**:
+  - In [`style.css`](../style.css), set `margin-top: -1rem` on `.top-auth-bar` for desktop viewports (`padding: 0.5rem 0 1rem`), bringing the header brand area snugly towards the top border while keeping mobile `margin-top: 0`.
+- **Mobile Featured Section Margin-Top Reduction**:
+  - In [`style.css`](../style.css), reduced `margin-top` for `.featured-section` inside `@media (max-width: 768px)` to `-0.85rem` (with `padding: 0.5rem 0 1rem`) and on small mobile (`≤ 480px`) to `margin-top: -1rem` (`padding-top: 0.25rem`), eliminating excessive vertical whitespace above the project gallery.
+- **Mobile Bubble Padding Around Icon & Span Tags Refinement**:
+  - In [`style.css`](../style.css), refined internal padding on `.floating-bubble` anchor tags to `2px !important` on tablets (`≤ 768px`) and `1px !important` on mobile (`≤ 480px`).
+  - Set `padding: 0 !important; margin: 0 0 0.1rem 0 !important;` on `.floating-bubble i` and `padding: 0 2px !important; margin: 0 !important;` on `.floating-bubble span`, strictly preserving desktop icon size (`1.6rem`) and typography (`0.72rem`).
+- **Service Worker & Visitor Changelog**:
+  - Bumped cache version in [`service-worker.js`](../service-worker.js) to `ou1ts-portal-v1.9`.
+  - Added `v1.9` entry to [`changes.json`](../changes.json).
+
+### **Floating Navigation Scroll Persistence, Featured Gallery CLS Fix, Snapped Rank Pill & Counter**
+- **Floating Navigation Canvas Scroll Persistence**:
+  - In [`js/spa-controller.js`](../js/spa-controller.js), added `lastWindowWidth` check inside `window.resize` debounce listener. Viewport height fluctuations caused by mobile address bars showing/hiding during scroll no longer fire bubble repositioning.
+  - Implemented session-level slot randomization caching (`bubbleSlotOrder` and `bubbleJitters`). Every page refresh generates a fresh randomized distribution of links, while scrolling, resizing within the same column count, and returning from subviews retain the assigned positions without re-randomizing or jumping.
+- **Eliminated Featured Gallery Layout Shifting (CLS)**:
+  - In [`style.css`](../style.css), converted `.gallery-track` to CSS Grid stacking (`grid-template-columns: 1fr; grid-template-rows: 1fr;`) with all slides sharing `grid-column: 1; grid-row: 1`. This naturally locks the track height to the maximum content height across slides and prevents page jumping as slides rotate.
+  - Added explicit line clamping and `min-height: 2.65rem` (`2.05rem` on mobile) to `.gallery-desc` to ensure consistent description vertical rhythm.
+- **Border-Snapped Bottom-Right Rank Label**:
+  - In [`index.html`](../index.html), added `.gallery-corner-rank` (`#galleryCornerRank`) inside `.featured-gallery-container`.
+  - In [`style.css`](../style.css), positioned `.gallery-corner-rank` snapped flush to the bottom-right border (`bottom: 0; right: 0; border-top-left-radius: 14px; border-bottom-right-radius: 24px;`).
+  - In [`js/data-renderer.js`](../js/data-renderer.js), removed the old rank pill from the project card info area and dynamically update `#galleryRankText` whenever the active slide changes.
+- **Modern Numerical Slide Counter**:
+  - In [`index.html`](../index.html), converted `#galleryIndicators` to `.gallery-counter` displaying `01 / 05` format.
+  - In [`js/data-renderer.js`](../js/data-renderer.js), removed dot generation loops and updated the numerical counter elements (`galleryCounterCurrent`, `galleryCounterTotal`) on slide change.
+  - In [`style.css`](../style.css), styled `.gallery-counter` with a compact pill badge, tabular numbers, and glassmorphism styling.
+- **Service Worker & Visitor Changelog**:
+  - Bumped cache version in [`service-worker.js`](../service-worker.js) to `ou1ts-portal-v1.8`.
+  - Added `v1.8` entry to [`changes.json`](../changes.json).
+
+### **Reduced Vertical Gaps Between Core Home Hub Sections**
+- **Removed Extraneous Line Breaks**:
+  - In [`index.html`](../index.html), removed `<br><br>` placed directly between `.floating-nav-container` (Explore Hub Resources) and `.about-clean-section` (`#about`).
+- **Compact Section Vertical Margins & Padding**:
+  - In [`style.css`](../style.css), decreased `.featured-section` vertical padding from `2.5rem 0` to `1rem 0`.
+  - Decreased `.floating-nav-container` vertical margin from `3rem 0` to `1rem 0` (desktop), `0.75rem 0` on tablets (`≤ 768px`), and `0.5rem 0` on mobile (`≤ 480px`).
+  - Decreased `.about-clean-section` vertical padding from `2rem 0` to `0.75rem 0`, and tightened `.about-socials-row` vertical margin from `1.25rem auto 1.5rem` to `0.5rem auto 1rem`.
+- **Version Bump & Visitor Changelog**:
+  - Bumped cache version in [`service-worker.js`](../service-worker.js) to `ou1ts-portal-v1.7`.
+  - Added `v1.7` entry to [`changes.json`](../changes.json) detailing the layout gap optimization.
+
 # 20.09.26
 
 ### **Gallery Card Restructure, Mobile Changelog Button Visibility & Bubble Padding**
