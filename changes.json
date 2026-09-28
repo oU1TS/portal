@@ -1,11 +1,23 @@
 {
-  "currentVersion": "v3.1",
+  "currentVersion": "v3.2",
   "lastUpdated": "September 2026",
   "documentationUrl": "doc/history.md",
   "history": [
     {
-      "version": "v3.1",
+      "version": "v3.2",
       "badge": "Latest",
+      "date": "28.09.26",
+      "changes": [
+        {
+          "type": "Fix",
+          "title": "Production 404 Fixes: env-config.js, Service Worker & Favicon",
+          "description": "Fixed critical production issues: corrected GitHub Actions deploy workflow to properly stage gitignored env-config.js so Supabase credentials are available on GitHub Pages; fixed service worker registration path (was incorrectly resolving to /service-worker.js instead of /portal/service-worker.js); added favicon link tag to suppress browser 404; also fixed the heredoc quoting bug that was causing secrets to not be expanded."
+        }
+      ]
+    },
+    {
+      "version": "v3.1",
+      "badge": "Previous",
       "date": "28.09.26",
       "changes": [
         {
@@ -15,6 +27,7 @@
         }
       ]
     },
+
     {
       "version": "v3.0",
       "badge": "Previous",

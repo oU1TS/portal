@@ -126,7 +126,10 @@ window.addEventListener('resize', () => {
 // --- PWA Service Worker Registration ---
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/service-worker.js')
+        // Resolve service-worker.js relative to the current page's base path.
+        // This works whether the site is hosted at / (local/Netlify) or /portal/ (GitHub Pages).
+        const basePath = window.location.pathname.replace(/\/[^/]*$/, '/');
+        navigator.serviceWorker.register(basePath + 'service-worker.js', { scope: basePath })
             .then((reg) => console.log('Service Worker Registered', reg))
             .catch((err) => console.log('Service Worker Registration Failed', err));
     });

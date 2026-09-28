@@ -1,0 +1,9 @@
+/temp
+/doc/backup
+/doc/idea/oU1TS_Central_Database_Guide.md
+# Environment secrets — DO NOT COMMIT
+.env
+.env.*
+env-config.js
+doc/idea/\[DoNotCommit\]oU1TS_Central_Database_Guide.md
+env-config.example.js
