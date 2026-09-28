@@ -316,7 +316,7 @@ function initIdleAutoScroll() {
                     cleanup(); // Run for the first time only
                     const rect = target.getBoundingClientRect();
                     const currentScrollY = window.pageYOffset || document.documentElement.scrollTop;
-                    const targetY = Math.max(0, currentScrollY + rect.top - 40);
+                    const targetY = Math.max(0, currentScrollY + rect.top);
                     smoothScrollTo(targetY, 1400);
                 }
             }

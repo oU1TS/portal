@@ -1,11 +1,155 @@
 {
-  "currentVersion": "v1.9",
+  "currentVersion": "v3.1",
   "lastUpdated": "September 2026",
   "documentationUrl": "doc/history.md",
   "history": [
     {
-      "version": "v1.9",
+      "version": "v3.1",
       "badge": "Latest",
+      "date": "28.09.26",
+      "changes": [
+        {
+          "type": "Enhancement",
+          "title": "Profile Icon Header Button & Profile-Page Logout Relocation",
+          "description": "Replaced the verbose header user-info bar with a compact profile icon button matching the Login button footprint. Hovering the icon reveals a frosted-glass dropdown with student ID and email. Moved the Logout button from the header to the Profile page, right-aligned alongside the Back to Hub button."
+        }
+      ]
+    },
+    {
+      "version": "v3.0",
+      "badge": "Previous",
+      "date": "28.09.26",
+      "changes": [
+        {
+          "type": "Enhancement",
+          "title": "Mobile CMS Submissions Dropdown Filters & Collapsible Card Accordions",
+          "description": "Refined mobile CMS workspace to maintain 95% container width with optimized padding. Integrated Feedback filter directly into the mobile filter dropdown for complete single-selector filtering. Converted submission cards on mobile into interactive accordion dropdowns displaying only title and badges by default, smoothly expanding details on demand."
+        }
+      ]
+    },
+    {
+      "version": "v2.9",
+      "badge": "Previous",
+      "date": "28.09.26",
+      "changes": [
+        {
+          "type": "Enhancement",
+          "title": "Canonical URLs & Automated Netlify-to-GitHub Pages Redirection",
+          "description": "Added canonical link tags pointing to official GitHub Pages origin (https://ou1ts.github.io/portal/) and implemented automatic client-side redirection for incoming traffic from ou1ts-portal.netlify.app and ouits-res.netlify.app with path, query, and hash preservation."
+        }
+      ]
+    },
+    {
+      "version": "v2.8",
+      "badge": "Previous",
+      "date": "28.09.26",
+      "changes": [
+        {
+          "type": "Enhancement",
+          "title": "Wide CMS Workspace, Mobile Tab Icons & Mobile Submissions Dropdown",
+          "description": "Streamlined Portal Admin CMS into a dedicated wide layout (1440px / 95% width) directly in the profile switcher, replacing the redundant popup modal. Optimized mobile experience by hiding tab button text labels to show clean icons with counts, and converted submissions filter pills into an accessible mobile dropdown."
+        }
+      ]
+    },
+    {
+      "version": "v2.7",
+      "badge": "Previous",
+      "date": "28.09.26",
+      "changes": [
+        {
+          "type": "Enhancement",
+          "title": "CMS Submissions Styling, Role Selector & Admin Delegation Safeguards",
+          "description": "Enhanced Google Sheet submissions with lighter, high-contrast submitter social links. Applied dark-glass styling to role filters and profile edit buttons. Added sole administrator protection preventing lockout by making revoke read-only. Streamlined Add User modal to register regular members only with list-based admin toggling."
+        }
+      ]
+    },
+    {
+      "version": "v2.6",
+      "badge": "Previous",
+      "date": "28.09.26",
+      "changes": [
+        {
+          "type": "Feature",
+          "title": "Add & Provision Users in CMS Admin Delegation",
+          "description": "Admins can now directly add, pre-provision, or update users in the Admin Delegation section with custom role assignment, search by student name/email/ID, and role-based filtering."
+        }
+      ]
+    },
+    {
+      "version": "v2.5",
+      "badge": "Previous",
+      "date": "28.09.26",
+      "changes": [
+        {
+          "type": "Feature",
+          "title": "Google Sheets Submissions Tracking Table & Admin View Switcher",
+          "description": "Connected live Google Sheets form responses to database table public.portal_sheet_submissions with deterministic row IDs. Automatically detects added vs pending submissions with 1-click approvals. Added seamless Profile View <-> CMS View toggle switcher for admin users."
+        }
+      ]
+    },
+    {
+      "version": "v2.4",
+      "badge": "Previous",
+      "date": "28.09.26",
+      "changes": [
+        {
+          "type": "Enhancement",
+          "title": "Expanded Featured Projects Pool & Mobile Semi-Transparent Gallery Arrows",
+          "description": "Expanded rotating featured projects pool to select the top 3 submissions from all 11 catalog lists (~30 projects total) with dynamic random shuffle. Added left and right navigation arrows to mobile viewports with a sleek semi-transparent frosted glass design."
+        }
+      ]
+    },
+    {
+      "version": "v2.3",
+      "badge": "Previous",
+      "date": "28.09.26",
+      "changes": [
+        {
+          "type": "Feature",
+          "title": "Portal CMS, Central Resources Database & Admin Delegation",
+          "description": "Implemented full Content Management System (CMS) modal for approving community resources, auto-arranging entries into Supabase categories, managing Google Form feedback submissions, delegating portal-scoped admin roles with a user selector modal, and dynamic star-based featured projects ranking."
+        }
+      ]
+    },
+    {
+      "version": "v2.2",
+      "badge": "Previous",
+      "date": "28.09.26",
+      "changes": [
+        {
+          "type": "Bug Fix",
+          "title": "Service Worker Fetch & Origin Interception Fix",
+          "description": "Implemented same-origin and GET filtering in service-worker.js, added self.skipWaiting() and clients.claim(), and eliminated undefined cache responses that caused net::ERR_FAILED errors across local assets."
+        }
+      ]
+    },
+    {
+      "version": "v2.1",
+      "badge": "Previous",
+      "date": "28.09.26",
+      "changes": [
+        {
+          "type": "Architecture",
+          "title": "Central Database Integration & Star Ranking System",
+          "description": "Connected login and profile systems to the centralized oU1TS Supabase database, added automatic 'portal' project tagging, and implemented the stars ranking architecture across all JSON catalog resources with database-backed RLS policies and live sorting."
+        }
+      ]
+    },
+    {
+      "version": "v2.0",
+      "badge": "Previous",
+      "date": "28.09.26",
+      "changes": [
+        {
+          "type": "Feature",
+          "title": "100vh Floating Nav Canvas Showcase & Seamless Scroll Reappearance",
+          "description": "Scrolling to the Explore Hub Resources section smoothly expands the navigation canvas to 100vh with all resource nodes showcased together in full view while adjacent sections glide out of view. Immediately on any scroll action, the canvas smoothly contracts and adjacent sections fluidly reappear."
+        }
+      ]
+    },
+    {
+      "version": "v1.9",
+      "badge": "Previous",
       "date": "28.09.26",
       "changes": [
         {

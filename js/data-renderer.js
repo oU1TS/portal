@@ -26,12 +26,20 @@
     function normalizeProjectItem(item, defaultCategory) {
         if (!item) return null;
 
-        let title = item.title;
-        let url = item.url || item.visitUrl || item.copyUrl || '#';
-        let description = item.description || '';
+        let title = (defaultCategory === 'Mentor' || defaultCategory === 'Talent' || !item.title)
+            ? (item.name || item.title)
+            : (item.title || item.name);
+        let url = item.visitUrl || item.url || item.copyUrl || item.socials?.linkedin || item.socials?.github || '#';
+        let description = item.description || item.bio || '';
+
+        if (!description && item.company) {
+            description = `${item.role || item.title || 'Engineer'} at ${item.company} (${item.batch || 'Alumni'}). ${item.experience || ''}`.trim();
+        } else if (!description && item.role) {
+            description = `${item.role} • ${item.sector || 'Software'}`.trim();
+        }
 
         // Handle course items or items with rawHtml
-        if (!title && item.rawHtml) {
+        if ((!title || title === defaultCategory) && item.rawHtml) {
             const div = document.createElement('div');
             div.innerHTML = item.rawHtml;
             const a = div.querySelector('a');
@@ -53,6 +61,8 @@
         let icon = item.icon || null;
         if (!img && !icon && item.iconClass) {
             icon = { type: 'icon', class: item.iconClass };
+        } else if (!img && !icon && item.name) {
+            icon = { type: 'text', text: item.name.charAt(0).toUpperCase() };
         }
 
         // Category label
@@ -74,30 +84,54 @@
         };
     }
 
-    // Fetches top ranked featured projects: picks randomly from the top 3 of each JSON list in json/
+    // Fetches top ranked featured projects: picks top 3 from each category in json/ (~30 projects) and shuffles
     async function loadFeatured() {
         let featuredProjects = null;
 
-        // 1. PLACEHOLDER: Attempt to fetch from ou1ts-backend Vercel API or Supabase
+        // 1. Attempt to fetch top listings across categories corresponding to star rankings from Supabase
         try {
-            const backendApiUrl = 'https://ou1tsbackend.vercel.app/api/featured';
-            const controller = new AbortController();
-            const timeoutId = setTimeout(() => controller.abort(), 1200);
+            if (window.supabaseClient) {
+                // Fetch highest starred resources across categories
+                const { data: rankedData, error: rankedErr } = await window.supabaseClient
+                    .from('resource_star_rankings')
+                    .select('resource_id, total_stars, category')
+                    .gt('total_stars', 0)
+                    .order('total_stars', { ascending: false })
+                    .limit(30);
 
-            const res = await fetch(backendApiUrl, { signal: controller.signal });
-            clearTimeout(timeoutId);
-            if (res.ok) {
-                const apiData = await res.json();
-                if (Array.isArray(apiData) && apiData.length > 0) {
-                    featuredProjects = apiData;
+                if (!rankedErr && Array.isArray(rankedData) && rankedData.length >= 20) {
+                    const resIds = rankedData.map(r => r.resource_id);
+                    const { data: resData, error: resErr } = await window.supabaseClient
+                        .from('portal_resources')
+                        .select('*')
+                        .in('id', resIds);
+
+                    if (!resErr && Array.isArray(resData) && resData.length > 0) {
+                        const resMap = new Map(resData.map(r => [r.id, r]));
+                        const normalizedList = rankedData
+                            .filter(r => resMap.has(r.resource_id))
+                            .map((r, idx) => {
+                                const item = resMap.get(r.resource_id);
+                                const norm = normalizeProjectItem(item, r.category);
+                                if (norm) {
+                                    norm.rank = `#${idx + 1} Top Starred (${r.total_stars} ★)`;
+                                }
+                                return norm;
+                            })
+                            .filter(Boolean);
+
+                        if (normalizedList.length >= 20) {
+                            featuredProjects = normalizedList.sort(() => 0.5 - Math.random());
+                        }
+                    }
                 }
             }
         } catch (err) {
-            // Backend offline or not yet configured - silently proceed to multi-list JSON loader
+            // Silently proceed to multi-list JSON loader
         }
 
-        // 2. Load at random from the top 3 of each of the json/ project lists
-        if (!featuredProjects || featuredProjects.length === 0) {
+        // 2. Load top 3 from each of the 11 json/ project lists (~30 projects total) and shuffle
+        if (!featuredProjects || featuredProjects.length < 20) {
             try {
                 const PROJECT_LISTS = [
                     { file: 'materials.json', category: 'Materials' },
@@ -107,14 +141,16 @@
                     { file: 'guidance.json', category: 'Guidance' },
                     { file: 'official.json', category: 'Official' },
                     { file: 'portfolios.json', category: 'Portfolio' },
+                    { file: 'courses.json', category: 'Courses', isNested: true },
                     { file: 'inspirations.json', category: 'Inspirations', isNested: true },
-                    { file: 'courses.json', category: 'Courses', isNested: true }
+                    { file: 'mentors.json', category: 'Mentor' },
+                    { file: 'talent.json', category: 'Talent' }
                 ];
 
                 const fetchPromises = PROJECT_LISTS.map(async (cfg) => {
                     try {
                         const res = await fetch(`json/${cfg.file}`);
-                        if (!res.ok) return null;
+                        if (!res.ok) return [];
                         const data = await res.json();
                         let items = [];
                         if (cfg.isNested) {
@@ -123,29 +159,27 @@
                             items = data;
                         }
 
-                        if (!items || items.length === 0) return null;
+                        if (!items || items.length === 0) return [];
 
-                        // Extract top 3 of this project list
+                        // Take top 3 submissions of each list
                         const top3 = items.slice(0, 3);
-                        // Pick 1 at random from top 3
-                        const picked = top3[Math.floor(Math.random() * top3.length)];
-                        return normalizeProjectItem(picked, cfg.category);
+                        return top3.map(item => normalizeProjectItem(item, cfg.category)).filter(Boolean);
                     } catch (e) {
-                        return null;
+                        return [];
                     }
                 });
 
                 const settled = await Promise.allSettled(fetchPromises);
-                const candidates = settled
-                    .filter(p => p.status === 'fulfilled' && p.value !== null)
-                    .map(p => p.value);
+                const allCandidates = settled
+                    .filter(p => p.status === 'fulfilled' && Array.isArray(p.value))
+                    .flatMap(p => p.value);
 
-                if (candidates.length > 0) {
-                    // Shuffle the diverse project pool so order changes on every refresh
-                    featuredProjects = candidates.sort(() => 0.5 - Math.random());
+                if (allCandidates.length > 0) {
+                    // Shuffle the entire pool of ~30 projects so container rotates dynamically
+                    featuredProjects = allCandidates.sort(() => 0.5 - Math.random());
                 }
             } catch (error) {
-                console.error('Error loading random featured projects from json lists:', error);
+                console.error('Error loading top 3 featured projects from json lists:', error);
             }
         }
 
@@ -377,6 +411,8 @@
             } else if (item.icon) {
                 if (typeof item.icon === 'string') {
                     mediaHtml = `<div class="gallery-placeholder"><i class="${item.icon}"></i></div>`;
+                } else if (item.icon.type === 'text') {
+                    mediaHtml = `<div class="gallery-placeholder" style="font-weight:700; font-size:2.2rem; color:#38bdf8; background:rgba(56,189,248,0.12); border-radius:18px; width:100%; height:100%; display:flex; align-items:center; justify-content:center;">${item.icon.text}</div>`;
                 } else if (item.icon.type === 'image' && item.icon.src) {
                     mediaHtml = `<img src="${item.icon.src}" alt="${item.title || 'Project'}" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\\'gallery-placeholder\\'><i class=\\'fa-solid fa-layer-group\\'></i></div>';">`;
                 } else if (item.icon.class) {
