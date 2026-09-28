@@ -18,21 +18,32 @@ jobs:
 
       - name: Inject Supabase credentials into env-config.js
         run: |
-          cat > env-config.js << 'ENVEOF'
+          cat > env-config.js << ENVEOF
           window.__ENV = {
-            SUPABASE_URL: "${{ secrets.SUPABASE_URL }}",
-            SUPABASE_ANON_KEY: "${{ secrets.SUPABASE_ANON_KEY }}"
+            SUPABASE_URL: "$SUPABASE_URL",
+            SUPABASE_ANON_KEY: "$SUPABASE_ANON_KEY"
           };
           ENVEOF
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
 
+      - name: Stage deploy artefacts (include gitignored env-config.js)
+        run: |
+          mkdir -p _site
+          # Copy all repo files except source-only dirs
+          rsync -av --exclude='.git' --exclude='.github' --exclude='doc' \
+                    --exclude='README.md' --exclude='LICENSE' \
+                    --exclude='env-config.example.js' --exclude='scratch' \
+                    --exclude='temp_backup' --exclude='_site' \
+                    ./ _site/
+          # Explicitly copy the freshly generated env-config.js (gitignored but needed)
+          cp env-config.js _site/env-config.js
+
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./
+          publish_dir: ./_site
           publish_branch: gh-pages
-          # Exclude source-only files from deployment
-          exclude_assets: '.gitignore,.github,doc,README.md,LICENSE'
+          force_orphan: false

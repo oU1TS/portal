@@ -4,7 +4,23 @@ Tags: [portal, release-notes, changelog, history, preloader, typewriter, gallery
 
 # 28.09.26
 
+### **Production 404 Fixes: env-config.js, Service Worker & Favicon (v3.2)**
+- **Deploy Workflow Fix ([`.github/workflows/deploy.yml`](../.github/workflows/deploy.yml))**:
+  - Root cause: `peaceiris/actions-gh-pages` respects `.gitignore`, so the generated `env-config.js` was never included in the deploy, causing `env-config.js 404` on every page load and `supabaseClient = null`.
+  - Fix: Added a `rsync` staging step to copy the full working directory (including the generated `env-config.js`) into `_site/`, then deploy from `_site/`.
+  - Fixed heredoc quoting bug: the heredoc used `'ENVEOF'` (no variable expansion) — switched to unquoted `ENVEOF` with `$SUPABASE_URL` / `$SUPABASE_ANON_KEY` shell vars so secrets are correctly interpolated.
+  - Also excluded `scratch` and `temp_backup` from the deployed site.
+- **Service Worker Registration Path Fix ([`script.js`](../script.js))**:
+  - Was registered at `/service-worker.js` (root-absolute), but site lives at `/portal/` on GitHub Pages — causing a 404 on the SW fetch.
+  - Fix: Derives `basePath` dynamically via `window.location.pathname.replace(/\/[^/]*$/, '/')`, registering the SW as `basePath + 'service-worker.js'` with matching `scope: basePath`.
+- **Favicon 404 Fix ([`index.html`](../index.html))**:
+  - Added `<link rel="icon" href="icons/icon.webp" type="image/webp">` to silence the automatic `/favicon.ico` browser request.
+- **manifest.json Scope Fix ([`manifest.json`](../manifest.json))**:
+  - `start_url` updated to `/portal/`; `scope` added as `/portal/` for correct PWA installation on GitHub Pages.
+- **Cache Version**: `ou1ts-portal-v3.2` in [`service-worker.js`](../service-worker.js) to purge old cached JS referencing the defunct Vercel backend.
+
 ### **Profile Icon Header Button & Profile-Page Logout Relocation**
+
 - **Compact Profile Icon Button (`#userInfo`, `#userProfileBtn`, `.user-details-dropdown` in [`index.html`](../index.html) & [`style.css`](../style.css))**:
   - Replaced the wide `.user-info` header bar (which showed student ID, email, and a logout icon) with a minimal `<a class="auth-btn user-profile-btn">` profile icon button that occupies the exact same space as the Login button.
   - Profile details (`.user-details-dropdown`) now appear in a frosted-glass popdown (glassmorphic backdrop, purple-tinted border, arrow pointer) when hovering or focusing the profile icon.
