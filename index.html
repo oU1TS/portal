@@ -6,6 +6,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>oU1TS Portal - Academic Project Hub</title>
     <meta name="description" content="Projects for and by the students of UITS.">
+    <link rel="canonical" href="https://ou1ts.github.io/portal/">
+
+    <!-- Netlify to GitHub Pages Redirector -->
+    <script>
+        (function () {
+            const host = window.location.hostname;
+            const redirectHosts = ['ou1ts-portal.netlify.app', 'ouits-res.netlify.app'];
+            if (redirectHosts.includes(host)) {
+                let path = window.location.pathname;
+                if (path === '/' || path === '/index.html') {
+                    path = '/';
+                } else if (!path.endsWith('.html') && !path.endsWith('/')) {
+                    path += '.html';
+                }
+                const targetUrl = 'https://ou1ts.github.io/portal' + (path.startsWith('/') ? path : '/' + path) + window.location.search + window.location.hash;
+                window.location.replace(targetUrl);
+            }
+        })();
+    </script>
+
     <link rel="stylesheet" href="style.css">
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#1a1a2e">
@@ -67,16 +87,22 @@
                         <span>Changelog</span>
                         <!-- <span class="changelog-badge-pill">v1.6</span> -->
                     </a>
+                    <!-- <a href="#cms" id="adminCmsBtn" class="admin-cms-btn" style="display: none;" title="Open Portal Admin CMS">
+                        <i class="fa-solid fa-sliders"></i>
+                        <span>Admin CMS</span>
+                    </a> -->
                     <a href="#profile" class="auth-btn" id="authBtn">
                         <i class="fa-solid fa-right-to-bracket"></i>
                         <span>Login</span>
                     </a>
                     <div class="user-info" id="userInfo" style="display: none;">
-                        <a href="#profile" class="user-details" id="userDetails"
-                            style="text-decoration: none; color: inherit;"></a>
-                        <button class="logout-btn" id="logoutBtn" onclick="handleLogout()">
-                            <i class="fa-solid fa-right-from-bracket"></i>
-                        </button>
+                        <a href="#profile" class="auth-btn user-profile-btn" id="userProfileBtn" title="View Profile">
+                            <i class="fa-solid fa-user"></i>
+                        </a>
+                        <div class="user-details-dropdown" id="userDetailsDropdown">
+                            <a href="#profile" class="user-details" id="userDetails"
+                                style="text-decoration: none; color: inherit;"></a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -385,7 +411,15 @@
                 <div id="profileView" class="spa-view category-page">
                     <div class="back-btn-container">
                         <a href="#" class="back-btn"><i class="fa-solid fa-arrow-left"></i> Back to Hub</a>
+                        <button class="logout-btn profile-logout-btn" id="logoutBtn" onclick="handleLogout()" title="Log out of your account" style="display: none;">
+                            <i class="fa-solid fa-right-from-bracket"></i>
+                            <span>Logout</span>
+                        </button>
                     </div>
+
+                    <!-- Admin View Switcher (Visible to Admin Users) -->
+                    <div class="admin-view-switcher-container" id="profileViewSwitcher"></div>
+
                     <header class="category-header">
                         <div class="category-icon" style="background: linear-gradient(135deg, #ede7f6, #d1c4e9);">
                             <i class="fa-solid fa-user-shield" style="color: #5e35b1;"></i>
@@ -457,6 +491,36 @@
                     <!-- Authenticated profile dashboard -->
                     <div class="profile-dashboard" id="profileDetailsArea" style="display: none;">
                         <!-- Populated dynamically -->
+                    </div>
+                </div>
+
+                <!-- Admin CMS View -->
+                <div id="cmsView" class="spa-view category-page">
+                    <div class="back-btn-container">
+                        <a href="#" class="back-btn"><i class="fa-solid fa-arrow-left"></i> Back to Hub</a>
+                    </div>
+
+                    <!-- Admin View Switcher (Visible to Admin Users) -->
+                    <div class="admin-view-switcher-container" id="cmsViewSwitcher"></div>
+
+                    <header class="category-header">
+                        <div class="category-icon" style="background: linear-gradient(135deg, #ede9fe, #ddd6fe);">
+                            <i class="fa-solid fa-sliders" style="color: #7c3aed;"></i>
+                        </div>
+                        <div class="category-info">
+                            <h1>Portal Admin CMS</h1>
+                            <p>Resource Approvals, Central DB Catalog Management & Role Delegation</p>
+                        </div>
+                        <button class="cms-sync-btn header-sync-btn" id="cmsPageSyncSheetBtn"
+                            title="Sync form submissions from Google Sheet"
+                            onclick="if(window.CMS) window.CMS.syncFromGoogleSheet();">
+                            <i class="fa-solid fa-arrows-rotate"></i> Sync Google Form
+                        </button>
+                    </header>
+
+                    <!-- Embedded CMS Workspace Container -->
+                    <div class="cms-inline-workspace" id="cmsInlineWorkspace">
+                        <!-- Populated dynamically by js/cms.js -->
                     </div>
                 </div>
 
@@ -627,6 +691,7 @@
     <script src="js/auth.js"></script>
     <script src="js/stars.js"></script>
     <script src="js/data-renderer.js"></script>
+    <script src="js/cms.js"></script>
     <script src="js/spa-controller.js"></script>
     <script src="js/changelog-modal.js"></script>
     <script src="script.js"></script>

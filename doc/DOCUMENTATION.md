@@ -54,6 +54,7 @@ ou1ts.portal/
 │   ├── auth.js             # Authentication logic (Email & Google OAuth)
 │   ├── auth-modal.js       # Reusable authentication modal injection
 │   ├── changelog-modal.js  # What's New changelog modal controller & SW version watcher
+│   ├── cms.js              # Portal Content Management System & Admin Role Delegation controller
 │   ├── data-renderer.js    # Universal JSON data fetching & dynamic DOM rendering
 │   ├── spa-controller.js   # Single Page Application router & subview transitions
 │   ├── stars.js            # Resource starring, upvoting & ranking engine
@@ -236,13 +237,12 @@ After OAuth sign-in, users must add their Student ID to complete their profile.
 | **Per-Dropdown Sort** | `courses.html` sorts within each dropdown section independently |
 | **Optimistic UI** | Instant visual feedback, reverts on error |
 
-### Files Overview
-
 | File / Folder | Purpose |
 |------|--------|
 | `js/supabase-config.js` | Supabase client initialization with project URL and anon key |
 | `js/auth-modal.js` | Auth Modal module: reusable script to dynamically inject the auth modal HTML template |
 | `js/auth.js` | Auth module: register, login, logout, session management, UI updates |
+| `js/cms.js` | Content Management System: approvals, central database management, feedback triage, and admin delegation |
 | `js/stars.js` | Stars module: toggle stars, load counts, sort resources |
 | `js/data-renderer.js` | Universal data renderer: dynamically fetches JSON files and builds DOM components for lists, dropdowns, and featured marquee tracks |
 | `json/` | Folder containing structured data (.json files) representing all items/resources on category pages and index marquee |
@@ -253,6 +253,33 @@ After OAuth sign-in, users must add their Student ID to complete their profile.
 Each resource has a unique `data-resource-id` attribute:
 - Format: `{page}-{identifier}`
 - Examples: `community-facebook`, `courses-spl-b1tranger`, `tools-handgesture`
+
+---
+
+## Portal Content Management System (CMS) & Admin Delegation
+
+The oU1TS Portal includes a comprehensive administrative dashboard ([`js/cms.js`](../js/cms.js)) accessible exclusively to designated portal administrators.
+
+### 1. Key Capabilities
+- **Submissions & Approvals:** Review student-submitted links, verify metadata, and approve them with one click. Approved resources are automatically slugified and published into `public.portal_resources` under their corresponding category (`materials`, `tools`, `guidance`, `community`, `courses`, `portfolios`, `capstones`, `mentors`, `talent`).
+- **Google Sheets / Form Sync:** Live integration with the community contribution sheet (`1oQ5Mkavjm62UGZwNjM-52yvKppWZHfX-Qpq6jtEVIOY`) automatically pulls and categorizes both new resource submissions and student `FEEDBACK` records.
+- **Content Manager:** Live catalog browser allowing admins to view, edit, reorder, or directly add new resources across all 10 categories without modifying JSON files.
+- **Feedback Inbox:** Triage and track resolutions for bug reports, general suggestions, and user feedback.
+- **Admin User Selector Modal:** Existing portal admins can delegate or revoke administrator privileges for any student who has accessed the portal (`'portal' = ANY(project_tags)`). Self-demotion safeguards prevent accidental lockout.
+
+### 2. Designating the Initial Portal Admin
+The initial portal admin is designated directly in the central Supabase database:
+```sql
+UPDATE public.profiles
+SET is_portal_admin = true
+WHERE email = 'your.email@uits.edu.bd';
+```
+
+### 3. Dual-Loading Strategy
+- The application automatically queries approved resources from `public.portal_resources` first.
+- If offline, unconfigured, or if the database is unreachable, the portal transparently falls back to local `json/*.json` catalogs.
+- Institutional inspirations (`json/inspirations.json`) remain manually curated as designed.
+- Featured initiatives are ranked automatically using real-time star metrics from `public.resource_star_rankings`.
 
 ---
 
@@ -275,89 +302,96 @@ Each resource has a unique `data-resource-id` attribute:
    - **Project URL:** `https://xxxxx.supabase.co`
    - **anon public key:** `eyJhbGc...`
 
-### 3. Update Config File
+### 3. Update Environment Credentials
 
-Edit `js/supabase-config.js`:
+For local development, copy `env-config.example.js` to `env-config.js` (which is gitignored):
 
 ```javascript
-const SUPABASE_URL = 'https://YOUR-PROJECT-ID.supabase.co';
-const SUPABASE_ANON_KEY = 'your-anon-key-here';
+window.__ENV = {
+    SUPABASE_URL: 'https://<YOUR-PROJECT-ID>.supabase.co',
+    SUPABASE_ANON_KEY: '<YOUR-ANON-KEY>'
+};
 ```
 
-### 4. Create Database Tables
+For production deployments, inject `SUPABASE_URL` and `SUPABASE_ANON_KEY` as repository secrets in GitHub Actions.
 
-In Supabase SQL Editor, run:
+### 4. Create Central Database Tables & Views
+
+In the Supabase SQL Editor on your central project (`oU1TS-Central`), run the unified setup script from [`doc/query/query-4-central-db-portal-stars.sql`](query/query-4-central-db-portal-stars.sql) (see [`doc/db/CENTRAL_DATABASE_SETUP_GUIDE.md`](db/CENTRAL_DATABASE_SETUP_GUIDE.md) for full walkthrough):
 
 ```sql
--- Create profiles table
-CREATE TABLE public.profiles (
+-- 1. Create profiles table (aligned with ou1ts.github.io central schema)
+CREATE TABLE IF NOT EXISTS public.profiles (
   id UUID REFERENCES auth.users(id) ON DELETE CASCADE PRIMARY KEY,
-  student_id TEXT,  -- Nullable to support OAuth users
   email TEXT NOT NULL,
-  created_at TIMESTAMPTZ DEFAULT NOW()
+  full_name TEXT,
+  student_id TEXT,
+  department TEXT,
+  batch TEXT,
+  blood_group TEXT,
+  social_facebook TEXT,
+  social_instagram TEXT,
+  social_telegram TEXT,
+  social_discord TEXT,
+  project_tags TEXT[] DEFAULT ARRAY['root']::TEXT[],
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW(),
+  CONSTRAINT check_student_id_numeric_or_oauth 
+    CHECK (student_id ~ '^[0-9]+$' OR student_id = 'OAUTH_USER' OR student_id IS NULL),
+  CONSTRAINT check_blood_group_valid 
+    CHECK (blood_group IN ('A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-') OR blood_group IS NULL)
 );
 
--- Create stars table
-CREATE TABLE public.stars (
-  id SERIAL PRIMARY KEY,
+-- Partial index for student IDs
+CREATE UNIQUE INDEX IF NOT EXISTS profiles_student_id_unique
+  ON public.profiles (student_id)
+  WHERE student_id IS NOT NULL AND student_id <> 'OAUTH_USER';
+
+-- Enable RLS & Policies
+ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Users can view own profile" ON public.profiles FOR SELECT USING (auth.uid() = id);
+CREATE POLICY "Users can update own profile" ON public.profiles FOR UPDATE USING (auth.uid() = id);
+CREATE POLICY "Service role can insert profiles" ON public.profiles FOR INSERT WITH CHECK (true);
+
+-- 2. Create stars table for portal resources
+CREATE TABLE IF NOT EXISTS public.stars (
+  id BIGINT GENERATED BY DEFAULT AS IDENTITY PRIMARY KEY,
   user_id UUID REFERENCES public.profiles(id) ON DELETE CASCADE NOT NULL,
   resource_type TEXT NOT NULL,
   resource_id TEXT NOT NULL,
   created_at TIMESTAMPTZ DEFAULT NOW(),
-  UNIQUE(user_id, resource_type, resource_id)
+  CONSTRAINT unique_user_resource_star UNIQUE (user_id, resource_type, resource_id)
 );
 
--- Create index for faster queries
-CREATE INDEX idx_stars_resource ON public.stars(resource_type, resource_id);
+CREATE INDEX IF NOT EXISTS idx_stars_resource ON public.stars(resource_type, resource_id);
+CREATE INDEX IF NOT EXISTS idx_stars_user ON public.stars(user_id);
 
--- Enable Row Level Security
-ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.stars ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Anyone can view star counts" ON public.stars FOR SELECT USING (true);
+CREATE POLICY "Authenticated users can star" ON public.stars FOR INSERT WITH CHECK (auth.uid() = user_id);
+CREATE POLICY "Users can unstar own stars" ON public.stars FOR DELETE USING (auth.uid() = user_id);
 
--- Profiles policies
-CREATE POLICY "Users can view own profile" ON public.profiles
-  FOR SELECT USING (auth.uid() = id);
-  
-CREATE POLICY "Users can update own profile" ON public.profiles
-  FOR UPDATE USING (auth.uid() = id);
-
-CREATE POLICY "Service role can insert profiles" ON public.profiles
-  FOR INSERT WITH CHECK (true);
-
--- Stars policies  
-CREATE POLICY "Anyone can view star counts" ON public.stars
-  FOR SELECT USING (true);
-  
-CREATE POLICY "Authenticated users can star" ON public.stars
-  FOR INSERT WITH CHECK (auth.uid() = user_id);
-  
-CREATE POLICY "Users can unstar own stars" ON public.stars
-  FOR DELETE USING (auth.uid() = user_id);
-
--- Auto-create profile on signup
-CREATE OR REPLACE FUNCTION public.handle_new_user()
-RETURNS TRIGGER AS $$
-BEGIN
-  INSERT INTO public.profiles (id, student_id, email)
-  VALUES (
-    NEW.id,
-    COALESCE(NEW.raw_user_meta_data->>'student_id', 'OAUTH_USER'),
-    NEW.email
-  );
-  RETURN NEW;
-END;
-$$ LANGUAGE plpgsql SECURITY DEFINER;
-
-CREATE TRIGGER on_auth_user_created
-  AFTER INSERT ON auth.users
-  FOR EACH ROW EXECUTE FUNCTION public.handle_new_user();
+-- 3. Star Ranking Analytics View
+CREATE OR REPLACE VIEW public.resource_star_rankings AS
+SELECT 
+  s.resource_type,
+  s.resource_id,
+  COUNT(*)::INTEGER AS total_stars,
+  DENSE_RANK() OVER (PARTITION BY s.resource_type ORDER BY COUNT(*) DESC) AS category_rank,
+  DENSE_RANK() OVER (ORDER BY COUNT(*) DESC) AS global_rank
+FROM public.stars s
+GROUP BY s.resource_type, s.resource_id;
 ```
 
 ### 5. Configure Authentication URLs
 
 1. Go to **Authentication** → **URL Configuration**
-2. Set **Site URL:** `https://ouits-res.netlify.app`
-3. Add to **Redirect URLs:** `https://ouits-res.netlify.app`
+2. Set **Site URL:** `https://ou1ts.github.io/`
+3. Add to **Redirect URLs:**
+   - `https://ou1ts.github.io/**`
+   - `https://ou1ts.github.io/portal/**`
+   - `http://localhost:3000/**`
+   - `http://127.0.0.1:5500/**`
 
 ### 6. Configure Google OAuth
 

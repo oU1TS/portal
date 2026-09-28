@@ -4,6 +4,207 @@ Tags: [portal, release-notes, changelog, history, preloader, typewriter, gallery
 
 # 28.09.26
 
+### **Profile Icon Header Button & Profile-Page Logout Relocation**
+- **Compact Profile Icon Button (`#userInfo`, `#userProfileBtn`, `.user-details-dropdown` in [`index.html`](../index.html) & [`style.css`](../style.css))**:
+  - Replaced the wide `.user-info` header bar (which showed student ID, email, and a logout icon) with a minimal `<a class="auth-btn user-profile-btn">` profile icon button that occupies the exact same space as the Login button.
+  - Profile details (`.user-details-dropdown`) now appear in a frosted-glass popdown (glassmorphic backdrop, purple-tinted border, arrow pointer) when hovering or focusing the profile icon.
+  - Dropdown fades in with a smooth `translateY` animation and closes on mouse-out.
+- **Logout Button Moved to Profile Page ([`index.html`](../index.html) & [`js/spa-controller.js`](../js/spa-controller.js) & [`js/auth.js`](../js/auth.js))**:
+  - Removed the logout icon button from the header `#userInfo` block entirely.
+  - Added a `.profile-logout-btn` button inside the `#profileView .back-btn-container` so it appears right-aligned at the same height as the "← Back to Hub" link.
+  - Logout button is hidden by default (`style="display: none;"`) and shown/hidden dynamically by `Auth.updateUI()` and `SPA.renderProfileView()` based on session state.
+  - `.back-btn-container` updated to `display: flex; justify-content: space-between;` so back link and logout sit on opposite ends.
+  - `.profile-logout-btn` styled with a red-tinted glassmorphic look, hover glow, and text label "Logout" alongside the logout icon.
+- **Service Worker & Visitor Changelog**:
+  - Bumped cache version in [`service-worker.js`](../service-worker.js) to `ou1ts-portal-v3.1`.
+  - Added `v3.1` entry to [`changes.json`](../changes.json).
+
+### **Mobile CMS Submissions Dropdown Filters & Collapsible Card Accordions**
+- **Mobile Container Width & Reduced Padding ([`style.css`](../style.css))**:
+  - Enforced `.cms-inline-workspace` to strictly occupy `width: 95% !important; max-width: 95% !important; margin: 0.5rem auto !important;` with compact padding (`0.85rem 0.65rem`) on mobile viewports (`max-width: 768px`).
+  - Streamlined `#cmsView.category-page` on mobile with `padding: 1rem 0 !important;` ensuring proper centering and eliminating unwanted outer gutters.
+- **Unified Mobile Submissions Filter Dropdown ([`js/cms.js`](../js/cms.js) & [`style.css`](../style.css))**:
+  - Integrated "💬 Feedbacks" directly into the `<select id="cmsMobileSubFilter">` options alongside "All Submissions", "⚠️ Needs Approval", and "✅ Already on Website".
+  - Removed the standalone mobile Feedback button, providing a single, seamless, full-width dropdown control for instant mobile category filtering.
+- **Collapsible Submission Card Accordions ([`js/cms.js`](../js/cms.js) & [`style.css`](../style.css))**:
+  - Converted `.cms-submission-card` items into clean accordions for mobile screens:
+    - Default/collapsed view: displays only the card header (`.cms-sub-card-header`), showing the category badge, sheet row number, status tag, resource title, and animated chevron indicator.
+    - Expanded view (`.is-expanded`): tapping the header smoothly reveals the complete submission body (`.cms-sub-card-body`), including description notes, submitter metadata, project URL, catalog mapping ID, and approval/rejection actions.
+    - Added `CMS.toggleSubmissionCard()` to handle touch-friendly accordion toggling without intercepting clicks on internal action buttons or links.
+    - Maintained standard multi-column grid and fully visible cards on desktop screens.
+- **Service Worker & Visitor Changelog**:
+  - Bumped cache version in [`service-worker.js`](../service-worker.js) to `ou1ts-portal-v3.0`.
+  - Added `v3.0` entry to [`changes.json`](../changes.json).
+
+### **Canonical URLs & Automated Netlify-to-GitHub Pages Redirection**
+- **Domain Redirection Script ([`index.html`](../index.html) & [`contributions.html`](../contributions.html))**:
+  - Implemented client-side automatic redirection for incoming visitors on legacy Netlify hostnames (`ou1ts-portal.netlify.app` and `ouits-res.netlify.app`).
+  - Seamlessly redirects visitors to the central GitHub Pages deployment origin `https://ou1ts.github.io/portal/`.
+  - Automatically preserves subpaths (e.g. `contributions.html`), query parameters (`window.location.search`), and SPA hash routes (`window.location.hash`, e.g. `#cms`, `#profile`, `#capstones`).
+- **Canonical Meta Links ([`index.html`](../index.html) & [`contributions.html`](../contributions.html))**:
+  - Added `<link rel="canonical" href="https://ou1ts.github.io/portal/">` in `index.html`.
+  - Added `<link rel="canonical" href="https://ou1ts.github.io/portal/contributions.html">` in `contributions.html`.
+- **Service Worker & Visitor Changelog**:
+  - Bumped cache version in [`service-worker.js`](../service-worker.js) to `ou1ts-portal-v2.9`.
+  - Added `v2.9` entry to [`changes.json`](../changes.json).
+
+### **Wide CMS Workspace Layout, Mobile Tab Icons & Submissions Dropdown Navigation**
+- **Unified Dedicated Wide Layout for Portal Admin CMS ([`style.css`](../style.css), [`index.html`](../index.html) & [`js/cms.js`](../js/cms.js))**:
+  - Replaced the redundant floating `#adminCmsModal` with direct navigation to the dedicated `#cms` SPA route, eliminating duplicate DOM markup, dual container IDs, and redundant backdrop overlays.
+  - Updated the header "Admin CMS" launcher button in [`index.html`](../index.html) to link directly to `<a href="#cms">` with smooth routing.
+  - Expanded `#cmsView.category-page` and `.cms-inline-workspace` to `max-width: 1440px` and `width: 95%`, providing spacious multi-column layouts for Google Sheets submissions and administrative delegation tables.
+- **Mobile Screen Width Tab Buttons Shortening ([`js/cms.js`](../js/cms.js) & [`style.css`](../style.css))**:
+  - Wrapped tab button label text inside `<span class="cms-tab-label">...</span>` and added tooltip titles to each button.
+  - On mobile screens (`max-width: 768px`), automatically hid `.cms-tab-label`, displaying clean icons with count badges so all 4 tabs fit neatly side-by-side on any mobile device without horizontal overflow.
+- **Mobile Dropdown for Submissions Listings ([`js/cms.js`](../js/cms.js) & [`style.css`](../style.css))**:
+  - Consolidated the resource submission filter pills (`All Submissions`, `Needs Approval`, `Already on Website`) into an intuitive `<select id="cmsMobileSubFilter">` dropdown on mobile viewports (`max-width: 768px`).
+  - Preserved the `Feedback` button as a dedicated quick-access pill alongside the dropdown.
+  - Maintained the full horizontal pill bar on desktop viewports.
+- **Service Worker & Visitor Changelog**:
+  - Bumped cache version in [`service-worker.js`](../service-worker.js) to `ou1ts-portal-v2.8`.
+  - Added `v2.8` entry to [`changes.json`](../changes.json).
+
+### **CMS Submissions Styling, Role Selector Refinement & Admin Delegation Safeguards**
+- **Lighter Submitter Contact Link Styling ([`style.css`](../style.css) & [`js/cms.js`](../js/cms.js))**:
+  - Enhanced the "Submitter Contact/Social" link under Google Sheet Form Submissions with `.cms-social-link` and `.cms-sub-meta a` styled in a lighter sky-blue tone (`#93c5fd`) with hover glow (`#ffffff`), improving contrast and readability against dark submission cards.
+- **Admin Delegation Role Selector & Edit Profile Button Styling ([`style.css`](../style.css))**:
+  - Implemented custom glassmorphic styling for `#cmsUserRoleFilter` and `#cmsCategoryFilter` dropdowns with styled arrows, rounded corners, dark slate backgrounds (`rgba(30, 41, 59, 0.8)`), and purple focus rings.
+  - Styled the "Edit Student Profile" button (`.cms-btn-icon.edit`) with a 32x32px rounded container, subtle border, and sky-blue hover glow.
+  - Added dedicated layout and search styling for `.cms-filters-bar` and `.cms-search-box`.
+- **Sole Administrator Revoke Protection ([`js/cms.js`](../js/cms.js) & [`style.css`](../style.css))**:
+  - When only a single administrator exists (`adminCount <= 1`), the "Revoke" button automatically renders as disabled and read-only with a lock icon and tooltip: *"Cannot revoke the sole portal administrator. At least one administrator is required."*
+  - Added a defensive runtime check inside `CMS.toggleUserAdmin()` to strictly block any attempt to revoke the last remaining administrator.
+- **Add Regular Users Only in Modal & User List Admin Toggling ([`js/cms.js`](../js/cms.js))**:
+  - Updated the "Add User" workflow so that adding a user from `#cmsUserModal` is strictly dedicated to adding regular portal members (`isAdmin = false`), preventing accidental direct admin creation from the form.
+  - Displayed an informative banner informing administrators that role promotion/elevation is handled directly via the "Grant Admin" / "Revoke" action buttons in the user table.
+  - Preserved existing admin status during student profile edits (`openEditUserModal`).
+- **Service Worker & Visitor Changelog**:
+  - Bumped cache version in [`service-worker.js`](../service-worker.js) to `ou1ts-portal-v2.7`.
+  - Added `v2.7` entry to [`changes.json`](../changes.json).
+
+### **User Provisioning & Role Management in CMS Admin Delegation**
+- **User Addition & Pre-Provisioning (`query-7-admin-user-delegation.sql` & `doc/db/admin_user_delegation.sql`)**:
+  - Implemented database stored procedure `public.add_or_grant_portal_user(...)` allowing existing portal administrators to add new users, pre-provision profiles, or promote existing students by email or student ID.
+  - Automatically tags users with `'portal'` in `project_tags` and assigns `is_portal_admin` role. If the user has not logged in yet, pre-provisions a profile record so that upon first sign-in via Google OAuth or email, their credentials and admin privileges are immediately active.
+- **Frontend Admin Delegation Workspace ([`js/cms.js`](../js/cms.js))**:
+  - Added **"+ Add User / Admin"** primary action button to the Admin Delegation toolbar.
+  - Injected `#cmsUserModal` sub-modal allowing admins to input Email, Full Name, Student ID, Department, Batch, and Role Assignment (`Portal Administrator` vs `Portal Member`).
+  - Added real-time search input (`cmsUserSearch`) supporting queries by student name, email, student ID, department, or batch.
+  - Added role filter dropdown (`All Roles`, `Administrators Only`, `Members Only`).
+  - Added an inline **Edit** button (`openEditUserModal`) to each user row in the delegation table, allowing fast editing of student profile metadata and role.
+- **Service Worker & Visitor Changelog**:
+  - Bumped cache version in [`service-worker.js`](../service-worker.js) to `ou1ts-portal-v2.6`.
+  - Added `v2.6` entry to [`changes.json`](../changes.json).
+
+### **Google Sheets Form Submissions Tracking Table & Admin View Switcher (Profile <-> CMS)**
+- **Google Sheets Submissions Tracking (`portal_sheet_submissions` & `query-6-portal-sheet-submissions.sql`)**:
+  - Implemented database table `public.portal_sheet_submissions` with deterministic primary key `sheet_row_id` (`sheet_row_2`, `sheet_row_14`) and `sheet_row_number INTEGER UNIQUE` corresponding to physical Google Sheet rows (`SHEET_ID = '1oQ5Mkavjm62UGZwNjM-52yvKppWZHfX-Qpq6jtEVIOY'`).
+  - Added columns for submitter metadata (`submitter_name`, `submitter_email`, `student_id`, `department`, `batch`, `submitter_social`), project details (`project_title`, `project_link`, `project_type`, `portfolio_expertise`, `additional_details`), status tracking (`status` in `'pending'`, `'approved'`, `'already_added'`, `'rejected'`, `'feedback'`), and `mapped_resource_id TEXT REFERENCES public.portal_resources(id)`.
+  - Added stored RPC function `public.approve_sheet_submission(...)` allowing portal administrators to atomically publish a pending submission into `public.portal_resources` and link its status in `public.portal_sheet_submissions`.
+  - Pre-seeded all 13 existing Google Sheet entries, pre-mapping 11 verified submissions to existing catalog IDs (`tools-handgesture`, `courses-dsa1-robiul`, `portfolio-chatokjnr`, `portfolio-atikshahria`, `courses-cg-Arriesgado47`, `portfolio-#`, `capstone-research-archive`, `guidance-research-pub`, `courses-cg-4xrhd`, `courses-all-4xrhd`), identifying Row 12 as Feedback, and setting Row 14 (`Puzzle Solver` by Shalehin Ahmed Ornob) as `pending` for review.
+- **Frontend Submissions & Approvals Engine ([`js/cms.js`](../js/cms.js))**:
+  - Added live querying of `public.portal_sheet_submissions` with automatic fallback to direct Google Sheets API parsing and catalog cross-referencing.
+  - Implemented category & status filter pills: `All Submissions`, `⚠️ Needs Approval` (unadded projects), `✅ Already on Website` (mapped projects), and `💬 Feedback` (feedback submissions).
+  - Designed interactive cards showing row number, submitter identity, project link, and status badge.
+  - Added 1-click **"Approve & Add to Website"** action that pre-fills the resource publishing modal with detected category, slug, submitter info, and destination URL.
+  - Added **"View in Catalog"** button for verified items that navigates to the category page and smoothly scrolls to the element.
+  - Updated `syncFromGoogleSheet()` with accurate 0-indexed column mapping to sync and upsert live Google Sheet responses.
+- **Admin View Switcher (Profile View <-> CMS View)**:
+  - In [`index.html`](../index.html), added `#cmsView` SPA view container and `.admin-view-switcher-container` in both `#profileView` and `#cmsView`.
+  - In [`js/spa-controller.js`](../js/spa-controller.js), registered route `'cms': { viewId: 'cmsView', title: 'Admin CMS - oU1TS Portal', pageType: 'cms' }`.
+  - Implemented segmented control toggle switcher: `[ 👤 Profile View ]  [ ⚡ CMS View ]` rendered dynamically at the top of both views for authenticated administrators.
+  - Added `renderCmsView()` with role validation (denying non-admins) and rendering the inline CMS workspace.
+  - In [`js/cms.js`](../js/cms.js), added `renderInlineWorkspace()` allowing full-page CMS operation inside `#cmsView` in addition to the modal popup.
+  - In [`style.css`](../style.css), styled glassmorphic segmented control switcher bar, active tab glow, inline workspace container, and status badges.
+- **Service Worker & Visitor Changelog**:
+  - Bumped cache version in [`service-worker.js`](../service-worker.js) to `ou1ts-portal-v2.5`.
+  - Added `v2.5` entry to [`changes.json`](../changes.json).
+
+### **Expanded Featured Projects Pool (~30 Projects) & Mobile Semi-Transparent Gallery Arrows**
+- **30-Project Multi-Category Rotating Pool**:
+  - In [`js/data-renderer.js`](../js/data-renderer.js), updated `loadFeatured()` to include all 11 catalog sources (`materials.json`, `tools.json`, `capstones.json`, `community.json`, `guidance.json`, `official.json`, `portfolios.json`, `courses.json`, `inspirations.json`, `mentors.json`, and `talent.json`).
+  - Extracted the top 3 submissions from each catalog, yielding a diverse 32-item pool (~30 projects) across all categories.
+  - Implemented dynamic array shuffling (`sort(() => 0.5 - Math.random())`) so the rotating gallery cycles through all 32 projects in random order across page visits.
+  - In `normalizeProjectItem()`, added title prioritization for mentors and talent candidates (`item.name || item.title`), formatted company/experience metadata, and supported custom text avatar fallbacks (`item.icon.type === 'text'`) for initials.
+- **Mobile Semi-Transparent Frosted Glass Gallery Arrow Buttons**:
+  - In [`style.css`](../style.css), removed `display: none;` on `.gallery-arrow` inside `@media (max-width: 768px)` and `@media (max-width: 480px)`.
+  - Styled left and right navigation buttons with a semi-transparent frosted glass design (`background: rgba(15, 23, 42, 0.45)`, `border: 1px solid rgba(255, 255, 255, 0.16)`, `backdrop-filter: blur(8px)`).
+  - Positioned `.gallery-prev` at `left: 6px` (4px on mobile) and `.gallery-next` at `right: 6px` (4px on mobile) with `touch-action: manipulation;` and `user-select: none;` for smooth mobile taps.
+  - Adjusted `.featured-gallery-container` mobile padding to `2.8rem 1.6rem 0.85rem` to ensure clean separation between arrow buttons and slide cards.
+- **Service Worker & Visitor Changelog**:
+  - Bumped cache version in [`service-worker.js`](../service-worker.js) to `ou1ts-portal-v2.4`.
+  - Added `v2.4` entry to [`changes.json`](../changes.json).
+
+### **Portal CMS, Central Resources Database & Admin Role Delegation**
+- **Central CMS & Database Schema (`query-5-portal-cms-resources-schema.sql` & `doc/db/portal_cms_schema.sql`)**:
+  - Added `is_portal_admin` column to `public.profiles` with index and security comment for project-isolated administrator delegation.
+  - Created `public.portal_resources` table (`id`, `category`, `title`, `description`, `url`, `copy_url`, `icon`, `links`, `tags`, `extra_data`, `status`, `sort_order`, `submitted_by`, timestamps) with RLS policies allowing public reading of approved resources and admin-only insertions/updates/deletions.
+  - Created `public.portal_submissions` table for community link submissions and Google Form `FEEDBACK` records with status tracking (`pending`, `approved`, `rejected`, `resolved`).
+  - Authored RPC functions:
+    - `public.get_portal_users()`: Returns all profiles where `'portal' = ANY(project_tags)` for the Admin User Selector Modal.
+    - `public.set_portal_admin(target_user_id, grant_admin)`: Validates caller has `is_portal_admin = true` and updates target user's admin privilege.
+    - `public.approve_resource_submission(p_sub_id)`: Atomically slugifies, promotes, and publishes a community submission directly into `public.portal_resources`.
+  - Migrated and seeded all 63 catalog records across 10 categories (`materials`, `tools`, `guidance`, `community`, `official`, `portfolios`, `courses`, `capstones`, `mentors`, `talent`) into `public.portal_resources`.
+- **Frontend Management System Module ([`js/cms.js`](../js/cms.js))**:
+  - Implemented glassmorphic CMS modal with 4 tabs:
+    1. **Submissions & Approvals**: One-click approval/rejection with category auto-arrangement and live "Sync Google Form" sheet integration (`SHEET_ID = '1oQ5Mkavjm62UGZwNjM-52yvKppWZHfX-Qpq6jtEVIOY'`).
+    2. **Content Manager**: Category filter, search, inline editor modal, status toggling, and direct catalog additions.
+    3. **Feedback Inbox**: Dedicated triage inbox for Google Form student feedback and bug reports with resolution tags.
+    4. **Admin User Selector**: Searchable student directory of users with Ecosystem Access to the portal (`'portal' = ANY(project_tags)`), featuring instant toggle switches for granting/revoking portal admin roles with self-demotion guards.
+- **Dynamic Supabase Data Loading & Seamless JSON Fallback**:
+  - In [`js/spa-controller.js`](../js/spa-controller.js), enhanced `loadAndRenderView(pageType)` to fetch approved catalog items from `public.portal_resources` first and dynamically normalize database records with `transformDbResources()`; falls back seamlessly to `json/*.json` if offline or unconfigured.
+  - Preserved manual curation for institutional inspirations (`json/inspirations.json`) as requested.
+  - In [`js/data-renderer.js`](../js/data-renderer.js), updated `loadFeatured()` to rank top initiatives dynamically across all categories joined with `resource_star_rankings`.
+  - In [`js/auth.js`](../js/auth.js), added `isPortalAdmin` tracking, `Auth.isPortalAdmin()` check, and reactive UI updates.
+  - In [`index.html`](../index.html), added Admin CMS launcher button to header and included `js/cms.js`.
+  - In [`style.css`](../style.css), added glassmorphic modal styling, submission cards, tables, toggle switches, and responsive mobile layouts.
+- **Service Worker & Visitor Changelog**:
+  - Bumped cache version in [`service-worker.js`](../service-worker.js) to `ou1ts-portal-v2.3` and pre-cached `js/cms.js`.
+  - Added `v2.3` entry to [`changes.json`](../changes.json).
+
+### **Service Worker Same-Origin Fetch Filtering & Network Pipeline Stabilization**
+- **Eliminated TypeError: Failed to convert value to 'Response'**:
+  - In [`service-worker.js`](../service-worker.js), resolved issue where failed fetches and cache misses returned `undefined` to `event.respondWith()`, triggering cascade `net::ERR_FAILED` errors across local assets (`env-config.js`, `js/auth-modal.js`, `changes.json`, `json/*.json`).
+  - Added strict same-origin filtering (`event.request.url.startsWith(self.location.origin)`), method filtering (`event.request.method === 'GET'`), and excluded WebSockets (`/ws`) and live-reload streams from interception.
+  - Implemented safe fallback returning a proper HTTP 503 `Response` object instead of `undefined` when both network and cache are unavailable.
+  - Added `self.skipWaiting()` and `self.clients.claim()` for immediate activation of the repaired service worker.
+- **Service Worker & Visitor Changelog**:
+  - Bumped cache version in [`service-worker.js`](../service-worker.js) to `ou1ts-portal-v2.2`.
+  - Added `v2.2` entry to [`changes.json`](../changes.json).
+
+### **Centralized Database Setup, Profile Integration and Star Ranking System**
+- **Unified Central Database SQL Schema**:
+  - Authored [`doc/query/query-4-central-db-portal-stars.sql`](query/query-4-central-db-portal-stars.sql) and mirrored in [`doc/db/portal_central_database_setup.sql`](db/portal_central_database_setup.sql).
+  - Aligned schema with `ou1ts.github.io` central architecture: `public.profiles` (`student_id`, `email`, `full_name`, `department`, `batch`, `blood_group`, `social_*`, `project_tags`), partial unique index on real student IDs, trigger `handle_new_user()`, and RPC helper `add_project_tag(tag)`.
+  - Configured `public.stars` table (`user_id`, `resource_type`, `resource_id`, `created_at`) with foreign key cascade to `public.profiles(id)`, unique constraint per user/resource, performance indexes, and strict Row Level Security (RLS) policies allowing public star count reads and authenticated owner-only star/unstar mutations.
+  - Added real-time analytics view `public.resource_star_rankings` with category and global dense ranking, plus RPC helper functions `get_category_rankings()` and `get_user_star_metrics()`.
+- **Comprehensive Step-by-Step Setup Guide**:
+  - Authored [`doc/db/CENTRAL_DATABASE_SETUP_GUIDE.md`](db/CENTRAL_DATABASE_SETUP_GUIDE.md) detailing architecture, Supabase SQL Editor execution, Authentication URL redirects, Google OAuth provider setup, and verification checklists.
+  - Added [`env-config.example.js`](../env-config.example.js) as a gitignored template for secure local client setup.
+- **Frontend Profile & Stars Integration**:
+  - In [`js/auth.js`](../js/auth.js), updated `setUser()` to fetch complete student profile fields (`full_name`, `department`, `batch`, `blood_group`, `project_tags`) and automatically invoke `supabase.rpc('add_project_tag', { tag: 'portal' })`.
+  - In [`js/spa-controller.js`](../js/spa-controller.js), enriched `renderProfileView()` to display full student details, formatted joined dates, and active ecosystem project badges; enhanced offline fallback in `loadUserStarredList()`; and enabled stars functionality on `capstonesView`.
+- **Service Worker & Visitor Changelog**:
+  - Bumped cache version in [`service-worker.js`](../service-worker.js) to `ou1ts-portal-v2.1`.
+  - Added `v2.1` entry to [`changes.json`](../changes.json).
+
+### **100vh Floating Navigation Canvas Showcase & Seamless Scroll Reappearance**
+- **100vh Fullscreen Focus Mode on Scroll Arrival**:
+  - In [`style.css`](../style.css), added `.floating-nav-container.expanded-100vh` and `.floating-nav-canvas` styles utilizing `100vh` and modern `100dvh` dynamic viewport height units, accompanied by a `0.65s cubic-bezier(0.25, 1, 0.5, 1)` easing curve for container expansion.
+  - Added `top 0.65s` and `left 0.65s` transitions to `.floating-bubble` anchors so category nodes fluidly glide into their expanded constellation across the enlarged canvas.
+- **Adjacent Section Hiding & Reappearing Transitions**:
+  - In [`style.css`](../style.css), configured smooth `0.55s` opacity and transform transitions on `.top-auth-bar`, `.featured-section`, `.about-clean-section`, and `footer`.
+  - When in 100vh focus (`body.nav-focused-100vh`), upper elements glide up (`translateY(-24px)`) and fade out while lower elements glide down (`translateY(24px)`) and fade out, removing all surrounding visual clutter and putting full focus on all nodes together.
+  - Added `.main-content` padding collapse under `body.nav-focused-100vh` with `transition: padding 0.55s ease` to ensure edge-to-edge vertical alignment.
+- **Scroll Detection, Immediate Gesture Collapse & Slot Stability**:
+  - In [`js/spa-controller.js`](../js/spa-controller.js), implemented `initNavScrollExpansion()`. When the user scrolls to `.floating-nav-container` (or idle auto-scroll arrives), it aligns flush to the top and smoothly expands to 100vh.
+  - Attached immediate listeners to user scroll gestures (`wheel`, `touchmove`, arrow/navigation keys, non-programmatic `scroll`). The instant any user scroll action is initiated, the 100vh mode collapses immediately (0ms delay), smoothly pulling adjacent sections back into view without trapping the user.
+  - Added cooldown guard and retained session `bubbleSlotOrder` across canvas height transitions to eliminate node shuffling or jumpiness.
+  - In [`script.js`](../script.js), updated `initIdleAutoScroll()` target calculation to land flush with the top of the container.
+- **Service Worker & Visitor Changelog**:
+  - Bumped cache version in [`service-worker.js`](../service-worker.js) to `ou1ts-portal-v2.0`.
+  - Added `v2.0` entry to [`changes.json`](../changes.json).
+
 ### **Desktop Top Auth Bar & Mobile Featured Gallery Margin Reduction & Mobile Bubble Padding Refinement**
 - **Desktop Top Auth Bar Margin Reduction**:
   - In [`style.css`](../style.css), set `margin-top: -1rem` on `.top-auth-bar` for desktop viewports (`padding: 0.5rem 0 1rem`), bringing the header brand area snugly towards the top border while keeping mobile `margin-top: 0`.

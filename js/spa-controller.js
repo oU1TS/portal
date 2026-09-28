@@ -14,6 +14,7 @@
             'official': { viewId: 'officialView', title: 'Official UITS - oU1TS Portal', pageType: 'official' },
             'inspirations': { viewId: 'inspirationsView', title: 'Inspirations - oU1TS Portal', pageType: 'inspirations' },
             'profile': { viewId: 'profileView', title: 'User Profile - oU1TS Portal', pageType: 'profile' },
+            'cms': { viewId: 'cmsView', title: 'Admin CMS - oU1TS Portal', pageType: 'cms' },
             'capstones': { viewId: 'capstonesView', title: 'Capstone Projects - oU1TS Portal', pageType: 'capstones' },
             'mentors': { viewId: 'mentorsView', title: 'Industry Mentors - oU1TS Portal', pageType: 'mentors' },
             'talent': { viewId: 'talentView', title: 'Talent Directory - oU1TS Portal', pageType: 'talent' }
@@ -50,6 +51,9 @@
                     this.positionFloatingBubbles();
                 }
             });
+
+            // Initialize 100vh scroll-focused navigation canvas
+            this.initNavScrollExpansion();
         },
 
         debounce(func, wait) {
@@ -67,9 +71,23 @@
         async handleRouting() {
             const rawHash = window.location.hash;
             let routeKey = rawHash.replace('#', '');
-            
-            // Check if route exists, if not fallback to home
-            if (!this.routes[routeKey]) {
+
+            // Detect Supabase OAuth return (tokens in hash, PKCE code in query string, or session flag)
+            const isOAuthCallback = rawHash.includes('access_token=') || 
+                                    rawHash.includes('refresh_token=') || 
+                                    window.location.search.includes('code=') ||
+                                    sessionStorage.getItem('oauth_return_route') === 'profile';
+
+            if (isOAuthCallback) {
+                sessionStorage.removeItem('oauth_return_route');
+                routeKey = 'profile';
+                // Allow Supabase SDK a moment to parse the tokens from the URL, then cleanly normalize to #profile
+                setTimeout(() => {
+                    if (window.location.hash !== '#profile') {
+                        history.replaceState(null, '', window.location.pathname + '#profile');
+                    }
+                }, 400);
+            } else if (!this.routes[routeKey]) {
                 routeKey = '';
             }
 
@@ -79,11 +97,17 @@
             // Update document title
             document.title = route.title;
 
-            // Toggle body class
+            // Toggle body class and collapse 100vh nav expansion if leaving home
             if (routeKey === '') {
                 document.body.classList.remove('in-subview');
+                if (this.collapseNavExpansion) {
+                    this.collapseNavExpansion(true);
+                }
             } else {
                 document.body.classList.add('in-subview');
+                if (this.collapseNavExpansion) {
+                    this.collapseNavExpansion(true);
+                }
             }
 
             // Hide all sub-views and show active
@@ -114,23 +138,56 @@
         },
 
         async loadAndRenderView(pageType) {
+            if (pageType === 'profile') {
+                this.renderProfileView();
+                return;
+            }
+            if (pageType === 'cms') {
+                this.renderCmsView();
+                return;
+            }
+
             try {
                 // Show loading states in active containers
                 this.showLoadingState(pageType);
 
                 let data = this.dataCache[pageType];
                 if (!data) {
-                    const response = await fetch(`json/${pageType}.json`);
-                    if (!response.ok) throw new Error(`HTTP error fetching ${pageType}`);
-                    data = await response.json();
+                    // 1. Attempt to fetch live from Supabase public.portal_resources (except inspirations which is manually set)
+                    if (pageType !== 'inspirations' && window.supabaseClient) {
+                        try {
+                            const { data: dbData, error } = await window.supabaseClient
+                                .from('portal_resources')
+                                .select('*')
+                                .eq('category', pageType)
+                                .eq('status', 'approved')
+                                .order('sort_order', { ascending: true })
+                                .order('created_at', { ascending: false });
+
+                            if (!error && Array.isArray(dbData) && dbData.length > 0) {
+                                data = this.transformDbResources(pageType, dbData);
+                            }
+                        } catch (dbErr) {
+                            console.warn(`[SPA] Supabase fetch for [${pageType}] failed, falling back to JSON:`, dbErr);
+                        }
+                    }
+
+                    // 2. Fallback to local JSON if not loaded from database
+                    if (!data) {
+                        const response = await fetch(`json/${pageType}.json`);
+                        if (!response.ok) throw new Error(`HTTP error fetching ${pageType}`);
+                        data = await response.json();
+                    }
+
                     this.dataCache[pageType] = data; // Cache results
                 }
 
                 // Render respective view content
-                if (pageType === 'profile') {
-                    this.renderProfileView();
-                } else if (pageType === 'capstones') {
+                if (pageType === 'capstones') {
                     this.renderCapstonesView(data);
+                    setTimeout(() => {
+                        if (window.Stars) Stars.init('capstones');
+                    }, 100);
                 } else if (pageType === 'mentors') {
                     this.renderMentorsView(data);
                 } else if (pageType === 'talent') {
@@ -147,6 +204,106 @@
                 console.error(`Error loading SPA view [${pageType}]:`, err);
                 this.showErrorState(pageType, err.message);
             }
+        },
+
+        // Helper to normalize Supabase portal_resources rows to respective page data structures
+        transformDbResources(pageType, dbData) {
+            if (!Array.isArray(dbData)) return [];
+
+            if (pageType === 'courses') {
+                // Group by course category section
+                const sectionMap = new Map();
+                dbData.forEach(item => {
+                    const extra = item.extra_data || {};
+                    const catName = extra.course_category || (item.tags && item.tags[0]) || 'General Courses';
+                    const icon = extra.course_icon || 'fa-solid fa-code';
+
+                    if (!sectionMap.has(catName)) {
+                        sectionMap.set(catName, {
+                            category: catName,
+                            icon: icon,
+                            items: []
+                        });
+                    }
+
+                    const rawHtml = extra.rawHtml || `
+                        <a href="${item.url || '#'}" target="_blank">${item.title}</a>
+                        <p>${item.description || ''}</p>
+                    `;
+
+                    sectionMap.get(catName).items.push({
+                        id: item.id,
+                        iconClass: (item.icon && item.icon.class) || 'fa-brands fa-github',
+                        rawHtml: rawHtml
+                    });
+                });
+                return Array.from(sectionMap.values());
+            }
+
+            if (pageType === 'capstones') {
+                return dbData.map(item => {
+                    const extra = item.extra_data || {};
+                    return {
+                        id: item.id,
+                        title: item.title,
+                        description: item.description,
+                        batch: extra.batch || 'Batch 51',
+                        semester: extra.semester || '',
+                        team: Array.isArray(extra.team) ? extra.team : (extra.team ? [extra.team] : ['UITS Student']),
+                        visitUrl: item.url,
+                        tags: item.tags || [],
+                        image: extra.image || (item.icon && item.icon.src) || ''
+                    };
+                });
+            }
+
+            if (pageType === 'mentors') {
+                return dbData.map(item => {
+                    const extra = item.extra_data || {};
+                    return {
+                        id: item.id,
+                        name: item.title,
+                        title: extra.title || 'Engineer',
+                        role: extra.role || '',
+                        company: extra.company || '',
+                        batch: extra.batch || 'Alumni',
+                        experience: extra.experience || '',
+                        stars: extra.stars || 5,
+                        email: extra.email || '',
+                        socials: extra.socials || { linkedin: item.url },
+                        skills: item.tags || []
+                    };
+                });
+            }
+
+            if (pageType === 'talent') {
+                return dbData.map(item => {
+                    const extra = item.extra_data || {};
+                    return {
+                        id: item.id,
+                        name: item.title,
+                        role: extra.role || 'Developer',
+                        sector: extra.sector || 'Software',
+                        bio: item.description || extra.bio || '',
+                        skills: item.tags || [],
+                        socials: extra.socials || { linkedin: item.url }
+                    };
+                });
+            }
+
+            // Standard categories (materials, tools, guidance, community, official, portfolios)
+            return dbData.map(item => {
+                return {
+                    id: item.id,
+                    title: item.title,
+                    description: item.description,
+                    visitUrl: item.url,
+                    copyUrl: item.copy_url || item.url,
+                    icon: item.icon,
+                    links: item.links || [],
+                    tags: item.tags || []
+                };
+            });
         },
 
         showLoadingState(pageType) {
@@ -223,7 +380,7 @@
             const totalCells = rows * cols;
 
             // Generate or preserve randomized slot mapping & jitter seeds for the current page session
-            if (!this.bubbleSlotOrder || this.bubbleSlotOrder.length !== numBubbles || this.lastCols !== cols || this.lastRows !== rows) {
+            if (!this.bubbleSlotOrder || this.bubbleSlotOrder.length !== numBubbles) {
                 // Generate shuffled slot assignments for the bubbles
                 const cellIndices = Array.from({ length: Math.max(numBubbles, totalCells) }, (_, i) => i % totalCells);
                 for (let i = cellIndices.length - 1; i > 0; i--) {
@@ -342,35 +499,204 @@
             });
         },
 
+        // --- 100VH SCROLL-FOCUSED EXPANSION & SEAMLESS SCROLL REAPPEARANCE ---
+        initNavScrollExpansion() {
+            const navContainer = document.querySelector('.floating-nav-container');
+            const canvas = document.getElementById('floatingCanvas');
+            if (!navContainer || !canvas) return;
+
+            let isExpanded = false;
+            let isProgrammaticScrolling = false;
+            let scrollIdleTimer = null;
+            let cooldownUntil = 0;
+
+            const expandSection = () => {
+                if (isExpanded || document.body.classList.contains('in-subview')) return;
+                if (Date.now() < cooldownUntil) return;
+
+                isExpanded = true;
+                isProgrammaticScrolling = true;
+
+                navContainer.classList.add('expanded-100vh');
+                document.body.classList.add('nav-focused-100vh');
+
+                // Smoothly align the container to fill the viewport flush
+                const currentScrollY = window.pageYOffset || document.documentElement.scrollTop;
+                const rect = navContainer.getBoundingClientRect();
+                const targetY = currentScrollY + rect.top;
+
+                window.scrollTo({
+                    top: Math.max(0, targetY),
+                    behavior: 'smooth'
+                });
+
+                // Reposition bubbles to spread across the full 100vh height
+                setTimeout(() => {
+                    this.positionFloatingBubbles();
+                }, 80);
+
+                setTimeout(() => {
+                    isProgrammaticScrolling = false;
+                }, 650);
+            };
+
+            const collapseSection = (immediate = false) => {
+                if (!isExpanded) return;
+                isExpanded = false;
+                isProgrammaticScrolling = false;
+                cooldownUntil = Date.now() + 850;
+
+                navContainer.classList.remove('expanded-100vh');
+                document.body.classList.remove('nav-focused-100vh');
+
+                // Reposition bubbles back to standard canvas height bounds
+                setTimeout(() => {
+                    this.positionFloatingBubbles();
+                }, immediate ? 10 : 350);
+            };
+
+            const handleImmediateScrollAction = () => {
+                if (isExpanded) {
+                    collapseSection();
+                }
+            };
+
+            // Immediate reaction on any user scroll gesture
+            window.addEventListener('wheel', handleImmediateScrollAction, { passive: true });
+            window.addEventListener('touchmove', handleImmediateScrollAction, { passive: true });
+            window.addEventListener('keydown', (e) => {
+                if (['ArrowDown', 'ArrowUp', 'PageDown', 'PageUp', 'Space', 'Home', 'End'].includes(e.key)) {
+                    handleImmediateScrollAction();
+                }
+            });
+
+            // Check if current scroll position has settled on the floating nav section
+            const checkScrollPosition = () => {
+                if (document.body.classList.contains('in-subview')) return;
+                if (isExpanded || isProgrammaticScrolling || Date.now() < cooldownUntil) return;
+
+                const rect = navContainer.getBoundingClientRect();
+                const vh = window.innerHeight;
+
+                // When user scrolls to the section:
+                // Top is within upper viewport area (or near top) and bottom extends down
+                const inFocusRange = (rect.top <= vh * 0.45 && rect.top >= -vh * 0.2) ||
+                                     (Math.abs(rect.top) < 140);
+
+                if (inFocusRange && rect.bottom > vh * 0.35) {
+                    expandSection();
+                }
+            };
+
+            window.addEventListener('scroll', () => {
+                if (!isProgrammaticScrolling && isExpanded) {
+                    collapseSection();
+                }
+
+                if (scrollIdleTimer) clearTimeout(scrollIdleTimer);
+                scrollIdleTimer = setTimeout(() => {
+                    checkScrollPosition();
+                }, 200);
+            }, { passive: true });
+
+            this.collapseNavExpansion = collapseSection;
+            this.expandNavExpansion = expandSection;
+        },
+
         // --- NEW SECTION 1: USER PROFILE VIEW ---
         renderProfileView() {
             const container = document.getElementById('profileDetailsArea');
             const unauthForm = document.getElementById('profileUnauthForm');
+            const switcher = document.getElementById('profileViewSwitcher');
+            const logoutBtn = document.getElementById('logoutBtn');
             if (!container || !unauthForm) return;
 
             const auth = window.Auth;
+
+            // If Supabase session is still resolving on page load, show clean loading state
+            if (auth && !auth.isInitialized && window.supabaseClient) {
+                if (switcher) switcher.innerHTML = '';
+                if (logoutBtn) logoutBtn.style.display = 'none';
+                unauthForm.style.display = 'none';
+                container.style.display = 'block';
+                container.innerHTML = `
+                    <div class="loading-state" style="text-align:center; padding: 4rem 1rem; color: #a0a0a0;">
+                        <i class="fa-solid fa-spinner fa-spin" style="font-size: 2rem; color: #64b5f6; margin-bottom: 1rem;"></i>
+                        <p>Verifying database session...</p>
+                    </div>
+                `;
+                return;
+            }
+
             if (auth && auth.isLoggedIn()) {
                 // Logged In Dashboard View
+                if (logoutBtn) logoutBtn.style.display = 'inline-flex';
                 unauthForm.style.display = 'none';
                 container.style.display = 'grid';
 
                 const user = auth.currentUser;
                 const studentIdStr = user.studentId || 'Not Set';
-                const firstLetter = (user.email || 'U').charAt(0).toUpperCase();
+                const displayName = user.fullName || user.email.split('@')[0];
+                const firstLetter = displayName.charAt(0).toUpperCase();
 
-                // Compute Contribution Count (mock based on student email length/id etc)
-                const mockContributions = Math.max(1, (user.email.length % 5) + 1);
+                // Render Admin View Switcher for admin users
+                if (switcher) {
+                    switcher.innerHTML = user.isPortalAdmin ? `
+                        <div class="admin-view-switcher-bar">
+                            <a href="#profile" class="switcher-btn active">
+                                <i class="fa-solid fa-user"></i> Profile View
+                            </a>
+                            <a href="#cms" class="switcher-btn">
+                                <i class="fa-solid fa-sliders"></i> CMS View
+                            </a>
+                        </div>
+                    ` : '';
+                }
+
+                // Compute Contribution Count (based on stars + active tags)
+                const projectTags = user.projectTags && Array.isArray(user.projectTags) ? user.projectTags : ['portal'];
+                const tagsBadges = projectTags.map(t => `<span class="expertise-tag" style="text-transform: capitalize;">${t}</span>`).join(' ');
+
+                // Joined date format
+                let joinedText = 'Active Member';
+                if (user.createdAt) {
+                    try {
+                        const d = new Date(user.createdAt);
+                        joinedText = d.toLocaleDateString(undefined, { month: 'short', year: 'numeric' });
+                    } catch (e) { }
+                }
 
                 container.innerHTML = `
                     <div class="profile-card">
                         <div class="profile-avatar-container">${firstLetter}</div>
-                        <h3 class="profile-name">${user.email.split('@')[0]}</h3>
+                        <h3 class="profile-name">${displayName}</h3>
                         <span class="profile-student-id">ID: ${studentIdStr}</span>
                         
                         <div class="profile-meta-info">
                             <p><strong>Email:</strong> ${user.email}</p>
+                            ${user.department ? `<p><strong>Department:</strong> ${user.department}</p>` : ''}
+                            ${user.batch ? `<p><strong>Batch:</strong> ${user.batch}</p>` : ''}
+                            ${user.bloodGroup ? `<p><strong>Blood Group:</strong> ${user.bloodGroup}</p>` : ''}
                             <p><strong>Status:</strong> Active Student</p>
-                            <p><strong>Joined:</strong> Feb 2026</p>
+                            <p><strong>Joined:</strong> ${joinedText}</p>
+                            <div style="margin-top: 0.85rem;">
+                                <p style="margin-bottom: 0.35rem;"><strong>Ecosystem Access:</strong></p>
+                                <div class="expertise-tags">${tagsBadges}</div>
+                            </div>
+                            ${user.isPortalAdmin ? `
+                                <div class="profile-admin-panel" style="margin-top: 1.25rem; padding: 1rem; border-radius: 12px; background: rgba(147, 51, 234, 0.15); border: 1px solid rgba(168, 85, 247, 0.4); text-align: left;">
+                                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.4rem;">
+                                        <span style="color: #c084fc; font-weight: 600; font-size: 0.9rem;">
+                                            <i class="fa-solid fa-shield-halved"></i> Portal Administrator
+                                        </span>
+                                        <span class="portal-badge-pill" style="background: rgba(168, 85, 247, 0.25); color: #e9d5ff; font-size: 0.72rem; padding: 2px 8px; border-radius: 9999px;">Admin</span>
+                                    </div>
+                                    <p style="color: #94a3b8; font-size: 0.78rem; line-height: 1.4; margin-bottom: 0.8rem;">You have administrative access to approve resources, triage feedback, and manage user roles.</p>
+                                    <a href="#cms" class="cms-btn-primary" style="width: 100%; justify-content: center; padding: 0.6rem 1rem; font-size: 0.85rem; text-decoration: none; display: flex; align-items: center; gap: 8px;">
+                                        <i class="fa-solid fa-sliders"></i> Switch to CMS View
+                                    </a>
+                                </div>
+                            ` : ''}
                         </div>
                     </div>
                     
@@ -381,8 +707,8 @@
                                 <div class="stat-label">Starred Resources</div>
                             </div>
                             <div class="stat-card">
-                                <div class="stat-number">${mockContributions}</div>
-                                <div class="stat-label">Contributions</div>
+                                <div class="stat-number">${projectTags.length}</div>
+                                <div class="stat-label">Project Initiatives</div>
                             </div>
                         </div>
                         
@@ -399,11 +725,58 @@
 
             } else {
                 // Logged Out Connection Form View
+                if (switcher) switcher.innerHTML = '';
+                if (logoutBtn) logoutBtn.style.display = 'none';
                 container.style.display = 'none';
                 unauthForm.style.display = 'block';
                 this.setupProfileTabs();
             }
         },
+
+        // --- NEW SECTION 1B: ADMIN CMS SPA VIEW ---
+        renderCmsView() {
+            const auth = window.Auth;
+            const user = auth ? auth.currentUser : null;
+            const isAdmin = user && user.isPortalAdmin;
+            const switcher = document.getElementById('cmsViewSwitcher');
+
+            if (switcher) {
+                switcher.innerHTML = isAdmin ? `
+                    <div class="admin-view-switcher-bar">
+                        <a href="#profile" class="switcher-btn">
+                            <i class="fa-solid fa-user"></i> Profile View
+                        </a>
+                        <a href="#cms" class="switcher-btn active">
+                            <i class="fa-solid fa-sliders"></i> CMS View
+                        </a>
+                    </div>
+                ` : '';
+            }
+
+            const workspace = document.getElementById('cmsInlineWorkspace');
+            if (!workspace) return;
+
+            if (!isAdmin) {
+                workspace.innerHTML = `
+                    <div class="cms-access-denied">
+                        <i class="fa-solid fa-shield-halved"></i>
+                        <h3>Administrator Access Required</h3>
+                        <p>You must be signed in with a verified Portal Administrator account to access the CMS management dashboard.</p>
+                        <div style="margin-top: 1.5rem;">
+                            <a href="#profile" class="cms-btn-primary" style="text-decoration: none; display: inline-flex; align-items: center; gap: 8px;">
+                                <i class="fa-solid fa-arrow-left"></i> Return to Profile
+                            </a>
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+
+            if (window.CMS && typeof window.CMS.renderInlineWorkspace === 'function') {
+                window.CMS.renderInlineWorkspace('cmsInlineWorkspace');
+            }
+        },
+
 
         setupProfileTabs() {
             const tabs = document.querySelectorAll('.profile-auth-tab');
@@ -450,7 +823,12 @@
                     // Local fallback stars
                     const key = `local_stars_${auth.currentUser.id}`;
                     const localStarsStr = localStorage.getItem(key);
-                    userStars = localStarsStr ? JSON.parse(localStarsStr) : [];
+                    if (localStarsStr) {
+                        userStars = JSON.parse(localStarsStr);
+                    } else {
+                        const allStars = JSON.parse(localStorage.getItem('local_stars_database') || '[]');
+                        userStars = allStars.filter(s => s.user_id === auth.currentUser.id);
+                    }
                 }
 
                 if (starredCountEl) starredCountEl.textContent = userStars.length;
@@ -574,6 +952,7 @@
                 const cardsHtml = batchProjects.map(proj => {
                     const projTags = proj.tags.map(t => `<span class="talent-skill">${t}</span>`).join('');
                     const members = proj.team.join(', ');
+                    const starClass = window.Auth && window.Auth.isLoggedIn() ? 'star-btn' : 'star-btn disabled';
                     return `
                         <div class="capstone-card" data-resource-id="${proj.id}">
                             <div>
@@ -585,9 +964,15 @@
                             </div>
                             <div class="capstone-card-footer">
                                 <span class="capstone-team-text"><i class="fa-solid fa-users"></i> ${members}</span>
-                                <a href="${proj.visitUrl}" target="_blank" class="visit-btn" style="padding: 0.4rem 0.8rem; font-size: 0.75rem;">
-                                    Demo <i class="fa-solid fa-arrow-up-right-from-square"></i>
-                                </a>
+                                <div style="display:flex; gap:0.5rem; align-items:center;">
+                                    <button class="${starClass}" onclick="window.Stars.toggleStar('${proj.id}')" title="Star this capstone">
+                                        <i class="fa-solid fa-star"></i>
+                                        <span class="star-count">0</span>
+                                    </button>
+                                    <a href="${proj.visitUrl}" target="_blank" class="visit-btn" style="padding: 0.4rem 0.8rem; font-size: 0.75rem;">
+                                        Demo <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     `;

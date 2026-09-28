@@ -3,6 +3,7 @@
 
 const Auth = {
     currentUser: null,
+    isInitialized: false,
 
     // Initialize auth state
     async init() {
@@ -12,6 +13,7 @@ const Auth = {
         if (!supabase) {
             console.log('[Auth] Supabase client not initialized. Using LocalStorage fallback.');
             this.loadLocalSession();
+            this.isInitialized = true;
             this.updateUI();
             return;
         }
@@ -36,6 +38,7 @@ const Auth = {
             this.loadLocalSession();
         }
 
+        this.isInitialized = true;
         this.updateUI();
     },
 
@@ -44,28 +47,40 @@ const Auth = {
         const supabase = window.supabaseClient;
         if (!supabase) return;
         
-        // Fetch profile data
-        const { data: profile, error } = await supabase
+        // Fetch full profile data from central database
+        let { data: profile, error } = await supabase
             .from('profiles')
-            .select('student_id, email')
+            .select('*')
             .eq('id', user.id)
             .single();
 
-        // If profile doesn't exist (OAuth user), create it
+        // If profile doesn't exist (OAuth user), create it with central defaults
         if (error && error.code === 'PGRST116') {
             const { error: insertError } = await supabase
                 .from('profiles')
                 .insert({
                     id: user.id,
                     student_id: user.user_metadata?.student_id || 'OAUTH_USER',
-                    email: user.email
+                    email: user.email,
+                    full_name: user.user_metadata?.full_name || null,
+                    project_tags: ['root', 'portal']
                 });
 
             if (insertError) {
                 console.error('Failed to create profile:', insertError);
+            } else {
+                const res = await supabase.from('profiles').select('*').eq('id', user.id).single();
+                if (res.data) profile = res.data;
             }
         } else if (error) {
             console.error('Failed to fetch profile:', error);
+        }
+
+        // Auto-tag with 'portal' in central database project_tags
+        try {
+            await supabase.rpc('add_project_tag', { tag: 'portal' });
+        } catch (tagErr) {
+            console.warn('[Auth] Could not execute add_project_tag RPC:', tagErr);
         }
 
         const rawStudentId = profile?.student_id || user.user_metadata?.student_id || null;
@@ -75,12 +90,23 @@ const Auth = {
         this.currentUser = {
             id: user.id,
             email: user.email,
-            studentId: displayStudentId
+            studentId: displayStudentId,
+            fullName: profile?.full_name || user.user_metadata?.full_name || '',
+            department: profile?.department || '',
+            batch: profile?.batch || '',
+            bloodGroup: profile?.blood_group || '',
+            socialFacebook: profile?.social_facebook || '',
+            socialInstagram: profile?.social_instagram || '',
+            socialTelegram: profile?.social_telegram || '',
+            socialDiscord: profile?.social_discord || '',
+            projectTags: profile?.project_tags || ['root', 'portal'],
+            isPortalAdmin: !!profile?.is_portal_admin,
+            createdAt: profile?.created_at || user.created_at
         };
 
         this.updateUI();
 
-        if (needsStudentId) {
+        if (needsStudentId && !window.location.hash.includes('profile')) {
             openAuthModal('complete-profile');
         }
     },
@@ -249,10 +275,13 @@ const Auth = {
             return this.currentUser;
         }
 
+        sessionStorage.setItem('oauth_return_route', 'profile');
+
+        const cleanRedirectUrl = window.location.origin + window.location.pathname;
         const { data, error } = await supabase.auth.signInWithOAuth({
             provider: 'google',
             options: {
-                redirectTo: window.location.href,
+                redirectTo: cleanRedirectUrl,
                 queryParams: {
                     access_type: 'offline',
                     prompt: 'consent'
@@ -283,12 +312,13 @@ const Auth = {
         const authBtn = document.getElementById('authBtn');
         const userInfo = document.getElementById('userInfo');
         const userDetails = document.getElementById('userDetails');
+        const logoutBtn = document.getElementById('logoutBtn');
 
         if (authBtn) {
             if (this.currentUser) {
                 authBtn.style.display = 'none';
                 if (userInfo) {
-                    userInfo.style.display = 'flex';
+                    userInfo.style.display = 'inline-flex';
                     if (userDetails) {
                         userDetails.innerHTML = `
                             <span class="user-id">${this.currentUser.studentId}</span>
@@ -297,19 +327,32 @@ const Auth = {
                     }
                 }
             } else {
-                authBtn.style.display = 'flex';
+                authBtn.style.display = 'inline-flex';
                 if (userInfo) {
                     userInfo.style.display = 'none';
                 }
             }
         }
 
+        if (logoutBtn) {
+            logoutBtn.style.display = this.currentUser ? 'inline-flex' : 'none';
+        }
+
         // Update star buttons across all sections
         this.updateStarButtons();
 
-        // Trigger SPA profile view re-render if active
-        if (window.SPA && window.SPA.currentRoute === 'profile') {
-            window.SPA.renderProfileView();
+        // Update CMS button visibility
+        if (window.CMS) {
+            window.CMS.updateUI();
+        }
+
+        // Trigger SPA profile or cms view re-render if active
+        if (window.SPA) {
+            if (window.SPA.currentRoute === 'profile') {
+                window.SPA.renderProfileView();
+            } else if (window.SPA.currentRoute === 'cms') {
+                window.SPA.renderCmsView();
+            }
         }
     },
 
@@ -330,6 +373,11 @@ const Auth = {
     // Check if user is logged in
     isLoggedIn() {
         return this.currentUser !== null;
+    },
+
+    // Check if user is portal admin
+    isPortalAdmin() {
+        return !!(this.currentUser && this.currentUser.isPortalAdmin);
     }
 };
 
@@ -371,7 +419,7 @@ function openAuthModal(mode = 'login') {
             if (completeProfileForm) completeProfileForm.style.display = 'block';
             if (googleBtn) googleBtn.style.display = 'none';
             if (authDivider) authDivider.style.display = 'none';
-            if (closeBtn) closeBtn.style.display = 'none';
+            if (closeBtn) closeBtn.style.display = 'flex';
         }
     }
 }

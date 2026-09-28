@@ -7,7 +7,8 @@ This project is an Academic Resources Portal called **oU1TS Portal** designed to
 - **Playful Floating Navigation Canvas**: An organic bubble canvas for quick discovery across study materials, developer tools, course repositories, guidance tutorials, official links, inspirations, capstones, and mentors.
 - **Single Page Application (SPA) Subviews**: Dynamic in-place subviews powered by universal JSON data rendering without full page reloads.
 - **Visitor Changelog Modal**: An automated "What's New" changelog modal tracking releases (`changes.json`) with Service Worker version detection, desktop floating button, and mobile menu trigger.
-- **Student Contribution & Star Rating System**: Integrated Supabase authentication (Google OAuth & Email) allowing students to star resources, submit their own projects, and explore student talent and mentors.
+- **Centralized Database & Star Ranking System**: Connected directly to the centralized oU1TS Supabase database (`ou1ts.github.io`), featuring unified Google OAuth & student credentials, auto-project tagging (`'portal'`), dynamic stars ranking across JSON resources, and user profile metrics. Full SQL setup script: [`doc/query/query-4-central-db-portal-stars.sql`](doc/query/query-4-central-db-portal-stars.sql) (see [`doc/db/CENTRAL_DATABASE_SETUP_GUIDE.md`](doc/db/CENTRAL_DATABASE_SETUP_GUIDE.md)).
+- **Portal CMS & Project-Scoped Admin Role Delegation**: Full administrative Content Management System ([`js/cms.js`](js/cms.js)) allowing designated admins to approve community resources, auto-arrange catalog listings across 10 categories directly in Supabase (`public.portal_resources`), manage Google Form feedback (`public.portal_submissions`), and delegate portal admin roles using a dedicated User Selector Modal. Migration script: [`doc/query/query-5-portal-cms-resources-schema.sql`](doc/query/query-5-portal-cms-resources-schema.sql).
 
 <br>
 
