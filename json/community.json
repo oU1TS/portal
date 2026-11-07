@@ -2,25 +2,37 @@
   {
     "id": "ou1ts-community-fb",
     "icon": {
-      "type": "image",
       "src": "community-icon/oUITS.webp",
+      "type": "image",
       "background": "linear-gradient(135deg, #e3f2fd, #bbdefb);"
     },
     "title": "oU1TS Community",
     "description": "Online community, for the students of UITS. Join here to get latest updates on oU1TS initiative.",
+    "visitUrl": "https://facebook.com/groups/1074592960836263/",
     "links": [
-      { "label": "Telegram", "url": "https://t.me/s/oUITS_ORnU" },
-      { "label": "Discord", "url": "https://discord.gg/BdmArz6FHY" },
-      { "label": "GitHub", "url": "https://github.com/oU1TS" },
-      { "label": "Reddit", "url": "https://www.reddit.com/r/oU1TS/" }
-    ],
-    "visitUrl": "https://facebook.com/groups/1074592960836263/"
+      {
+        "url": "https://t.me/s/oUITS_ORnU",
+        "label": "Telegram"
+      },
+      {
+        "url": "https://discord.gg/BdmArz6FHY",
+        "label": "Discord"
+      },
+      {
+        "url": "https://github.com/oU1TS",
+        "label": "GitHub"
+      },
+      {
+        "url": "https://www.reddit.com/r/oU1TS/",
+        "label": "Reddit"
+      }
+    ]
   },
   {
     "id": "discord-protein-shake",
     "icon": {
-      "type": "image",
       "src": "community-icon/protein-shake-discord.webp",
+      "type": "image",
       "background": "linear-gradient(135deg, #e3f2fd, #bbdefb);"
     },
     "title": "Protein Shake - Discord",
@@ -30,8 +42,8 @@
   {
     "id": "community-discord",
     "icon": {
-      "type": "image",
       "src": "community-icon/sfuits-fb.webp",
+      "type": "image",
       "background": "linear-gradient(135deg, #ede7f6, #d1c4e9);"
     },
     "title": "Students Forum of UITS",
@@ -41,18 +53,27 @@
   {
     "id": "community-discord-golang",
     "icon": {
-      "type": "image",
-      "src": "community-icon/golang-community-icon.webp",
       "alt": "UITS Cyber Security Wing",
+      "src": "community-icon/golang-community-icon.webp",
+      "type": "image",
       "background": "linear-gradient(135deg, #fff3e0, #ffe0b2);"
     },
     "title": "Best Golang Community Ever",
     "description": "\"Education must be free!\"- Habibur Rahman (CSE37)",
+    "visitUrl": "https://discord.gg/HUG2W59yUb",
     "links": [
-      { "label": "Facebook", "url": "https://www.facebook.com/groups/1118405403169990/" },
-      { "label": "Dev", "url": "https://www.linkedin.com/in/habibur-r-ahman/" },
-      { "label": "NesoHQ", "url": "https://nesohq.org/" }
-    ],
-    "visitUrl": "https://discord.gg/HUG2W59yUb"
+      {
+        "url": "https://www.facebook.com/groups/1118405403169990/",
+        "label": "Facebook"
+      },
+      {
+        "url": "https://www.linkedin.com/in/habibur-r-ahman/",
+        "label": "Dev"
+      },
+      {
+        "url": "https://nesohq.org/",
+        "label": "NesoHQ"
+      }
+    ]
   }
 ]

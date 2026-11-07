@@ -84,54 +84,117 @@
         };
     }
 
-    // Fetches top ranked featured projects: picks top 3 from each category in json/ (~30 projects) and shuffles
+    // Fetches top ranked featured projects:
+    // 1. Live Supabase curated featured resources (category = 'featured')
+    // 2. Live Supabase highest starred resources across categories (>= 20)
+    // 3. Fallback to json/featured.json
+    // 4. Fallback to pool of top 3 from each category list
     async function loadFeatured() {
         let featuredProjects = null;
 
-        // 1. Attempt to fetch top listings across categories corresponding to star rankings from Supabase
+        // 1. Attempt to fetch curated 'featured' projects from Supabase portal_resources
         try {
             if (window.supabaseClient) {
-                // Fetch highest starred resources across categories
-                const { data: rankedData, error: rankedErr } = await window.supabaseClient
-                    .from('resource_star_rankings')
-                    .select('resource_id, total_stars, category')
-                    .gt('total_stars', 0)
-                    .order('total_stars', { ascending: false })
-                    .limit(30);
+                const { data: dbFeatured, error: featErr } = await window.supabaseClient
+                    .from('portal_resources')
+                    .select('*')
+                    .eq('category', 'featured')
+                    .eq('status', 'approved')
+                    .order('sort_order', { ascending: true });
 
-                if (!rankedErr && Array.isArray(rankedData) && rankedData.length >= 20) {
-                    const resIds = rankedData.map(r => r.resource_id);
-                    const { data: resData, error: resErr } = await window.supabaseClient
-                        .from('portal_resources')
-                        .select('*')
-                        .in('id', resIds);
+                if (!featErr && Array.isArray(dbFeatured) && dbFeatured.length > 0) {
+                    const normalizedList = dbFeatured
+                        .map((item, idx) => {
+                            const norm = normalizeProjectItem(item, 'Featured');
+                            if (norm) {
+                                norm.rank = `#${idx + 1} Featured`;
+                            }
+                            return norm;
+                        })
+                        .filter(Boolean);
 
-                    if (!resErr && Array.isArray(resData) && resData.length > 0) {
-                        const resMap = new Map(resData.map(r => [r.id, r]));
-                        const normalizedList = rankedData
-                            .filter(r => resMap.has(r.resource_id))
-                            .map((r, idx) => {
-                                const item = resMap.get(r.resource_id);
-                                const norm = normalizeProjectItem(item, r.category);
+                    if (normalizedList.length > 0) {
+                        featuredProjects = normalizedList;
+                    }
+                }
+            }
+        } catch (err) {
+            console.warn('[loadFeatured] Error querying Supabase for featured:', err);
+        }
+
+        // 2. Attempt to fetch top listings across categories corresponding to star rankings from Supabase
+        if (!featuredProjects || featuredProjects.length === 0) {
+            try {
+                if (window.supabaseClient) {
+                    // Fetch highest starred resources across categories
+                    const { data: rankedData, error: rankedErr } = await window.supabaseClient
+                        .from('resource_star_rankings')
+                        .select('resource_id, total_stars, category')
+                        .gt('total_stars', 0)
+                        .order('total_stars', { ascending: false })
+                        .limit(30);
+
+                    if (!rankedErr && Array.isArray(rankedData) && rankedData.length >= 20) {
+                        const resIds = rankedData.map(r => r.resource_id);
+                        const { data: resData, error: resErr } = await window.supabaseClient
+                            .from('portal_resources')
+                            .select('*')
+                            .in('id', resIds);
+
+                        if (!resErr && Array.isArray(resData) && resData.length > 0) {
+                            const resMap = new Map(resData.map(r => [r.id, r]));
+                            const normalizedList = rankedData
+                                .filter(r => resMap.has(r.resource_id))
+                                .map((r, idx) => {
+                                    const item = resMap.get(r.resource_id);
+                                    const norm = normalizeProjectItem(item, r.category);
+                                    if (norm) {
+                                        norm.rank = `#${idx + 1} Top Starred (${r.total_stars} ★)`;
+                                    }
+                                    return norm;
+                                })
+                                .filter(Boolean);
+
+                            if (normalizedList.length >= 20) {
+                                featuredProjects = normalizedList.sort(() => 0.5 - Math.random());
+                            }
+                        }
+                    }
+                }
+            } catch (err) {
+                // Silently proceed to JSON loader
+            }
+        }
+
+        // 3. Fallback directly to json/featured.json
+        if (!featuredProjects || featuredProjects.length === 0) {
+            try {
+                const res = await fetch('json/featured.json');
+                if (res.ok) {
+                    const featItems = await res.json();
+                    if (Array.isArray(featItems) && featItems.length > 0) {
+                        const normalizedList = featItems
+                            .map((item, idx) => {
+                                const norm = normalizeProjectItem(item, 'Featured');
                                 if (norm) {
-                                    norm.rank = `#${idx + 1} Top Starred (${r.total_stars} ★)`;
+                                    norm.rank = item.rank || `#${idx + 1} Featured`;
                                 }
                                 return norm;
                             })
                             .filter(Boolean);
 
-                        if (normalizedList.length >= 20) {
-                            featuredProjects = normalizedList.sort(() => 0.5 - Math.random());
+                        if (normalizedList.length > 0) {
+                            featuredProjects = normalizedList;
                         }
                     }
                 }
+            } catch (featJsonErr) {
+                console.warn('[loadFeatured] Error loading json/featured.json:', featJsonErr);
             }
-        } catch (err) {
-            // Silently proceed to multi-list JSON loader
         }
 
-        // 2. Load top 3 from each of the 11 json/ project lists (~30 projects total) and shuffle
-        if (!featuredProjects || featuredProjects.length < 20) {
+        // 4. Fallback: Load top 3 from each of the 11 json/ project lists (~30 projects total) and shuffle
+        if (!featuredProjects || featuredProjects.length === 0) {
             try {
                 const PROJECT_LISTS = [
                     { file: 'materials.json', category: 'Materials' },

@@ -26,9 +26,9 @@
   {
     "id": "community-github",
     "icon": {
-      "type": "image",
-      "src": "https://res.cloudinary.com/b1tranger/image/upload/v1757773769/nobg_UITS_Cyber_Security_Wing_FB_logo_admu5c.png",
       "alt": "UITS Cyber Security Wing",
+      "src": "https://res.cloudinary.com/b1tranger/image/upload/v1757773769/nobg_UITS_Cyber_Security_Wing_FB_logo_admu5c.png",
+      "type": "image",
       "background": "linear-gradient(135deg, #212121, #424242)"
     },
     "title": "UITS Cyber Security Wing",
@@ -38,9 +38,9 @@
   {
     "id": "official-attendance",
     "icon": {
-      "type": "image",
-      "src": "official-icon/attendance-fine-icon.webp",
       "alt": "Attendance Fine",
+      "src": "official-icon/attendance-fine-icon.webp",
+      "type": "image",
       "background": "linear-gradient(135deg, #e8f5e9, #c8e6c9)"
     },
     "title": "CSE Attendance Fine",

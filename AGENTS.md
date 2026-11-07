@@ -50,7 +50,7 @@
   - Keep all conversation turns for that session inside the main file `doc/prompts/<Prefix>. <Session Title>.md`.
 - **Chat Archive Fidelity & Sanitization**:
   - Reproduce the conversation in full (user request blocks verbatim, with sensitive keys redacted).
-  - Include the model's unabridged internal thinking/reasoning parts (`### Thinking`) alongside the complete final response (`### AI Response`).
+  - Include the model's unabridged internal thinking/reasoning parts (`### Thinking`) alongside the complete final response (`### AI Response`) verbatim exactly as delivered in the chat (never use placeholders like `*(Refer to output in main chat)*` or truncated summaries).
   - Verify that all API keys and secrets have been replaced with placeholders before writing.
   - Preserve the frontmatter tags comment block at the top of the archive file.
 

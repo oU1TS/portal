@@ -1,6 +1,30 @@
 <!--
-Tags: [portal, release-notes, changelog, history, preloader, typewriter, gallery, auto-scroll, service-worker]
+Tags: [portal, release-notes, changelog, history, preloader, typewriter, gallery, auto-scroll, service-worker, supabase, sync, cms]
 -->
+
+# 07.11.26
+
+### **Supabase <-> JSON Bidirectional Sync Automation & Featured Projects Reconnection (v3.3)**
+- **Bidirectional Database Sync Automation ([`scripts/sync-database.js`](../scripts/sync-database.js))**:
+  - Implemented standalone Node.js sync engine supporting `smart sync` (default), `push` (local JSON -> Supabase), and `pull` (Supabase -> local JSON).
+  - Handles all 11 curated catalog datasets: `featured.json`, `guidance.json`, `materials.json`, `tools.json`, `community.json`, `official.json`, `portfolios.json`, `courses.json`, `capstones.json`, `mentors.json`, and `talent.json`.
+  - Smart sync detects modification timestamps (`mtimeMs` vs database `updated_at`) and automatically keeps whichever has the latest content.
+  - Automatically loads credentials from [`env-config.js`](../env-config.js) or [`.env`](../.env), supports `SUPABASE_SERVICE_ROLE_KEY` with interactive prompt and persistent save to gitignored config for subsequent 1-click execution.
+  - Provides batched upserts (`on_conflict=id`, `merge-duplicates`) to prevent payload limit errors during large data pushes.
+- **One-Click Batch Launchers ([`sync.bat`](../sync.bat) & [`json/sync.bat`](../json/sync.bat))**:
+  - Added Windows batch file `sync.bat` in the root repository directory and `json/sync.bat` directly inside the `json/` directory.
+  - Allows single-click execution directly from Windows File Explorer while working inside the `json/` folder or at the repository root.
+- **Homepage Featured Project Gallery Reconnection ([`js/data-renderer.js`](../js/data-renderer.js))**:
+  - Re-integrated `featured.json` and Supabase category `'featured'` directly into `loadFeatured()`.
+  - Established a 4-tier fallback hierarchy:
+    1. Query Supabase `public.portal_resources` for curated items where `category = 'featured'`.
+    2. Query Supabase `public.resource_star_rankings` for highest starred resources (if >= 20 items exist).
+    3. Query local [`json/featured.json`](../json/featured.json) for explicit featured initiatives.
+    4. Fallback to sampling top 3 items across all 11 category JSON datasets.
+  - Ensures changes to [`json/featured.json`](../json/featured.json) immediately render locally and across live visits once synced.
+- **Service Worker & Visitor Changelog Modal ([`service-worker.js`](../service-worker.js) & [`changes.json`](../changes.json))**:
+  - Bumped cache version to `ou1ts-portal-v3.3` to purge stale cached JS and instantly serve the updated featured loader.
+  - Added `v3.3` release record in [`changes.json`](../changes.json) with interactive changelog modal presentation.
 
 # 28.09.26
 

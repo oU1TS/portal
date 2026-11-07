@@ -1,11 +1,23 @@
 {
-  "currentVersion": "v3.2",
-  "lastUpdated": "September 2026",
+  "currentVersion": "v3.3",
+  "lastUpdated": "November 2026",
   "documentationUrl": "doc/history.md",
   "history": [
     {
-      "version": "v3.2",
+      "version": "v3.3",
       "badge": "Latest",
+      "date": "07.11.26",
+      "changes": [
+        {
+          "type": "Feature",
+          "title": "Supabase <-> Local JSON Bidirectional Sync Automation & Featured Project Reconnection",
+          "description": "Introduced one-click CLI and batch automation (sync.bat and json/sync.bat) to seamlessly sync all 11 catalog datasets between local json/*.json and Supabase public.portal_resources with timestamp-based smart synchronization. Reconnected json/featured.json and Supabase category 'featured' directly into the homepage Featured Project Carousel."
+        }
+      ]
+    },
+    {
+      "version": "v3.2",
+      "badge": "Previous",
       "date": "28.09.26",
       "changes": [
         {

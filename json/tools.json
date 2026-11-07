@@ -14,8 +14,8 @@
   {
     "id": "tools-blooddonation",
     "icon": {
-      "type": "image",
       "src": "tools-icon/logo-bd.png",
+      "type": "image",
       "background": "linear-gradient(135deg, #e3f2fd, #bbdefb)"
     },
     "title": "Blood Donation Network - UITS",
@@ -25,31 +25,43 @@
   {
     "id": "tools-b1tsched",
     "icon": {
-      "type": "image",
       "src": "tools-icon/b1t-sched.webp",
+      "type": "image",
       "background": "linear-gradient(135deg, #e8f5e9, #c8e6c9)"
     },
     "title": "b1t Scheduler",
     "description": "lightweight, centralized academic assistant that allows students to view their schedules, track tasks, and access academic information efficiently.",
+    "visitUrl": "https://b1tsched.netlify.app/",
     "links": [
-      { "label": "Source Code", "url": "https://github.com/b1tranger/b1t-Sched" },
-      { "label": "Dev", "url": "https://github.com/b1tranger" }
-    ],
-    "visitUrl": "https://b1tsched.netlify.app/"
+      {
+        "url": "https://github.com/b1tranger/b1t-Sched",
+        "label": "Source Code"
+      },
+      {
+        "url": "https://github.com/b1tranger",
+        "label": "Dev"
+      }
+    ]
   },
   {
     "id": "tools-yourbloodbank",
     "icon": {
-      "type": "image",
       "src": "",
+      "type": "image",
       "background": "linear-gradient(135deg, #e8f5e9, #c8e6c9)"
     },
     "title": "UBBDMS",
     "description": "Save Lives Through Blood Donation UITS Blood Bank & Donor Management System connects blood donors with those in need within UITS university.",
+    "visitUrl": "https://yourbloodbank.netlify.app/",
     "links": [
-      { "label": "Source Code", "url": "https://github.com/amit1-ctrl/ubbdms-backend" },
-      { "label": "Dev", "url": "https://github.com/amit1-ctrl" }
-    ],
-    "visitUrl": "https://yourbloodbank.netlify.app/"
+      {
+        "url": "https://github.com/amit1-ctrl/ubbdms-backend",
+        "label": "Source Code"
+      },
+      {
+        "url": "https://github.com/amit1-ctrl",
+        "label": "Dev"
+      }
+    ]
   }
 ]

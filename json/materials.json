@@ -2,32 +2,44 @@
   {
     "id": "materials-uitsbot",
     "icon": {
-      "type": "image",
       "src": "materials-icon/UITS-Bot.webp",
+      "type": "image",
       "background": "linear-gradient(135deg, #e3f2fd, #bbdefb)"
     },
     "title": "UITS Bot",
     "description": "This is a utility website where students can check their cgpa for each semester, see class routines in a formatted way, and find handwritten notes from previous batch students.",
+    "visitUrl": "http://akibreza.github.io/uitsBOT",
     "links": [
-      { "label": "Source Code", "url": "https://github.com/AkibReza/uitsBOT" },
-      { "label": "Dev", "url": "https://github.com/AkibReza" }
-    ],
-    "visitUrl": "http://akibreza.github.io/uitsBOT"
+      {
+        "url": "https://github.com/AkibReza/uitsBOT",
+        "label": "Source Code"
+      },
+      {
+        "url": "https://github.com/AkibReza",
+        "label": "Dev"
+      }
+    ]
   },
   {
     "id": "materials-b1tacad",
     "icon": {
-      "type": "image",
       "src": "materials-icon/b1t-acad.webp",
+      "type": "image",
       "background": "linear-gradient(135deg, #f3e5f5, #e1bee7)"
     },
     "title": "b1t Academics",
     "description": "b1t Academics is a comprehensive, student-maintained archive for UITS (University) resources. It serves as a central hub for course materials, question banks, class routines, and academic guidelines, aiming to solve the fragmentation of resources across different platforms.",
+    "visitUrl": "https://b1tacad.netlify.app/",
     "links": [
-      { "label": "Source Code", "url": "https://github.com/b1tranger/b1t-Acad" },
-      { "label": "Dev", "url": "https://github.com/b1tranger" }
-    ],
-    "visitUrl": "https://b1tacad.netlify.app/"
+      {
+        "url": "https://github.com/b1tranger/b1t-Acad",
+        "label": "Source Code"
+      },
+      {
+        "url": "https://github.com/b1tranger",
+        "label": "Dev"
+      }
+    ]
   },
   {
     "id": "materials-uniCompanion",
@@ -39,12 +51,22 @@
     },
     "title": "University Companion",
     "description": "In this website, you will find the Academic calendar and the previous years' exam questions of the previous batches of CSE department, UITS. We also added an interactive scheduler where students can update their class records for each week.",
+    "visitUrl": "https://university-companion.netlify.app/",
     "links": [
-      { "label": "Source Code", "url": "https://github.com/Zirconium001/echoes_of_the_past", "suffix": "(old)" },
-      { "label": "Dev-1", "url": "https://github.com/Zirconium001" },
-      { "label": "Dev-2", "url": "https://github.com/RabbitJahir" }
-    ],
-    "visitUrl": "https://university-companion.netlify.app/"
+      {
+        "url": "https://github.com/Zirconium001/echoes_of_the_past",
+        "label": "Source Code",
+        "suffix": "(old)"
+      },
+      {
+        "url": "https://github.com/Zirconium001",
+        "label": "Dev-1"
+      },
+      {
+        "url": "https://github.com/RabbitJahir",
+        "label": "Dev-2"
+      }
+    ]
   },
   {
     "id": "materials-researchArchive",
@@ -56,11 +78,21 @@
     },
     "title": "UITS Research Archive",
     "description": "Experience the next generation of academic discovery. A unified ecosystem for thesis preservation, collaborative research, and scholarly excellence.",
+    "visitUrl": "https://research-uits.rf.gd/",
     "links": [
-      { "label": "Source Code", "url": "https://github.com/4xrhd/uits-research-archive" },
-      { "label": "Dev", "url": "https://github.com/4xrhd" },
-      { "label": "Socials", "url": "https://dinq.me/4xrhd", "parentheses": true }
-    ],
-    "visitUrl": "https://research-uits.rf.gd/"
+      {
+        "url": "https://github.com/4xrhd/uits-research-archive",
+        "label": "Source Code"
+      },
+      {
+        "url": "https://github.com/4xrhd",
+        "label": "Dev"
+      },
+      {
+        "url": "https://dinq.me/4xrhd",
+        "label": "Socials",
+        "parentheses": true
+      }
+    ]
   }
 ]

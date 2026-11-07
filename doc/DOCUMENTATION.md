@@ -40,9 +40,11 @@ ou1ts.portal/
 ├── inspirations.html   # Standalone subview fallback: Inspiring portals
 ├── contributions.html  # Dynamic contributor showcase integrated with Google Sheets
 ├── json/               # Curated JSON data source files
+│   ├── sync.bat        # 1-Click launcher to sync JSON folder with Supabase
 │   ├── capstones.json  # Capstone projects dataset
 │   ├── community.json  # Social channels & club links
 │   ├── courses.json    # Course repos by semester
+│   ├── featured.json   # Featured initiatives showcase
 │   ├── guidance.json   # Tips, guides & tutorials
 │   ├── inspirations.json # Other academic portals
 │   ├── materials.json  # Department resources & links
@@ -50,6 +52,9 @@ ou1ts.portal/
 │   ├── official.json   # University portal notices
 │   ├── portfolios.json # Student portfolios
 │   └── tools.json      # Student developer tools
+├── scripts/            # Developer automation & CLI utilities
+│   └── sync-database.js # Supabase <-> JSON bidirectional sync engine
+├── sync.bat            # Root 1-Click launcher for database synchronization
 ├── js/                 # Modular JavaScript architecture
 │   ├── auth.js             # Authentication logic (Email & Google OAuth)
 │   ├── auth-modal.js       # Reusable authentication modal injection
@@ -456,6 +461,27 @@ stars
 ├── created_at (TIMESTAMPTZ)
 └── UNIQUE(user_id, resource_type, resource_id)
 ```
+
+### 8. Bidirectional Database & JSON Sync Automation
+
+To keep the local catalog files in `json/*.json` and the live Supabase central database (`public.portal_resources`) synchronized without manual database SQL queries:
+
+1. **One-Click Execution**:
+   - Double-click [`sync.bat`](../sync.bat) in the project root or [`json/sync.bat`](../json/sync.bat) directly inside the `json/` directory.
+   - Or run from terminal:
+     ```bash
+     node scripts/sync-database.js        # Default Smart Sync: keeps the newest changes
+     node scripts/sync-database.js push   # Push local json/ to Supabase
+     node scripts/sync-database.js pull   # Pull Supabase to local json/
+     ```
+2. **Smart Sync Mechanism**:
+   - Compares the file modification time (`mtime`) against the highest `updated_at` timestamp in Supabase for each dataset.
+   - If local JSON was modified more recently, it automatically pushes and merges the changes to Supabase (`portal_resources`).
+   - If Supabase records are newer (e.g. approved submissions from the CMS), it pulls the records and updates the local JSON file.
+3. **Credentials**:
+   - Reads `SUPABASE_URL`, `SUPABASE_ANON_KEY`, and optional `SUPABASE_SERVICE_ROLE_KEY` from `env-config.js` or `.env`.
+   - The public `anon` key is sufficient for pulling data.
+   - Pushing data requires the `SUPABASE_SERVICE_ROLE_KEY` (to satisfy RLS policies); the script interactively prompts and offers to save it into `env-config.js` (gitignored) for continuous 1-click operation.
 
 ---
 
